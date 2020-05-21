@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PyTorch,Multi-gpus,Bug," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="解决了PyTorch 使用torch.nn.DataParallel 进行多GPU训练的一个BUG: 模型(参数)和数据不在相同设备上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch使用torch.nn.DataParallel进行多GPU训练的一个BUG，已解决">
+<meta property="og:url" content="http://senyang-ml.github.io/2019/07/20/pytorch-multigpu/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="解决了PyTorch 使用torch.nn.DataParallel 进行多GPU训练的一个BUG: 模型(参数)和数据不在相同设备上">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-07-20T10:42:12.000Z">
+<meta property="article:modified_time" content="2020-03-13T10:59:00.000Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="Multi-gpus">
+<meta property="article:tag" content="Bug">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2019/07/20/pytorch-multigpu/"/>
+
+
+
+
+
+  <title>PyTorch使用torch.nn.DataParallel进行多GPU训练的一个BUG，已解决 | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2019/07/20/pytorch-multigpu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PyTorch使用torch.nn.DataParallel进行多GPU训练的一个BUG，已解决</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2019-07-20T18:42:12+08:00">
+                2019-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>解决了PyTorch 使用torch.nn.DataParallel 进行多GPU训练的一个BUG:</p>
+<p><strong>模型(参数)和数据不在相同设备上</strong></p>
+<a id="more"></a>
+<p>我使用<code>torch.nn.DataParallel</code>进行多GPU训练时出现了一个BUG，困扰了我许久：</p>
+<p><code>RuntimeError: Expected tensor for argument #1 &#39;input&#39; to have the same device as tensor for argument #2 &#39;weight&#39;; but device 1 does not equal 0 (while checking arguments for cudnn_convolution)</code></p>
+<p>这个错误表明, <code>input</code>数据在<code>device 1</code> 上, 而模型的参数在<code>device 0</code> 上 (暗示数据是被拆分到了各个GPU上,但是BUG出现位置的此处参数可能没有成功复制到其他GPU上, 或者说, 还是调用了复制前的那个参数地址)</p>
+<p>因为模型比较复杂，继承与调用太多，之前调试了好久, 也没有解决掉, 在Github上有一个issue和我的问题很像:<br><a href="https://github.com/pytorch/pytorch/issues/8637" target="_blank" rel="noopener">https://github.com/pytorch/pytorch/issues/8637</a><br>但是我还是没有找到自己的bug在哪里.</p>
+<h4 id="今天-我又准备再此尝试解决它"><a href="#今天-我又准备再此尝试解决它" class="headerlink" title="今天, 我又准备再此尝试解决它"></a>今天, 我又准备再此尝试解决它</h4><p>经过6个小时的<code>print调试法</code>以及后面关键的VScode的<code>Debug</code>功能, 我大功告成,找到了问题所在,原来</p>
+<p>我的<code>A(nn.Module)</code>类的<code>forward</code> 前向计算函数里面, 有一处调用了一个该类的列表<code>self.cell_fabrics</code>, 其列表的元素是通过<code>self.cell_fabrics = [self.cell_1, self.cell_2,...,self.cell_n]</code> 来赋值的,其中每个<code>self.cell</code>也是<code>nn.Module</code>类</p>
+<p>即用<code>self.cell_fabrics = [self.cell_0_0, self.cell_0_1, … , self.cell_3_0, self.cell_3_1,…, self.cell_5_0]</code> 这样的方式,将所有的<code>cell类</code>放到<code>A类</code>的一个<code>列表属性</code>中, 而当整个<code>A类</code>通过<code>torch.nn.DataParallel</code>被复制了一份放到设备<code>cuda:1</code>上以后, 且在预计在设备<code>cuda:1</code>上执行下面代码段时:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,x)</span></span></span><br><span class="line"><span class="function">    <span class="title">for</span> <span class="title">layer</span> <span class="title">in</span> <span class="title">self</span>.<span class="title">cell_fabrics</span>:</span></span><br><span class="line">        <span class="keyword">for</span> cell <span class="keyword">in</span> layer:</span><br><span class="line">           y = cell (x,)</span><br></pre></td></tr></table></figure>
+
+<p> 经验证，<code>x</code>是在设备<code>cuda:1</code> 上面, 但是  <code>cell</code> 中的参数却明显都在 <code>cuda:0</code>上</p>
+<p>也就是说:</p>
+<p><strong>此时 <code>self.cell_fabrics</code> 的列表中保存的各个对象 (<code>self.cell</code>) 的地址，还是指向在没有进行<code>torch.nn.DataParallel</code>之前的<code>nn.Module</code> 的那些<code>self.cell</code>,  而<code>nn.DataParallel</code>类的<code>nn.Module</code>的参数都默认存放在<code>device(type=&#39;cuda&#39;,index=0)</code>上 .</strong> </p>
+<p><code>torch.nn.DataParallel(model,device_ids=[range(len(gpus))])</code>的机制是, 将属于<code>nn.Module</code>类的<code>model</code>以及其广播的所有<code>nn.Module</code>子类的上的所有参数,复制成<code>len(gpus)</code>份,送到各个GPU上.  这种广播机制的范围是注册(registered)成为其属性的<code>nn.Module</code>子类, <strong>属性为列表list中的各个对象是不会被复制的, 所以其list中的对象还是存放在默认设备<code>device 0</code>上</strong></p>
+<p>所以 在使用<code>torch.nn.DataParallel</code>进行多GPU训练的时候, 请注意：所有属于模型参数的模块以及其子模块必须以<code>nn.Module</code>的类型注册为模型的属性, 如果需要一个列表来批量存放子模块或者参数的话, 请采用<code>nn.ModuleList</code>或者<code>nn.ModuleDict</code>这样的继承了<code>nn.Module</code>的类来进行定义, 并且在<code>forward(self,)</code>前向传播的过程中，需要直接调用属于 <code>nn.Module</code>,<code>nn.ModuleList</code>或者<code>nn.ModuleDict</code> 这样的属性。</p>
+<p>那么<code>torch.nn.DataParallel</code>将会正常地将模型参数准确复制到多个GPU上, 并根据数据的<code>batchsize</code>的大小平分成GPU的数量分别送到相应的GPU设备上,</p>
+<p>然后运用<strong>多线程</strong>的方式, 同时对这些数据进行加工处理, 然后收集各个GPU上最终产生对模型的各参数的梯度, 最后汇总到一起更新原模型的参数!</p>
+<p>参考: </p>
+<ol>
+<li><a href="https://github.com/pytorch/pytorch/issues/8637" target="_blank" rel="noopener">https://github.com/pytorch/pytorch/issues/8637</a></li>
+<li><a href="https://pytorch.org/docs/stable/nn.html#dataparallel-layers-multi-gpu-distributed" target="_blank" rel="noopener">https://pytorch.org/docs/stable/nn.html#dataparallel-layers-multi-gpu-distributed</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+          
+            <a href="/tags/Multi-gpus/" rel="tag"># Multi-gpus</a>
+          
+            <a href="/tags/Bug/" rel="tag"># Bug</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/17/pifpaf/" rel="next" title="G-RMI-> PersonLab -> PifPaf  -- Human Pose Estimation">
+                <i class="fa fa-chevron-left"></i> G-RMI-> PersonLab -> PifPaf  -- Human Pose Estimation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/21/Chelsea-Finn/" rel="prev" title="Chelsea Finn">
+                Chelsea Finn <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#今天-我又准备再此尝试解决它"><span class="nav-number">1.</span> <span class="nav-text">今天, 我又准备再此尝试解决它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

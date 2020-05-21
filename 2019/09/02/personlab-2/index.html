@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Human Pose Estimation,Hough Voting,Algorithm," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Bilinear interpolation kernel + Hough voting + Greedy Algorithm 个人认为：  PersonLab中最给人启发的是：构造 geometric embedding: short-range offsets, mid-range offsets and long-range offsets 几何信息来表示人体姿态, 以此监督神经网络的预测，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reproduce PersonLab (2)">
+<meta property="og:url" content="http://senyang-ml.github.io/2019/09/02/personlab-2/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="Bilinear interpolation kernel + Hough voting + Greedy Algorithm 个人认为：  PersonLab中最给人启发的是：构造 geometric embedding: short-range offsets, mid-range offsets and long-range offsets 几何信息来表示人体姿态, 以此监督神经网络的预测，">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-09-02T08:17:42.000Z">
+<meta property="article:modified_time" content="2020-03-13T10:59:58.000Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="Human Pose Estimation">
+<meta property="article:tag" content="Hough Voting">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2019/09/02/personlab-2/"/>
+
+
+
+
+
+  <title>Reproduce PersonLab (2) | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2019/09/02/personlab-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Reproduce PersonLab (2)</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2019-09-02T16:17:42+08:00">
+                2019-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Bilinear interpolation kernel + Hough voting + Greedy Algorithm</p>
+<p>个人认为：</p>
+<ul>
+<li><p>PersonLab中最给人启发的是：构造 geometric embedding: short-range offsets, mid-range offsets and long-range offsets 几何信息来表示人体姿态, 以此监督神经网络的预测，并根据预测结果，施以贪婪算法，关联出所有人的姿态和分割区域。</p>
+</li>
+<li><p>PersonLab中最值得琢磨的数学部分是：如何将表示keypoints大致位置的heatmaps和short-offsets maps通过双线性插值核，然后进行Hough Vote得到精确位置的Hough Score Maps的过程。</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<p>后者是我复现过程中遇到的一个难题。其实构造Hough Score maps在Google的上一篇论文 <code>G-RMI</code> 中就出现了，然而因为G-RMI没有开源的代码，所以我对其提到的双线性插值核函数$G(\cdot)$的理解仍然还是很模糊。另外，如果按照论文公式给出的Hough Voting公式，去遍历图像的每一个像素位置进行计算的话，计算的时间复杂度会很高，所以，作者一定有什么巧妙的方式可以处理它，可是PersonLab也没有开源。</p>
+<p>后来我发现，github上有一个<a href="https://github.com/octiapp/KerasPersonLab" target="_blank" rel="noopener">KerasPersonLab</a>的实现，论文的所有细节都几乎实现了，所以来看看他的关于构造Hough Score Maps的。</p>
+<blockquote>
+<p>不禁佩服这个项目的开发者，为什么他们就可以有这个能力把论文中没有提到的细节完美地实现出来，这一定是他们的功底比我强很多，或者他们知道了一些我不知道的先验知识。对两人的了解后，我发现他们是<a href="http://octi.tv/" target="_blank" rel="noopener"><code>Octi</code></a>公司的两位算法工程师, 我的猜测是开发APP需要将PersonLab的算法移植到手机上面，所以激发了两个人完成了实现，PersonLab的ArXiv发布时间是2018年三月底，这个项目的发布时间是2018年5月份，真的是厉害了。GitHub上其他的Personlab实现版本都是在此之后，不少repo借鉴了他们的这个项目。</p>
+</blockquote>
+<p>关于构造Hough Score Map 有这样的一段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">accumulate_votes</span><span class="params">(votes, shape)</span>:</span></span><br><span class="line">    xs = votes[:,<span class="number">0</span>]</span><br><span class="line">    ys = votes[:,<span class="number">1</span>]</span><br><span class="line">    ps = votes[:,<span class="number">2</span>]</span><br><span class="line">    tl = [np.floor(ys).astype(<span class="string">'int32'</span>), np.floor(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">    tr = [np.floor(ys).astype(<span class="string">'int32'</span>), np.ceil(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">    bl = [np.ceil(ys).astype(<span class="string">'int32'</span>), np.floor(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">    br = [np.ceil(ys).astype(<span class="string">'int32'</span>), np.ceil(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">    dx = xs - tl[<span class="number">1</span>]</span><br><span class="line">    dy = ys - tl[<span class="number">0</span>]</span><br><span class="line">    tl_vals = ps*(<span class="number">1.</span>-dx)*(<span class="number">1.</span>-dy)</span><br><span class="line">    tr_vals = ps*dx*(<span class="number">1.</span>-dy)</span><br><span class="line">    bl_vals = ps*dy*(<span class="number">1.</span>-dx)</span><br><span class="line">    br_vals = ps*dy*dx</span><br><span class="line">    data = np.concatenate([tl_vals, tr_vals, bl_vals, br_vals])</span><br><span class="line">    I = np.concatenate([tl[<span class="number">0</span>], tr[<span class="number">0</span>], bl[<span class="number">0</span>], br[<span class="number">0</span>]])</span><br><span class="line">    J = np.concatenate([tl[<span class="number">1</span>], tr[<span class="number">1</span>], bl[<span class="number">1</span>], br[<span class="number">1</span>]])</span><br><span class="line">    good_inds = np.logical_and(I &gt;= <span class="number">0</span>, I &lt; shape[<span class="number">0</span>])</span><br><span class="line">    good_inds = np.logical_and(good_inds, np.logical_and(J &gt;= <span class="number">0</span>, J &lt; shape[<span class="number">1</span>]))</span><br><span class="line">    heatmap = np.asarray(coo_matrix( (data[good_inds], (I[good_inds],J[good_inds])), shape=shape ).todense())</span><br><span class="line">    <span class="keyword">return</span> heatmap</span><br></pre></td></tr></table></figure>
+
+<p>当我刚看到这些的时候是无法理解的，我认为这里面有着论文Hough voting最核心的部分。我想Accumulate——vote的出现一定和Hough Transform有一定的关联，另外，为什么会出现<code>np.ceil</code>和<code>np.floor</code>?这个<code>tl_vals = ps*(1.-dx)*(1.-dy)</code>又是什么鬼？似乎和双线性有着一点点的联系。我要慢慢摸清楚，顺藤摸瓜。</p>
+<h2 id="Hough-Transform"><a href="#Hough-Transform" class="headerlink" title="Hough Transform"></a>Hough Transform</h2><p>回顾一下最经典的Hough transform 算法，那就以Hough Line Transform 为例子。OpenCV关于<a href="https://docs.opencv.org/3.3.0/d6/d10/tutorial_py_houghlines.html" target="_blank" rel="noopener">Hough Line Transform</a>，有一个比较好的<a href="https://docs.opencv.org/3.3.0/d6/d10/tutorial_py_houghlines.html" target="_blank" rel="noopener">解释文档</a>.</p>
+<p>我想简洁地概括一下Hough Line Transform：</p>
+<p>在二维数据空间坐标中，线其上的点，$(x,y)$的满足 $y = mx+c$，一条直线就确定了一个唯一的参数坐标 $(m,c)$</p>
+<p>换一种视角去理解。</p>
+<p>在二维参数空间坐标中，“线”其上的“点”，$(m,c)$满足于$c=-xm+y$, 一条参数空间上的“线”就确定了二维平面中的唯一数据坐标$(x,y)$ (参数空间上的一条“线”，对应了数据空间中某个点的直线簇)</p>
+<p>这里的参数空间就是，hough space</p>
+<h3 id="什么是Hough-Voting呢？"><a href="#什么是Hough-Voting呢？" class="headerlink" title="什么是Hough Voting呢？"></a>什么是Hough Voting呢？</h3><p>举直线（可以进一步泛化，称之为模型A）的例子</p>
+<p>我们可以把数据空间上的数据点，想象成是由其模型A–直线生成的，那么数据空间中的一个点，在直线模型的参数空间（hough Space）上，可能属于很多个直线（点的直线簇）。我们用一个2维数组来记录直线的参数，构造出Hough Space。比如<a href="https://docs.opencv.org/3.3.0/d6/d10/tutorial_py_houghlines.html" target="_blank" rel="noopener">Hough Line Transform</a>给出的参数形式 $\rho = x \cos \theta + y \sin \theta$ 中的 $(\rho,\theta)$ 来构造一个二维Hough Space, 然后我们需要选择一个量化等级，来控制其中一个参数增减的最小单位。这样的话，拿到一个点，我们就可以给其在Hough Space中可能属于的所有模型各投一次票。如果对数据空间中的所有数据点进行上述操作，并用Accumulator累积Hough Space各个模型的投票总数，我们就可以获得不同模型的得分，那么根据得分最大的模型对应的参数，就能够刻画出数据空间中数据点们共同依赖的那个模型！</p>
+<p>根据这种思想我们可以将直线模型泛化到更一般的圆模型、椭圆甚至无规则的形状！！</p>
+<p>这就是Hough Transform 和hough Voting的基本要义了。</p>
+<p>然后我研究了一下<code>coo_matrix</code>函数，它能快速地构造一个稀疏矩阵，并且注意到，代码给出的格式满足：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">coo_matrix((data, (i, j)), [shape&#x3D;(M, N)])</span><br><span class="line">to construct from three arrays:</span><br><span class="line">    1. data[:]   the entries of the matrix, in any order</span><br><span class="line">    2. i[:]      the row indices of the matrix entries</span><br><span class="line">    3. j[:]      the column indices of the matrix entries</span><br><span class="line"></span><br><span class="line">Where &#96;&#96;A[i[k], j[k]] &#x3D; data[k]&#96;&#96;.  When shape is not</span><br><span class="line">specified, it is inferred from the index arrays</span><br></pre></td></tr></table></figure>
+<p>并且它具有累积功能，而就是它，完成了hough voting的功能</p>
+<h3 id="bilinear-interpolation"><a href="#bilinear-interpolation" class="headerlink" title="bilinear interpolation"></a>bilinear interpolation</h3><p>再去分析一下，与np.ceil和np.floor作差以及连乘的意义</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">xs = votes[:,<span class="number">0</span>]</span><br><span class="line">ys = votes[:,<span class="number">1</span>]</span><br><span class="line">ps = votes[:,<span class="number">2</span>]</span><br><span class="line">tl = [np.floor(ys).astype(<span class="string">'int32'</span>), np.floor(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">tr = [np.floor(ys).astype(<span class="string">'int32'</span>), np.ceil(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">bl = [np.ceil(ys).astype(<span class="string">'int32'</span>), np.floor(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">br = [np.ceil(ys).astype(<span class="string">'int32'</span>), np.ceil(xs).astype(<span class="string">'int32'</span>)]</span><br><span class="line">dx = xs - tl[<span class="number">1</span>]</span><br><span class="line">dy = ys - tl[<span class="number">0</span>]</span><br><span class="line">tl_vals = ps*(<span class="number">1.</span>-dx)*(<span class="number">1.</span>-dy)</span><br><span class="line">tr_vals = ps*dx*(<span class="number">1.</span>-dy)</span><br><span class="line">bl_vals = ps*dy*(<span class="number">1.</span>-dx)</span><br><span class="line">br_vals = ps*dy*dx</span><br></pre></td></tr></table></figure>
+<p>其功能相当于在进行双线性插值：</p>
+<p>f(dx,dy)=f(0,0)(1-dx)(1-dy)+f(1,0)x(1-dy)+f(0,1)(1-dx)dy+f(1,1)dxdy</p>
+<p>针对，每个位置上预测的<strong>小数点精度</strong>上（如果预测为整数，仅有<code>tl_vals</code>不为0）的偏量，以双线性的方式，并乘以预测置信度，累积到相邻的<strong>整数</strong>像素位置（这样可以不会牺牲任何量化上的精度），进而可以得到精确的预测位置，即反应在Hough Score Maps的极大值位置上</p>
+<p>对于Hough Score Maps对应的每一个关键点类型，最后施以：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_heatmaps</span><span class="params">(kp_maps, short_offsets,radius, kpts_num)</span>:</span></span><br><span class="line">    heatmaps = []</span><br><span class="line">    map_shape = kp_maps.shape[:<span class="number">2</span>]</span><br><span class="line">    idx = np.rollaxis(np.indices(map_shape[::<span class="number">-1</span>]), <span class="number">0</span>, <span class="number">3</span>).transpose((<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(kpts_num):</span><br><span class="line">        this_kp_map = kp_maps[:,:,i:i+<span class="number">1</span>]</span><br><span class="line">        votes = idx + short_offsets[:,:,i]</span><br><span class="line">        votes = np.reshape(np.concatenate([votes, this_kp_map], axis=<span class="number">-1</span>), (<span class="number">-1</span>, <span class="number">3</span>))</span><br><span class="line">        heatmaps.append(accumulate_votes(votes, shape=map_shape) / (np.pi*radius**<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> np.stack(heatmaps, axis=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+<p>即得到了Hough Score Maps.</p>
+<h2 id="Greedy-Decoding-和-Assign-pixels-to-person-skeleton-instance"><a href="#Greedy-Decoding-和-Assign-pixels-to-person-skeleton-instance" class="headerlink" title="Greedy Decoding 和 Assign pixels to person skeleton instance"></a>Greedy Decoding 和 Assign pixels to person skeleton instance</h2><ul>
+<li>PersonLab中巧妙的算法是：利用树结构，通过<code>Greedy Decoding</code>将偏移向量连通成独立的人体骨架；利用mask中像素与keypoints的偏移向量，以聚类的方式形成人体intance mask。</li>
+</ul>
+<p>关于<code>Greedy Decoding</code>部分，可以参考<a href="https://senyang-ml.github.io/2019/07/17/pifpaf/#Fast-greedy-decoding">我的另一篇博客</a>。</p>
+<p>关于长向量<code>long-range-offset</code>的预测部分,从直观上看，可以发现，偏移量向内指向人体的关节，可以形成了论文提到的<code>basins of attraction</code>. 体现了一种区域分割的思想。</p>
+<blockquote>
+<p>原创博客，转载请注明本文作者和链接</p>
+</blockquote>
+<p>更多请参考如下：</p>
+<ul>
+<li><a href="https://github.com/octiapp/KerasPersonLab" target="_blank" rel="noopener">KerasPersonLab</a></li>
+<li><a href="https://docs.opencv.org/3.3.0/d6/d10/tutorial_py_houghlines.html" target="_blank" rel="noopener">Hough Line Transform</a></li>
+<li><a href="https://arxiv.org/abs/1803.08225" target="_blank" rel="noopener">PersonLab</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Human-Pose-Estimation/" rel="tag"># Human Pose Estimation</a>
+          
+            <a href="/tags/Hough-Voting/" rel="tag"># Hough Voting</a>
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/26/Pose-Neural-Fabrics-Search/" rel="next" title="Pose Neural Fabrics Search">
+                <i class="fa fa-chevron-left"></i> Pose Neural Fabrics Search
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/02/distribution-aware/" rel="prev" title="Distribution-Aware Coordinate Representation for Human Pose Estimation">
+                Distribution-Aware Coordinate Representation for Human Pose Estimation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hough-Transform"><span class="nav-number">1.</span> <span class="nav-text">Hough Transform</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Hough-Voting呢？"><span class="nav-number">1.1.</span> <span class="nav-text">什么是Hough Voting呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bilinear-interpolation"><span class="nav-number">1.2.</span> <span class="nav-text">bilinear interpolation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Greedy-Decoding-和-Assign-pixels-to-person-skeleton-instance"><span class="nav-number">2.</span> <span class="nav-text">Greedy Decoding 和 Assign pixels to person skeleton instance</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

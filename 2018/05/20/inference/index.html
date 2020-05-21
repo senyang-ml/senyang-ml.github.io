@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Deep Learning,Causal Inference,Probability Graph Model," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="推断的介入善有善报，恶有恶报。 虽然世间并没有将这份准则执行地那么恰如其分，但是万物归根结底，必然有着因果之间的联系。 而人生匆匆，为什么愚蠢的我们总是在苦苦寻觅事情的答案，why？ 剪不断，理还乱，只好奉上因果推断">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Causal inference (因果推断)">
+<meta property="og:url" content="http://senyang-ml.github.io/2018/05/20/inference/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="推断的介入善有善报，恶有恶报。 虽然世间并没有将这份准则执行地那么恰如其分，但是万物归根结底，必然有着因果之间的联系。 而人生匆匆，为什么愚蠢的我们总是在苦苦寻觅事情的答案，why？ 剪不断，理还乱，只好奉上因果推断">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-05-20T01:52:16.000Z">
+<meta property="article:modified_time" content="2020-03-13T11:00:31.000Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="Causal Inference">
+<meta property="article:tag" content="Probability Graph Model">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2018/05/20/inference/"/>
+
+
+
+
+
+  <title>Causal inference (因果推断) | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2018/05/20/inference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Causal inference (因果推断)</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2018-05-20T09:52:16+08:00">
+                2018-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="推断的介入"><a href="#推断的介入" class="headerlink" title="推断的介入"></a>推断的介入</h1><p>善有善报，恶有恶报。</p>
+<p>虽然世间并没有将这份准则执行地那么恰如其分，但是万物归根结底，必然有着因果之间的联系。</p>
+<p>而人生匆匆，为什么愚蠢的我们总是在苦苦寻觅事情的答案，why？</p>
+<p>剪不断，理还乱，只好奉上因果推断</p>
+<a id="more"></a>
+<h2 id="因果推断"><a href="#因果推断" class="headerlink" title="因果推断"></a>因果推断</h2><p>在机器学习领域，因果推断，是在图模型中被着重研究的一种理论。</p>
+<p>2017年NIPS会议上，<a href="https://mp.weixin.qq.com/s/ytt8Hwv4JHZdV4649XG6Xw" target="_blank" rel="noopener">Judael Pearl</a>发表了机器学习的局限性演讲，并提出了因果推断的三个层次：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>公式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>观察</strong></td>
+<td>$P\left ( y\mid x \right )$</td>
+<td>Seeing: what is？ 观察到x时，会如何影响到y的信念</td>
+</tr>
+<tr>
+<td><strong>介入</strong></td>
+<td>$P\left ( y\mid do(x) \right )$</td>
+<td>Doing: what if？ 如果做出对x的介入时，会如何影响到y的信念</td>
+</tr>
+<tr>
+<td><strong>反事实</strong></td>
+<td>$P\left ( y_{x}\mid x^{,},y^{,} \right )$</td>
+<td>Imaging: why? 是x影响到y的吗，基于当下，假设发生的是x^，会对y产生何种影响</td>
+</tr>
+</tbody></table>
+<p>为来形象直观地理解Judael Pearl因果推断三层次，我举一个简单的追求异性的例子，它深刻蕴含着这三个推断层次：</p>
+<p><strong>观察</strong>：在追求一位异性时，不管你是情场高手，还是恋爱小白，你必须承认，我们都会收集足够多的关于他/她的信息x，来作为判断能否成功追求到他/她的依据，也许有的人会认真考虑这个问题，（如果发现成功率低就会直接选择放弃，而选择不再追，其实有点可惜了，因为这仅仅处于<strong>观察</strong>阶段），而有的人在直觉上就已经做出了估计。这也就是我们基于已经观察到的信息x，来评估成功追到他/她的概率$P\left ( y\mid x \right )$ </p>
+<p><strong>介入</strong>：在追求异性时，我们必须有所行动，仅仅是观察并不能影响到成功追到他/她的概率。理所当然，我们所作出的行动一般都会遵循一个显而易见的行动目标或指南：做一些有意义的事情 $do(x)$来增加能成功追求到他/她的概率$P\left ( y\mid do(x) \right )$，我们会尝试一些方法，来判断这样做是会引起对方的反感，还是能增加对自己的好感，进而影响成功追求到他/她的概率（如果你发现无论 $do(whatever)$，总不能提高$P\left ( y\mid do(whatever) \right )$，那么事实就会证明，放弃可能是比较明智的选择）</p>
+<p><strong>反事实</strong>： 在追求异性遭遇挫败时，或者反思自己的追求历程时，我们往往会基于当前的态势做出一些假设，要是当初我那样去做$x^{,}$而不是做$x$，会不会就更有可能把他/她给追到呢 $P\left ( y_{x}\mid x^{,},y^{,} \right )$ 。这样的假设才会让我们总结失败或者成功的真正原因，找出哪些才是真正影响我们最后能否追求成功的因素。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然而在现实生活中，上述的推断分析还是考虑地过于单纯、局限，因为情感问题不是靠推断就能解决的。</span><br></pre></td></tr></table></figure>
+
+<p>这样的推断，在大多数情况下，会更多地出现在我们的直觉当中，所以见到这样的理论你也会见怪不怪，但是对于机器而言，如何向用数学的语言来描述这个推断过程，确实一件极其困难的事情，更何况想让计算机能够自动计算这种推断。<strong>而当下首先要解决的是如何用合理的计算机语言来描述这个推断过程</strong>。</p>
+<p>基于这三个层次的因果推断属于较为高级的人类智能，而目前的机器学习仅仅停留在第一个阶段，就是由观察到信念的阶段，这就是当下机器学习的局限性所在：可解释差，没有引入人类的合理性推断在里面。那么，是否可以在这方面做出更多的思考呢？</p>
+<h2 id="概念假设推断"><a href="#概念假设推断" class="headerlink" title="概念假设推断"></a>概念假设推断</h2><p>下表是我根据反事实理论设想的<strong>概念假设推断表</strong>，可以将概念层级联系在一起。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>原始数据</th>
+<th>K个表示中间概念的特征</th>
+<th>高层概念表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Groud-truth</td>
+<td>X</td>
+<td>$Z^{<em>}:z^{</em>} \left ( 1 \right )=g^{<em>}_1,…,z^{</em>} \left ( K \right )=g^{*}_K$</td>
+<td>$G^{*}$</td>
+</tr>
+<tr>
+<td>Learning</td>
+<td>X</td>
+<td>观察单个显著特征 $z \left ( i \right )=g_i$</td>
+<td>显著特征下最容易激活的高层概念 $G_{z \left ( i \right )=g_i}$</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>X</td>
+<td>$\max_{\Theta }P(Z=Z^{<em>}\mid z^{</em>}\left ( i \right )=z \left ( i \right )=g_i,G^{*}=G_{z \left ( i \right )=g_i};\Theta )$</td>
+<td>$G$</td>
+</tr>
+</tbody></table>
+<p>$$\max_{\Theta }P(Z=Z^{<em>}\mid z^{</em>}\left ( i \right )=z \left ( i \right )=g_i,G^{*}=G_{z \left ( i \right )=g_i};\Theta )$$</p>
+<p>公式的含义，表示：数据信息X在传递到中间层时，如果某一属性实体 $z \left ( i \right )=g_i$（弱概念）处于激活态时，那么这一属性实体会导致具有相似属性的更高层概念 $G_{z \left ( i \right )=g_i}$ 处于活跃状态，来进行反向印证概念 $G_{z \left ( i \right )=g_i}$ 激活时对应的 的中间层其他属性的一致性：<br>即此时真实观测的 $z \left ( 1 \right ),…,z \left ( K \right )$ 与 $G_{z \left ( i \right )=g_i}$ 激活时其他属性值的期望值<br>$z^{<em>}\left ( 1 \right ),…z^{</em>} \left ( K \right )$ 之间的差异程度，差异越小，那么 $Z$ 越接近于$Z^{*}$，即优化目标，满足了假设推断。</p>
+<h2 id="怎么将推断应用到当前的机器学习？"><a href="#怎么将推断应用到当前的机器学习？" class="headerlink" title="怎么将推断应用到当前的机器学习？"></a>怎么将推断应用到当前的机器学习？</h2><p>用一个实际的例子来说明，比如我们在一幅图像中检测到了手指的存在，那么我们会推断是一个手臂会大概率的存在，然后我们检测图像中是否有在手臂激活时肩膀、上臂、前臂、肘关节的存在，如果这几个中级概念属性一致，那么我们可以大致推断出这里有张手臂。这种做法的好处，就是概念可以类似积木式地向上堆叠，比如我们观测到手臂后，可以推断是否为人类，来进一步观察是否有毛发、手臂颜色如何、是否有躯干形状、头部形状等等，同理可以类似推断其他物体。而关于中间概念的检测，可以依赖神经网络预测。至于推断层面，不需要神经网络来解决！</p>
+<p>而问题的难点在于中间概念的检测，目前的机器学习都没有去解决这个问题，往往是低层像素程度的特征抽取和高层标签信息的分类，介于两者之间的中间概念是被忽略的。</p>
+<p>而目前有工作，通过CNN可视化在尝试恢复中间层的特征信息。需要思考的两点是：1.如何表示中间特征可视化得到的信息 2.信息从前到后是一个压缩、去噪的有损失过程，怎么能够继续用图像可视化，这是违背了信息传递的基本事实，除非引入了新的信息或者融合了原始信息。</p>
+<p><strong>这是一个开放式的问题</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">原创作者：杨森</span><br><span class="line">原文地址：https://yangsenius.github.io/inference.html</span><br><span class="line">转载请声明</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          
+            <a href="/tags/Causal-Inference/" rel="tag"># Causal Inference</a>
+          
+            <a href="/tags/Probability-Graph-Model/" rel="tag"># Probability Graph Model</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/29/label_limitation/" rel="next" title="The limitation of thinking with 'label' in Deep Learning (深度学习中标签思维的局限)">
+                <i class="fa fa-chevron-left"></i> The limitation of thinking with 'label' in Deep Learning (深度学习中标签思维的局限)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/01/pose-machine-eccv2014/" rel="prev" title="Pose machine：Articulated Pose Estimation via Inference Machines">
+                Pose machine：Articulated Pose Estimation via Inference Machines <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#推断的介入"><span class="nav-number">1.</span> <span class="nav-text">推断的介入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#因果推断"><span class="nav-number">1.1.</span> <span class="nav-text">因果推断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念假设推断"><span class="nav-number">1.2.</span> <span class="nav-text">概念假设推断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么将推断应用到当前的机器学习？"><span class="nav-number">1.3.</span> <span class="nav-text">怎么将推断应用到当前的机器学习？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

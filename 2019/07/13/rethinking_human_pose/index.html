@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Human Pose Estimation,Deep Learning,Object Detection," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="更多内容在知乎文章: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72561165&#x2F;  浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rethinking Human Pose Estimation  重新思考人体姿态估计">
+<meta property="og:url" content="http://senyang-ml.github.io/2019/07/13/rethinking_human_pose/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="更多内容在知乎文章: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72561165&#x2F;  浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-1000017/1emeto7o6r.gif">
+<meta property="og:image" content="https://tse3-mm.cn.bing.net/th?id=OIP.u3JSsrIZJMhgjdxWK443vwHaHZ&w=221&h=211&c=7&o=5&pid=1.7">
+<meta property="og:image" content="https://raw.githubusercontent.com/CMU-Perceptual-Computing-Lab/openpose/master/doc/media/keypoints_pose_18.png">
+<meta property="article:published_time" content="2019-07-13T01:52:16.000Z">
+<meta property="article:modified_time" content="2020-03-13T10:58:45.000Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="Human Pose Estimation">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="Object Detection">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/yehe-1000017/1emeto7o6r.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2019/07/13/rethinking_human_pose/"/>
+
+
+
+
+
+  <title>Rethinking Human Pose Estimation  重新思考人体姿态估计 | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2019/07/13/rethinking_human_pose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rethinking Human Pose Estimation  重新思考人体姿态估计</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2019-07-13T09:52:16+08:00">
+                2019-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>更多内容在知乎文章: <a href="https://zhuanlan.zhihu.com/p/72561165" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/72561165/</a></strong></p>
+<p> 浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向</p>
+<img src="https://ask.qcloudimg.com/http-save/yehe-1000017/1emeto7o6r.gif">
+
+<a id="more"></a>
+<h4 id="1-基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。"><a href="#1-基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。" class="headerlink" title="1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。"></a>1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。</h4><img src="https://tse3-mm.cn.bing.net/th?id=OIP.u3JSsrIZJMhgjdxWK443vwHaHZ&w=221&h=211&c=7&o=5&pid=1.7">
+<img src="https://raw.githubusercontent.com/CMU-Perceptual-Computing-Lab/openpose/master/doc/media/keypoints_pose_18.png" width=20%>
+
+
+<h4 id="2-基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。"><a href="#2-基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。" class="headerlink" title="2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。"></a>2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。</h4><blockquote>
+<p>按照人的直观视觉理解的话，主要会涉及到以下问题：</p>
+<ul>
+<li>关键点及周围的局部特征是什么样的？</li>
+<li>关键点之间、人体肢体的空间约束关系是什么样的，以及层级的人体部件关系是什么样的？</li>
+<li>不同人体之间的交互关系是什么样的，人体与外界环境之间的交互关系是什么？</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>基于Deep CNN的方法的试图通过神经网络的拟合能力，建立一种隐式的预测模型来避开上述的显式问题：</p>
+<ul>
+<li>基于去显式分析人体姿态问题的方法是有的，传统的Pictorial Structure是其中一个较为经典的算法思路，目前也有少数方法用part-based的层级树结构建立人体姿态模型并利用CNN，来进行学习与预测。</li>
+<li>当下多数深度CNN回归的方式, 试图用模型强大的拟合能力去回避以上的显式问题，而从大量的图像数据和标签监督信息中用神经网络去学习图像数据与构建的标签信息之间的映射。</li>
+</ul>
+</blockquote>
+<h4 id="3-当前主流研究的基础问题和难点："><a href="#3-当前主流研究的基础问题和难点：" class="headerlink" title="3.当前主流研究的基础问题和难点："></a>3.当前主流研究的基础问题和难点：</h4><ul>
+<li><p>神经网络结构的设计是个永远（当下）都会伴随的问题（假如深度学习的热潮没有退去的话）</p>
+</li>
+<li><p>Top-down：先检测人体，再做单人姿态估计两阶段的方法。</p>
+<ul>
+<li><p>必然受到了目标检测任务的制约。</p>
+</li>
+<li><p>基于bounding box的单人姿态估计问题，在面对遮挡问题容易受到挫折。</p>
+</li>
+<li><p>精度虽然髙实时性能较差</p>
+</li>
+<li><p>小尺寸图像与计算资源限制</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Bottom-up：针对整副图像的多人关键点检测，检测所有关键点候选位置的同时，关联相关人体</p>
+<ul>
+<li>精度不如单人估计的更加精准，但实时性能较好</li>
+<li>面对拥挤问题、遮挡问题仍然容易受到挫折</li>
+<li>小尺寸图像问题</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-方法分类："><a href="#4-方法分类：" class="headerlink" title="4.方法分类："></a>4.方法分类：</h4><ul>
+<li><p>标准1：:Top-Down和Bottom-up的方法。</p>
+</li>
+<li><p>标准2：全局的长距离关系的隐式学习问题（大多数）和基于part的中短距离关系（ECCV-18 PersonLab，ECCV-18 Deeply learned compositional models）的学习问题</p>
+</li>
+<li><p>标准3：heatmap回归（大多数），直接坐标回归方法（CVPR-14-DeepPose，ECCV-18的Integral Pose），向量场嵌入（CVPR-17 G-RMI，ECCV-18 PersonLab，CVPR-19 PIFPAF）的方法等等</p>
+</li>
+</ul>
+<h5 id="5-近几年的代表作"><a href="#5-近几年的代表作" class="headerlink" title="5.近几年的代表作"></a>5.近几年的代表作</h5><ul>
+<li>发迹于2014年, CVPR: Google的DeepPose，同年出现了MPII数据集（Max-Planck ）以及MS-COCO数据集。<ul>
+<li>16年: CVPR：CMU的Convolutional Pose Machine (CPM)和德国的马克斯普朗克研究所Deepcut以及Stacked Hourglass 网络结构设计的出现。</li>
+</ul>
+</li>
+<li>17年: CVPR：Google的G-RMI开启基于目标检测的人体姿态估计方法。CMU的OpenPose系统出现，致力于打造实时姿态估计系统。Deepcut的改进版DeeperCut出现。同年ICCV上，Mask RCNN、上海交通大学的RMPE以及随后的AlphaPose崭露头角, NeurIPS17也出现了 Associative Embedding 以新的端到端的方式来避免人体姿态估计多阶段不连续学习的问题。</li>
+<li>18年：CVPR上出现了旷世的CPN拿下了17年COCO挑战赛的冠军, ECCV上微软亚洲研究院的SimpleBaseline用自上而下的方法为姿态估计打造最简单的baseline，并刷新了COCO数据集的新高。ECCV上还出现了来自中东技术大学的Muhammed Kocabas提出了MultiPoseNet，以及Google的自下而上多任务的新作PersonLab, 值得一提的是还有一些开辟新的研究角度的方法如ECCV上美国西北大学part-based的姿态估计方法Deeply learned compositional models 。18年的另外一个趋势就是，新问题新任务的出现，比如CVPR18的DensePose标志着密集关键点人体姿态估计任务的出现, 2D pose track 任务(CVPR18 PoseTrack数据集)的提出, 以及3D 姿态估计问题的兴起……</li>
+<li>19年CVPR, 姿态估计再次呈现一个小爆发（HRNET，PIFPAF，Seu-ByteDance Pose ，Related Parts Help，Crowded Pose , Fast Human Pose，Pose2Reg等等），并且出现了大量新的方向探讨姿态估计问题, 以及 3D 姿态估计成为主流。 当然, 2D姿态估计任务仍然是值得去深入探讨的问题, 因为一些本质上的难题目前还没有完全的洞察和有效的解决方案, 比如严重遮挡,多人重叠问题等等。另外， 数据集MPII, COCO数据集上的”刷性能” 也依然是大家孜孜不倦的追求，性能再次来到了新高。</li>
+</ul>
+<h4 id="6-研究意义："><a href="#6-研究意义：" class="headerlink" title="6.研究意义："></a>6.研究意义：</h4><ul>
+<li><p>3D人体姿态估计的铺垫、3维人体重建的必备技术</p>
+</li>
+<li><p>人体关键点的视频追踪问题的基础（从静态到动态）</p>
+</li>
+<li><p>动作识别的信息来源（从关键点的时序空间特征映射到动作语义问题）</p>
+</li>
+</ul>
+<h4 id="7-应用："><a href="#7-应用：" class="headerlink" title="7.应用："></a>7.应用：</h4><ul>
+<li>自动驾驶行业：自动驾驶道路街景中行人的检测以及姿态估计、动作预测等问题</li>
+<li>娱乐产业：动作特效的增加。快手、抖音、微视等视频软件</li>
+<li>安全领域：行人再识别问题，以及特殊场景的特定动作监控，婴儿、老人的照顾。</li>
+<li>影视产业：拍电影特效（复仇者联盟）</li>
+<li>人机交互：AR，VR，以及未来的人机交互方式</li>
+</ul>
+<h4 id="8-研究趋势的变化以及扩展："><a href="#8-研究趋势的变化以及扩展：" class="headerlink" title="8.研究趋势的变化以及扩展："></a>8.研究趋势的变化以及扩展：</h4><ul>
+<li>稀疏关键点到密集关键点（CVPR-18 FaceBook DensePose）</li>
+<li>静态图像到视频追踪  （CVPR-18 PoseTrack）</li>
+<li>从关键点定位到肢体的分割预测 （pose parsing,CVPR-19 Pose2Reg）</li>
+<li>从监督学习到弱监督 、半监督，甚至无监督有可能（如, ICLR2019 unsupervised discovery, parts, structure and dynamics）</li>
+<li>当然：神经网络结构的设计（ECCV-18 SimpleBaseline，CVPR-18 CPN， CVPR-19 HRNet，CVPR-19 Enhanced Channel-wise and Spatial Information，ICCV FPN-POSE等等）是个永远都会伴随的问题（假如深度学习的热潮没有退去的话）</li>
+</ul>
+<h4 id="个人思考"><a href="#个人思考" class="headerlink" title="个人思考"></a>个人思考</h4><p>当前所有的姿态估计方法几乎都使用了深度卷积神经网络的强大功能，但个人认为神经网络设计绝不是解决该问题的核心，用力搔靴和脱掉鞋子，哪个才是更好的止痒手段呢？</p>
+<p>人体姿态估计是一个综合的问题，有很多的切入点和难题值得去研究，并且它是一个尚未实际落地的计算机视觉技术。在这个层面上，AI的产品经理们和投机者们应该想想这项技术怎么能更好地服务大众，并带来市场和利润。</p>
+<p>作为科学研究者，赚钱的考虑或应该暂时放到明天。我想讨论的是: 当我们面对一项任务和难题， 我们是应该忽略固有的困难和问题，提出新的问题，给出问题方案，去探索新的研究趋势呢？还是强行深入当前的固有问题，解决当下的难题呢？ 是不是有一些的问题是超前式的，也许放到以后才会有更加合适的方案和角度来解决？</p>
+<p>或者说，我们还可以用另一种粗暴的方案：把这一问题黑箱化或者半黑箱化，然后从神经网络结构设计、数据处理、增强以及其他机器学习数学方法去暴力式的解决。这样的解决方式实际上是，摒弃了人类本身做姿态估计的直观思路（上面所述），而是从更加“机器学习”的角度去处理这个问题。假如，我们寻找到一个“完美”结构的神经网络，让它去达到１００％或者近似１００％的准确率！这样以来，似乎预测问题被完完全全地解决了，但是问题是，我们不知道能不能找到这样的结构或者技术，或者说一旦找到了以后能不能解释性地理解这一技术? 这就又引出了大家探讨争论许久的可解释性问题、显式推理问题。其实今年CVPR19 的PifPaf的工作值得我们去思考，它继续引入复合场(Composite Field)的概念，预测人为得设计好的高维度向量来处理人体姿态预测问题，让模型预测更加巧妙的监督信息。该方法能降低量化误差，设计的关联肢体得分公式巧妙保持了期望的一致性，再加之一个快速贪心算法，利用人体的连通特性就能得到多人姿态。这样的设计与算法，尽管性能比那些注重网络结构设计的略差一些，但却遵循合理的直觉，并且可解释性强，启发性强，是不是需要我们更多的关注？</p>
+<p>另外，今年ICLR2019上，有学者甚至提出了无监督的方式处理人体部件。 我认为这是一种可以去探讨的问题, 因为人体姿态本身其实可以看成图像中的特征簇, 其视觉上的连通特性本身就具备了高维特征上的独特性。那么靠聚类手段、生成模型、无监督学习在直觉上是可行的, 如果再加上视频，光流等辅助信息, 那么就可以从大量无标签的图像数据中, 准确构建人体部件的特征、部件到整体的结构特征以及人体姿态的运动时序特征, 这可能又会是一个新的思路和解决人体姿态估计任务的新手段吗？</p>
+<blockquote>
+<p>知乎文章: <a href="https://zhuanlan.zhihu.com/p/72561165" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/72561165/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Human-Pose-Estimation/" rel="tag"># Human Pose Estimation</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          
+            <a href="/tags/Object-Detection/" rel="tag"># Object Detection</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/metaanchor/" rel="next" title="MetaAnchor - Learning to Detect Objects with Customized Anchors - 2018 NeurIPS 解读">
+                <i class="fa fa-chevron-left"></i> MetaAnchor - Learning to Detect Objects with Customized Anchors - 2018 NeurIPS 解读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/17/hello-world/" rel="prev" title="Hello, 这是我的新博客">
+                Hello, 这是我的新博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。"><span class="nav-number">1.</span> <span class="nav-text">1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。"><span class="nav-number">2.</span> <span class="nav-text">2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-当前主流研究的基础问题和难点："><span class="nav-number">3.</span> <span class="nav-text">3.当前主流研究的基础问题和难点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-方法分类："><span class="nav-number">4.</span> <span class="nav-text">4.方法分类：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-近几年的代表作"><span class="nav-number">4.1.</span> <span class="nav-text">5.近几年的代表作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-研究意义："><span class="nav-number">5.</span> <span class="nav-text">6.研究意义：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-应用："><span class="nav-number">6.</span> <span class="nav-text">7.应用：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-研究趋势的变化以及扩展："><span class="nav-number">7.</span> <span class="nav-text">8.研究趋势的变化以及扩展：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#个人思考"><span class="nav-number">8.</span> <span class="nav-text">个人思考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

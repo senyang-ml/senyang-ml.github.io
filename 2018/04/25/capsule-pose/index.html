@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Human Pose Estimation,Deep Learning,Capsule Network," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Capsules Network2018.4.25##引言因为最近同时在看Matrix Capsules with EM routing  (https:&#x2F;&#x2F;openreview.net&#x2F;pdf?id&#x3D;HJWLfGWRb)和人体姿态估计相关的论文如Associative Embedding, stacked hourglass等，我渐渐发现了这两类研究方向在核心思想上的一些共通之处，即自下而上地获">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Capsule Network and Human Pose">
+<meta property="og:url" content="http://senyang-ml.github.io/2018/04/25/capsule-pose/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="Capsules Network2018.4.25##引言因为最近同时在看Matrix Capsules with EM routing  (https:&#x2F;&#x2F;openreview.net&#x2F;pdf?id&#x3D;HJWLfGWRb)和人体姿态估计相关的论文如Associative Embedding, stacked hourglass等，我渐渐发现了这两类研究方向在核心思想上的一些共通之处，即自下而上地获">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/stacked%20hourglass.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/%E8%B4%A1%E7%8C%AE.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/em.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/%E5%85%AC%E5%BC%8F.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/mpii1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/mpii2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/yangsenius/images/master/mscoco.png">
+<meta property="article:published_time" content="2018-04-25T01:52:16.000Z">
+<meta property="article:modified_time" content="2020-03-13T11:01:16.000Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="Human Pose Estimation">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="Capsule Network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yangsenius/images/master/stacked%20hourglass.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2018/04/25/capsule-pose/"/>
+
+
+
+
+
+  <title>Capsule Network and Human Pose | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2018/04/25/capsule-pose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Capsule Network and Human Pose</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posté le</span>
+              
+              <time title="Post aangemaakt" itemprop="dateCreated datePublished" datetime="2018-04-25T09:52:16+08:00">
+                2018-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Capsules-Network"><a href="#Capsules-Network" class="headerlink" title="Capsules Network"></a>Capsules Network</h1><h2 id="2018-4-25"><a href="#2018-4-25" class="headerlink" title="2018.4.25"></a>2018.4.25</h2><p>##引言<br>因为最近同时在看Matrix Capsules with EM routing  (<a href="https://openreview.net/pdf?id=HJWLfGWRb)和人体姿态估计相关的论文如Associative" target="_blank" rel="noopener">https://openreview.net/pdf?id=HJWLfGWRb)和人体姿态估计相关的论文如Associative</a> Embedding, stacked hourglass等，我渐渐发现了这两类研究方向在核心思想上的一些共通之处，即自下而上地获得全局信息，利用全局信息去解析局部特征，并进行预测。</p>
+<a id="more"></a>
+<p>概括地讲，近年来很多取得成功并广泛应用的深度网络设计都蕴含着这一思想，比如Deep Residual Net中的残差模块，Densely Connected Network卷积层的全连接，Fully Connected Network中的特征融合，U-net中的反卷积，还有Stacked Hourglass，其中 hourglass的设计更是淋漓尽致地表达了这一思想，不断pooling获得全局信息，然后结合局部信息进行unsampling，方法简单粗暴，通过关节点位置的监督约束来回归出heatmap。</p>
+<center> <img src="https://raw.githubusercontent.com/yangsenius/images/master/stacked%20hourglass.PNG" width="800"> </center>
+
+<p>上述网络设计之所以能够成功一方面和网络层数愈来愈深，还有所谓的Trick有关，另一方面很大程度上是因为它们的设计都在把较为原始的特征信息与加工后的特征信息相融合。</p>
+<p><strong>为什么这样的设计是有效的？或者说如果不这样设计，网络还会起作用吗？</strong></p>
+<p>思考这样的问题能让我们看到问题的本质，那就是这些网络全都是基于卷积网络的架构，而卷积网络中的Pooling层的设计初衷为了得到粗略的响应位置，这会导致精确特征信息的丢失，信息丢失是不可逆的，那在一些需要精确信息的视觉任务中，而能够挽救的方式就是结合原始信息与加工后的信息。可以说，这些设计方式的成功在于它们解决了信息损失的问题。 </p>
+<p>然而在上世纪80年代卷积网络中的pooling层被设计出来时，要解决的是图像目标在平移，变换后时依然能够有着相同的输出响应。它并没有考虑日后的一些极其复杂的视觉任务，比如图像分割需要产生一个pixels wise的热值图，分割任务面临的是像素级别的预测，而大多数研究者遇到此类问题，往往是在宏观层面去设计一个更复杂的网络结构去解决问题，这样做是在使模型复杂化，针对他们特定的任务或者数据集而发挥作用，虽然说一定程度弥补了基础网络的能力，但却牺牲了设计对不同视觉任务的泛化能力。如果我们能从基础CNN固有存在的问题出发，那么是否能达到事半功倍的效果呢？</p>
+<p>直到在2017年Hinton指出了在CNN中的固有缺陷，pooling层会导致精确特征信息的丢失，在较低层，这种丢失反映在空间信息上，如果在较高层，语义特征信息的丢失，就会让网络发掘不到更抽象的信息。所以Hinton提出了一种新的网络设计方式capsules net，并证明其能用更少量参数超过CNN性能，这种网络具有仿射变换鲁棒性，更擅长处理重叠问题。而在我的理解看来，他实际上提出的是一种新的信息无损失传递计算方式。从一定程度上讲，这种新的计算方式可以应用到已有的任何卷积网络框架中。</p>
+<p>如下是matrix capsules with EM routing的核心思想，我按照论文给出的思路，形象地画出了一幅前向计算的示意图。还有论文核心路由算法的公式精简版。</p>
+<center> <img src="https://raw.githubusercontent.com/yangsenius/images/master/%E8%B4%A1%E7%8C%AE.PNG" width="800"> </center>
+<center> <img src="https://raw.githubusercontent.com/yangsenius/images/master/em.PNG" width="800"> </center>
+<center> <img src="https://raw.githubusercontent.com/yangsenius/images/master/%E5%85%AC%E5%BC%8F.PNG" width="800"> </center>
+
+<p>#人体姿态估计</p>
+<p>目前人体姿态估计任务面临的都是图像中人体2D姿态的关键点的回归问题，如果考虑到多人姿态估计，就要涉及到图像的解析问题，即某个关节点到底要分给谁，这是多人重叠问题的难点。当下研究者一般从两个角度去分析这一问题：bottom-up和top-down，即自下而上和自上而下。<br>  在人体姿态估计领域内的研究，自上而下或者自下而上的图像解析都反映在了研究者的设计技巧上和网络结构的设计上，基础网络块都是CNN，还有一些更高层次的设计。而capsules网络独特的一点是，其本身的计算方式就蕴含了一种解析思想。</p>
+<p>它将连续两个featuremap层中，较高层的capsules单元视为“因”（先验-隐变量），较低层的单元视为“果”（数据），然后建立高斯混合分布，它从数据生成角度出发，可以理解为在某一层次的特征级别中，去寻找整体特征与局部特征的关系，即每个低层的capsules试图去在高层寻找一个可以解释（生成）它的母capsule,即似然：P(子capsule|母capsule)。同时，高层的capsules也在寻找并不是偶然产生的来自低层capsules投票产生的紧密簇，这个紧密簇代表许多跟它有强烈关系的低层capsules，如果高层的某个capsule发现了低层capsules越趋于一致（越聚集，就是更服从该capsule的高斯分布），这就意味该capsule与低层capsules的关系总不确定度越低，信息熵越低，那么这个capsule越容易激活。这一过程实际上同时蕴含了bottom-up和top-down，而且基本不存在信息丢失的问题。所以这是我在开头提到为什么Matrix Capsules with EM routing和人体姿态估计的hourglass思想上相通，所以我自然地考虑想把capsule运用到人体姿态估计。</p>
+<ul>
+<li>补充：4月26日</li>
+</ul>
+<p>Facebook提出了DensePose，密集人体姿势估计是指将一个RGB图像中的所有人体像素点映射到人体的3D表面</p>
+<p>#潜力<br>Capsules被设计的初衷并没有考虑复杂的视觉任务，比如人体姿态估计，那么如何去将它运用到人体姿态估计呢？</p>
+<p>一个简单粗暴的方式就是，直接那它的路由计算去替代CNN的pooling计算，然后网络设计上去模仿当下流行的网络架构</p>
+<blockquote>
+<p>补充：4月27日<br>2018CVPR 提出了Detail-presering pooling in Deep network（<a href="https://arxiv.org/pdf/1804.04076.pdf）" target="_blank" rel="noopener">https://arxiv.org/pdf/1804.04076.pdf）</a> ，它直接指出来CNN maxl-pooling或者average pooling存在的只选取最大而忽略与周围像素的关联性，一个重视关联性却又直接抹平，并且在实际梯度计算中也有一些drawback，所以该文提出了这个新方法，一句话概括，就是在池化过程中学了一个动态的weight    （来自德国学者，我觉得我的想法跟他有点像）</p>
+</blockquote>
+<p>另一种就是利用capsules本身能够保留精确的空间特征信息，来设计与人体姿态估计匹配的网络结构，比如设计一个heatmap层去加入到capsules网络中去，整个网络即不存在分辨率下降的问题。</p>
+<p>值得提到的一点是，hinton在提出capsules时，他强调了这种设计方式对于处理2D数据和3D数据，是性能上一致的，而matrix capsules with em routing的实验数据集就是一个3D数据集smallNorb，数据集是5类玩具，5个实例，在18个不同方位角，在9种不同高度下，在6种不同光照条件一共下采集了24300的照片，算法在该数据集上达到state-of-art。而人体2D姿态估计是很容易产生在3D场景下姿态的变换问题，所以我个人认为，capsules能够从人体2D姿态在全方位视角下捕捉产生的数据中去寻找一种3D上的全局信息，因为在matrix capsules with em routing这篇论文就在强调capsule中的 4x4 pose matrix 就在学习观察者和物体实例之间的视角关系。</p>
+<p>#未来工作和难点<br>实现hourglass相关代码和capsulesEM相关代码，DPP的cuda代码也可以考虑相，将算法融合</p>
+<p>实现hourglass相关代码和capsulesEM相关代码，将两者算法融合。</p>
+<p>目前在人体姿态数据集上，性能排名：</p>
+<p><strong>MPII</strong></p>
+<p>①单人姿态估计<br><ceter ><img src="https://raw.githubusercontent.com/yangsenius/images/master/mpii1.png" width="800"> </center><br>表现最好的是2018 ArXiv上来自中国科学院的Multi-Scale Structure-Aware Network for Human Pose Estimation论文 <a href="https://arxiv.org/pdf/1803.09894.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1803.09894.pdf</a></p>
+<p>（这篇论文包含Hourglass的设计）</p>
+<p>②多人姿态估计<br><ceter ><img src="https://raw.githubusercontent.com/yangsenius/images/master/mpii2.png" width="800"> </center><br>表现最好的是NIPS2017 Alejandro Newell发表的Associative Embedding: End-to-End Learning for Joint Detection and Grouping论文 <a href="https://arxiv.org/pdf/1611.05424.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1611.05424.pdf</a><br>（hourglass原作者的多人姿态估计设计）</p>
+<p><strong>MS COCO</strong></p>
+<p><ceter ><img src="https://raw.githubusercontent.com/yangsenius/images/master/mscoco.png" width="800"> </center><br>2017年在COCO数据集上性能表现最好的来自Face++提出的Cascaded Pyramid Network for Multi-Person Pose Estimation <a href="https://arxiv.org/pdf/1711.07319.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1711.07319.pdf</a></p>
+<p>其设计思想和stacked hourglass有异曲同工之妙，它包含了GlobalNet和RefineNet，不过CPN采用的是top-down的设计方式，FPN网络先检测bouding boxes，然后进行single pose estimation，它可以处理multi-person的姿态估计</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">原创, 禁止转载</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Human-Pose-Estimation/" rel="tag"># Human Pose Estimation</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          
+            <a href="/tags/Capsule-Network/" rel="tag"># Capsule Network</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/29/label_limitation/" rel="prev" title="The limitation of thinking with 'label' in Deep Learning (深度学习中标签思维的局限)">
+                The limitation of thinking with 'label' in Deep Learning (深度学习中标签思维的局限) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Des Matières
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Ensemble
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">articles</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Capsules-Network"><span class="nav-number">1.</span> <span class="nav-text">Capsules Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2018-4-25"><span class="nav-number">1.1.</span> <span class="nav-text">2018.4.25</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
