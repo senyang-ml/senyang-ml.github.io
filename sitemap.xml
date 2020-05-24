@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/</loc>
+    
+    <lastmod>2020-05-24T08:04:19.886Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/</loc>
+    
+    <lastmod>2020-05-24T06:13:18.928Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://senyang-ml.github.io/2019/09/02/personlab-2/</loc>
     
     <lastmod>2020-05-24T05:43:37.750Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/</loc>
     
     <lastmod>2020-05-24T05:42:11.296Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/</loc>
-    
-    <lastmod>2020-05-24T04:23:00.227Z</lastmod>
     
   </url>
   

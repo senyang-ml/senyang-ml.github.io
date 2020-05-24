@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/scae.jpg">
 <meta property="og:image" content="http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/coincidence-filtering.jpg">
 <meta property="article:published_time" content="2020-02-11T11:18:17.000Z">
-<meta property="article:modified_time" content="2020-05-24T04:23:00.227Z">
+<meta property="article:modified_time" content="2020-05-24T06:13:18.928Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Deep Learning">
 <meta property="article:tag" content="Capsule Network">
@@ -360,7 +360,10 @@
 </figure>
 <h4 id="pace">PACE</h4>
 <p><strong>目标</strong>：将 <span class="math inline">\(h\times w \times c\)</span> 的图像，编码成 <span class="math inline">\(M\)</span> 个part capsules，每个part capsule能够对应图像中的一种部件part的所有属性，用多个属性构成的一个向量 <span class="math inline">\(X \in R^{6+1+z_m}\)</span> 来表示一个part实例，这个实例属性中包括6维的姿态，1维的存在概率和 <span class="math inline">\(z_m\)</span> 维的自身独特性特征。</p>
-<p><strong>编码方法</strong>：采用CNN+Attention Pooling 方式： $hw c M X $</p>
+<p><strong>编码方法</strong>：采用CNN+Attention Pooling 方式:</p>
+<p><span class="math display">\[
+h\times w\times c \Rightarrow M \times X 
+\]</span></p>
 <p><strong>解码方法</strong>：可学习的<span class="math inline">\(M\)</span>个 <span class="math inline">\(11\times 11\)</span>大小的模板+仿射变换（6维姿态导出）</p>
 <p><strong>学习训练方法</strong>：用可学习的模板，进行高斯混合来重构原始图像+所有位置上的像素数据的极大似然估计</p>
 <h4 id="oace">OACE</h4>
@@ -456,6 +459,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/05/24/enhance-hexo-next/" rel="prev" title="Enhance hexo next">
+                Enhance hexo next <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -531,7 +538,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -544,7 +551,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -845,7 +852,10 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+      
   
 
 
