@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -139,7 +139,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -148,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
 
@@ -329,11 +329,16 @@
 
       
         
-          <h1 id="深度学习中标签思维的局限"><a href="#深度学习中标签思维的局限" class="headerlink" title="深度学习中标签思维的局限"></a>深度学习中标签思维的局限</h1><p>在生活中，聪明的人常常告诫我们，不要给事物轻易下定义，不要轻易给他人打上标签，因为“标签”的一种贬义替代词汇是“偏见”。然而目前的机器学习正利用人类的标签思维进行学习，所以机器学习到头来，学习到的都是我们的偏见吗？</p>
-<h2 id="端到端是标签思维的一种表现"><a href="#端到端是标签思维的一种表现" class="headerlink" title="端到端是标签思维的一种表现"></a>端到端是标签思维的一种表现</h2><p>我们首先来谈论一下端到端的学习。什么是端到端学习？简单来讲就是，机器学习一个从特定输入到特定输出的过程。端到端的学习应该在深度学习产生后进入了巅峰状态。对物体特征的提取技术由手工设计，如（HOG、Har、SIFT、LBP等），被自动提取技术（CNN）所替代了，少了人工的介入，那么端到端就能够轻易实现了。但实际上，端到端是一种局限的智能，为什么说它是局限的？一方面，它导致了模型的黑箱化，不可解释性，即我们不能认知中间特征数据所表示的内涵，另外，一个样本的信息量是巨大的，若是从不同的角度去解读，提取它的内涵就会得到不同的“标签”，甚至可以提取出内涵对立的标签（<strong>比如，如果我们特意地让机器去区分人类和动物的差异，机器就不能学习到，人类本身就是动物，这一基本事实</strong>），然而机器将大量相似的图像进行归纳学习为一个单独的标签，那么模型学到的是一种呆板的、偏见的抽象，这绝对不是真正的智能，就像Judeal Pearl说的如今的机器学习就是曲线拟合而已。</p>
-<h2 id="标签思维导致对抗样本的产生"><a href="#标签思维导致对抗样本的产生" class="headerlink" title="标签思维导致对抗样本的产生"></a>标签思维导致对抗样本的产生</h2><p><a href="https://www.jiqizhixin.com/articles/2018-01-06-6" target="_blank" rel="noopener">近来的研究表明</a> DNN 容易受到对抗样本（adversarial example）的影响：在输入中加入精心设计的对抗扰动（adversarial perturbation）可以误导目标 DNN，使其在运行中给该输入加标签时出错。</p>
-<p>一个常见的对抗攻击来自于2014年Goodfellow提出的Fast Gradient Sign Method(FGSM),它通过在梯度方向上进行添加增量来诱导网络对生成的图片X’进行误分类<br>$$ x^{,}=x+\varepsilon sign(\bigtriangledown _{x} J(\theta ,x,y)) $$</p>
-<center>  <img src="https://raw.githubusercontent.com/yangsenius/yangsenius.github.io/master/FGSM.png" width="800"> </center>
+          <h1 id="深度学习中标签思维的局限">深度学习中标签思维的局限</h1>
+<p>在生活中，聪明的人常常告诫我们，不要给事物轻易下定义，不要轻易给他人打上标签，因为“标签”的一种贬义替代词汇是“偏见”。然而目前的机器学习正利用人类的标签思维进行学习，所以机器学习到头来，学习到的都是我们的偏见吗？</p>
+<h2 id="端到端是标签思维的一种表现">端到端是标签思维的一种表现</h2>
+<p>我们首先来谈论一下端到端的学习。什么是端到端学习？简单来讲就是，机器学习一个从特定输入到特定输出的过程。端到端的学习应该在深度学习产生后进入了巅峰状态。对物体特征的提取技术由手工设计，如（HOG、Har、SIFT、LBP等），被自动提取技术（CNN）所替代了，少了人工的介入，那么端到端就能够轻易实现了。但实际上，端到端是一种局限的智能，为什么说它是局限的？一方面，它导致了模型的黑箱化，不可解释性，即我们不能认知中间特征数据所表示的内涵，另外，一个样本的信息量是巨大的，若是从不同的角度去解读，提取它的内涵就会得到不同的“标签”，甚至可以提取出内涵对立的标签（<strong>比如，如果我们特意地让机器去区分人类和动物的差异，机器就不能学习到，人类本身就是动物，这一基本事实</strong>），然而机器将大量相似的图像进行归纳学习为一个单独的标签，那么模型学到的是一种呆板的、偏见的抽象，这绝对不是真正的智能，就像Judeal Pearl说的如今的机器学习就是曲线拟合而已。</p>
+<h2 id="标签思维导致对抗样本的产生">标签思维导致对抗样本的产生</h2>
+<p><a href="https://www.jiqizhixin.com/articles/2018-01-06-6" target="_blank" rel="noopener">近来的研究表明</a> DNN 容易受到对抗样本（adversarial example）的影响：在输入中加入精心设计的对抗扰动（adversarial perturbation）可以误导目标 DNN，使其在运行中给该输入加标签时出错。</p>
+<p>一个常见的对抗攻击来自于2014年Goodfellow提出的Fast Gradient Sign Method(FGSM),它通过在梯度方向上进行添加增量来诱导网络对生成的图片X’进行误分类 <span class="math display">\[ x^{,}=x+\varepsilon sign(\bigtriangledown _{x} J(\theta ,x,y)) \]</span></p>
+<center>
+<img src="https://raw.githubusercontent.com/yangsenius/yangsenius.github.io/master/FGSM.png" width="800">
+</center>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/29/label_limitation/#meer" rel="contents">
@@ -459,7 +464,9 @@
 
       
         
-          <h1 id="Capsules-Network"><a href="#Capsules-Network" class="headerlink" title="Capsules Network"></a>Capsules Network</h1><h2 id="2018-4-25"><a href="#2018-4-25" class="headerlink" title="2018.4.25"></a>2018.4.25</h2><p>##引言<br>因为最近同时在看Matrix Capsules with EM routing  (<a href="https://openreview.net/pdf?id=HJWLfGWRb)和人体姿态估计相关的论文如Associative" target="_blank" rel="noopener">https://openreview.net/pdf?id=HJWLfGWRb)和人体姿态估计相关的论文如Associative</a> Embedding, stacked hourglass等，我渐渐发现了这两类研究方向在核心思想上的一些共通之处，即自下而上地获得全局信息，利用全局信息去解析局部特征，并进行预测。</p>
+          <h1 id="capsules-network">Capsules Network</h1>
+<h2 id="section">2018.4.25</h2>
+<p>##引言 因为最近同时在看Matrix Capsules with EM routing (https://openreview.net/pdf?id=HJWLfGWRb)和人体姿态估计相关的论文如Associative Embedding, stacked hourglass等，我渐渐发现了这两类研究方向在核心思想上的一些共通之处，即自下而上地获得全局信息，利用全局信息去解析局部特征，并进行预测。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/25/capsule-pose/#meer" rel="contents">
@@ -831,6 +838,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 

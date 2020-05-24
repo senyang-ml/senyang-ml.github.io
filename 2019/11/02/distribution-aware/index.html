@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="Sen Yang">
 <meta property="og:description" content="在arxiv上看到了这篇论文 ,个人认为这是一个很有意思的工作, 利用用heatmap上的最大值以及其对应位置m, 来估计真实高斯分布均值位置μ. 这样的量化误差（下采样导致的量化最小单位误差）能够得到最大程度上的减轻． 论文实验验证了该方法比经验上的估计方法更准确.（取峰值到次峰值的１／４偏移处的位置，这个估计其实也是近似符合高斯分布了）.">
 <meta property="article:published_time" content="2019-11-02T03:52:16.000Z">
-<meta property="article:modified_time" content="2020-03-13T11:00:45.000Z">
+<meta property="article:modified_time" content="2020-05-24T03:29:36.622Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Human Pose Estimation">
 <meta property="article:tag" content="Distribution">
@@ -140,7 +140,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -149,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -330,25 +330,41 @@
 <p>论文实验验证了该方法比经验上的估计方法更准确.（取峰值到次峰值的１／４偏移处的位置，这个估计其实也是近似符合高斯分布了）.</p>
 <a id="more"></a>
 <p><strong>公式６一阶导</strong></p>
-<p>$$<br>\left.\mathcal{D}^{\prime}(\boldsymbol{x})\right|<em>{\boldsymbol{x}=\boldsymbol{\mu}}=\left.\frac{\partial \mathcal{P}^{T}}{\partial \boldsymbol{x}}\right|</em>{\boldsymbol{x}=\boldsymbol{\mu}}=-\left.\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\right|_{\boldsymbol{x}=\boldsymbol{\mu}}=0<br>$$</p>
-<p>那么$\mathcal{D}^{\prime}(\boldsymbol{x})$ 是一个和$\boldsymbol{x}$ 形状一样的向量, 然而在公式(7)对向量$\boldsymbol{\mu}$泰勒展开:</p>
-<p><strong>公式７,高斯分布均值$\mu$处关于$ｍ$位置的二阶泰勒展开</strong></p>
-<p>$\mathcal{P}(\boldsymbol{\mu})=\mathcal{P}(\boldsymbol{m})+\mathcal{D}^{\prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})+\frac{1}{2}(\boldsymbol{\mu}-\boldsymbol{m})^{T} \mathcal{D}^{\prime \prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})$</p>
-<p>中的第二项$\mathcal{D}^{\prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})$ 中的$\mathcal{D}^{\prime}(\boldsymbol{m})$ 是不是应该加上转置,才能得到标量? 即 $\mathcal{D}^{\prime}(\boldsymbol{m})^T(\boldsymbol{\mu}-\boldsymbol{m})$</p>
-<h2 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h2><p>泰勒展开公式</p>
-<p>$\mathcal{P}(\boldsymbol{\mu})=\mathcal{P}(\boldsymbol{m})+\mathcal{D}^{\prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})+\frac{1}{2}(\boldsymbol{\mu}-\boldsymbol{m})^{T} \mathcal{D}^{\prime \prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})$</p>
-<p>代入$P(\mu)$和$P(m)$的高斯分布公式，即，将$\mu,m$代入下面的式子，约掉常数项</p>
-<p>$$<br>\begin{aligned} \mathcal{P}(\boldsymbol{x}; \boldsymbol{\mu}, \Sigma)=\ln (\mathcal{G})=&amp;-\ln (2 \pi)-\frac{1}{2} \ln (|\Sigma|)\ &amp;-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{T} \Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu}) \end{aligned}<br>$$</p>
-<p>可以得到<br>$$<br>\begin{aligned}0&amp;=-\frac{1}{2}(m-\mu)^{\top} \Sigma^{-1}(m-\mu) +D^{\prime}(m)^{\top}(\mu-m)+\frac{1}{2}(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m)\-D^{\prime}(m)^{\top}(\mu-m)&amp;=(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m)\-D^{\prime}(m)^{\top} &amp;=(\mu-m)^{\top} D^{\prime \prime}(m)\-D^{\prime}(m)^{\top} D^{\prime \prime}(m)^{-1} &amp;=(\mu-m)^{\top} \-D^{\prime\prime}(m)^{-\top} D^{\prime}(m) &amp;=\mu-m \ \mu &amp;=m-D^{\prime \prime}(m)^{-\top} D^{\prime}(m) \end{aligned}$$</p>
-<p><strong>因为$D^{\prime \prime}(m)＝－ \Sigma^{-1}$，在论文中方差矩阵假设为对角阵(可逆)$\Sigma=\left[\begin{array}{ll}{\sigma^{2}} &amp; {0} \ {0} &amp; {\sigma^{2}}\end{array}\right]$ (因为ｘｙ方向独立),　这意味着$D^{\prime \prime}(m)=D^{\prime \prime}(m)^T$, 所以</strong></p>
-<p>$$<br>\begin{aligned}\mu &amp;=m-D^{\prime \prime}(m)^{-\top} D^{\prime}(m) \ \mu&amp;=m-D^{\prime \prime}(m)^{-1} D^{\prime}(m)\end{aligned}<br>$$</p>
+<p><span class="math display">\[
+\left.\mathcal{D}^{\prime}(\boldsymbol{x})\right|_{\boldsymbol{x}=\boldsymbol{\mu}}=\left.\frac{\partial \mathcal{P}^{T}}{\partial \boldsymbol{x}}\right|_{\boldsymbol{x}=\boldsymbol{\mu}}=-\left.\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu})\right|_{\boldsymbol{x}=\boldsymbol{\mu}}=0
+\]</span></p>
+<p>那么<span class="math inline">\(\mathcal{D}^{\prime}(\boldsymbol{x})\)</span> 是一个和<span class="math inline">\(\boldsymbol{x}\)</span> 形状一样的向量, 然而在公式(7)对向量<span class="math inline">\(\boldsymbol{\mu}\)</span>泰勒展开:</p>
+<p><strong>公式７,高斯分布均值<span class="math inline">\(\mu\)</span>处关于<span class="math inline">\(ｍ\)</span>位置的二阶泰勒展开</strong></p>
+<p><span class="math display">\[
+\mathcal{P}(\boldsymbol{\mu})=\mathcal{P}(\boldsymbol{m})+\mathcal{D}^{\prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})+\frac{1}{2}(\boldsymbol{\mu}-\boldsymbol{m})^{T} \mathcal{D}^{\prime \prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})
+\]</span></p>
+<p>中的第二项<span class="math inline">\(\mathcal{D}^{\prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})\)</span> 中的<span class="math inline">\(\mathcal{D}^{\prime}(\boldsymbol{m})\)</span> 是不是应该加上转置,才能得到标量? 即 <span class="math inline">\(\mathcal{D}^{\prime}(\boldsymbol{m})^T(\boldsymbol{\mu}-\boldsymbol{m})\)</span></p>
+<h2 id="推导">推导</h2>
+<p>泰勒展开公式</p>
+<p><span class="math display">\[
+\mathcal{P}(\boldsymbol{\mu})=\mathcal{P}(\boldsymbol{m})+\mathcal{D}^{\prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})+\frac{1}{2}(\boldsymbol{\mu}-\boldsymbol{m})^{T} \mathcal{D}^{\prime \prime}(\boldsymbol{m})(\boldsymbol{\mu}-\boldsymbol{m})
+\]</span></p>
+<p>代入<span class="math inline">\(P(\mu)\)</span>和<span class="math inline">\(P(m)\)</span>的高斯分布公式，即，将<span class="math inline">\(\mu,m\)</span>代入下面的式子，约掉常数项</p>
+<p><span class="math display">\[
+\begin{aligned} \mathcal{P}(\boldsymbol{x}; \boldsymbol{\mu}, \Sigma)=\ln (\mathcal{G})=&amp;-\ln (2 \pi)-\frac{1}{2} \ln (|\Sigma|)\\ &amp;-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{T} \Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu}) \end{aligned}
+\]</span></p>
+<p>可以得到</p>
+<p><span class="math display">\[
+\begin{aligned}0&amp;=-\frac{1}{2}(m-\mu)^{\top} \Sigma^{-1}(m-\mu) +D^{\prime}(m)^{\top}(\mu-m)+\frac{1}{2}(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m)\\-D^{\prime}(m)^{\top}(\mu-m)&amp;=(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m)\\-D^{\prime}(m)^{\top} &amp;=(\mu-m)^{\top} D^{\prime \prime}(m)\\-D^{\prime}(m)^{\top} D^{\prime \prime}(m)^{-1} &amp;=(\mu-m)^{\top} \\-D^{\prime\prime}(m)^{-\top} D^{\prime}(m) &amp;=\mu-m \\ \mu &amp;=m-D^{\prime \prime}(m)^{-\top} D^{\prime}(m) \end{aligned}
+\]</span></p>
+<p><strong>因为<span class="math inline">\(D^{\prime \prime}(m)＝－ \Sigma^{-1}\)</span>，在论文中方差矩阵假设为对角阵(可逆)<span class="math inline">\(\Sigma=\left[\begin{array}{ll}{\sigma^{2}} &amp; {0} \\ {0} &amp; {\sigma^{2}}\end{array}\right]\)</span> (因为ｘｙ方向独立),　这意味着<span class="math inline">\(D^{\prime \prime}(m)=D^{\prime \prime}(m)^T\)</span>, 所以</strong></p>
+<p><span class="math display">\[
+\begin{aligned}\mu &amp;=m-D^{\prime \prime}(m)^{-\top} D^{\prime}(m) \\ \mu&amp;=m-D^{\prime \prime}(m)^{-1} D^{\prime}(m)\end{aligned}
+\]</span></p>
 <p>补充一个细节:</p>
-<p>上面的推导, 在第三个等式约掉($\mu-m$)的条件是假设$\mu$不等于$m$,<br>所以下面的等式是更完备的推导:<br>$$<br>\begin{aligned}0&amp;=-\frac{1}{2}(m-\mu)^{\top} \Sigma^{-1}(m-\mu) +D^{\prime}(m)^{\top}(\mu-m)+\frac{1}{2}(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m)\-D^{\prime}(m)^{\top}(\mu-m)&amp;=(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m) \-D^{\prime}(m)^{\top} D^{\prime \prime}(m)^{-1} (\mu-m)&amp;=(\mu-m)^{\top}(\mu-m)  \  0 &amp;=\left[\mu-m+D^{\prime \prime}(m)^{-\top} D^{\prime}(m)\right] (\mu-m) \  0 &amp;=[\mu-m+D^{\prime \prime}(m)^{-1} D^{\prime}(m)] (\mu-m)\end{aligned}<br>$$</p>
-<p>这个推导的建立在两个假设上面:<br>(1) 下采样后得到的heatmap上面的取值, 被假设为服从真实关键点位置的高斯分布<br>(2) 二阶泰勒展开的近似</p>
-<p>那么 $\mu =m-D^{\prime \prime}(m)^{-1} D^{\prime}(m)$ 也包含了$\mu=m$的可能, 因为</p>
-<p>$D^{\prime}(m)=0\Leftrightarrow m$在高斯分布的均值位置$\Leftrightarrow \mu=m$</p>
-<p>所以 $\mu =m-D^{\prime \prime}(m)^{-1} D^{\prime}(m)$是完备的</p>
-<p>在ilovepose网站(赞!)上, 原作者也给出了关于公式的解释: <a href="http://www.ilovepose.cn/t/99" target="_blank" rel="noopener">http://www.ilovepose.cn/t/99</a></p>
+<p>上面的推导, 在第三个等式约掉(<span class="math inline">\(\mu-m\)</span>)的条件是假设<span class="math inline">\(\mu\)</span>不等于<span class="math inline">\(m\)</span>, 所以下面的等式是更完备的推导: <span class="math display">\[
+\begin{aligned}0&amp;=-\frac{1}{2}(m-\mu)^{\top} \Sigma^{-1}(m-\mu) +D^{\prime}(m)^{\top}(\mu-m)+\frac{1}{2}(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m)\\-D^{\prime}(m)^{\top}(\mu-m)&amp;=(\mu-m)^{\top} D^{\prime \prime}(m)(\mu-m) \\-D^{\prime}(m)^{\top} D^{\prime \prime}(m)^{-1} (\mu-m)&amp;=(\mu-m)^{\top}(\mu-m)  \\  0 &amp;=\left[\mu-m+D^{\prime \prime}(m)^{-\top} D^{\prime}(m)\right] (\mu-m) \\  0 &amp;=[\mu-m+D^{\prime \prime}(m)^{-1} D^{\prime}(m)] (\mu-m)\end{aligned}
+\]</span></p>
+<p>这个推导的建立在两个假设上面: (1) 下采样后得到的heatmap上面的取值, 被假设为服从真实关键点位置的高斯分布 (2) 二阶泰勒展开的近似</p>
+<p>那么 <span class="math inline">\(\mu =m-D^{\prime \prime}(m)^{-1} D^{\prime}(m)\)</span> 也包含了<span class="math inline">\(\mu=m\)</span>的可能, 因为</p>
+<p><span class="math inline">\(D^{\prime}(m)=0\Leftrightarrow m\)</span>在高斯分布的均值位置<span class="math inline">\(\Leftrightarrow \mu=m\)</span></p>
+<p>所以 <span class="math inline">\(\mu =m-D^{\prime \prime}(m)^{-1} D^{\prime}(m)\)</span>是完备的</p>
+<p>在ilovepose网站(赞!)上, 原作者也给出了关于公式的解释: <a href="http://www.ilovepose.cn/t/99" target="_blank" rel="noopener" class="uri">http://www.ilovepose.cn/t/99</a></p>
 
       
     </div>
@@ -360,6 +376,24 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://senyang-ml.github.io/2019/11/02/distribution-aware/" title="Distribution-Aware Coordinate Representation for Human Pose Estimation">http://senyang-ml.github.io/2019/11/02/distribution-aware/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -801,6 +835,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 

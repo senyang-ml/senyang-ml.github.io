@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -83,12 +83,12 @@
 
 
 
-<meta name="description" content="更多内容在知乎文章: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72561165&#x2F;  浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向">
+<meta name="description" content="更多内容在知乎文章: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72561165&#x2F; 浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Rethinking Human Pose Estimation  重新思考人体姿态估计">
 <meta property="og:url" content="http://senyang-ml.github.io/2019/07/13/rethinking_human_pose/index.html">
 <meta property="og:site_name" content="Sen Yang">
-<meta property="og:description" content="更多内容在知乎文章: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72561165&#x2F;  浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向">
+<meta property="og:description" content="更多内容在知乎文章: https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;72561165&#x2F; 浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向">
 <meta property="og:image" content="https://ask.qcloudimg.com/http-save/yehe-1000017/1emeto7o6r.gif">
 <meta property="og:image" content="https://tse3-mm.cn.bing.net/th?id=OIP.u3JSsrIZJMhgjdxWK443vwHaHZ&w=221&h=211&c=7&o=5&pid=1.7">
 <meta property="og:image" content="https://raw.githubusercontent.com/CMU-Perceptual-Computing-Lab/openpose/master/doc/media/keypoints_pose_18.png">
@@ -145,7 +145,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -154,7 +154,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -332,94 +332,73 @@
 
       
         <p><strong>更多内容在知乎文章: <a href="https://zhuanlan.zhihu.com/p/72561165" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/72561165/</a></strong></p>
-<p> 浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向</p>
-<img src="https://ask.qcloudimg.com/http-save/yehe-1000017/1emeto7o6r.gif">
-
+<p>浅谈：2D人体姿态估计基本任务、研究问题、意义、应用、研究趋势以及未来方向</p>
+<p><img src="https://ask.qcloudimg.com/http-save/yehe-1000017/1emeto7o6r.gif"></p>
 <a id="more"></a>
-<h4 id="1-基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。"><a href="#1-基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。" class="headerlink" title="1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。"></a>1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。</h4><img src="https://tse3-mm.cn.bing.net/th?id=OIP.u3JSsrIZJMhgjdxWK443vwHaHZ&w=221&h=211&c=7&o=5&pid=1.7">
-<img src="https://raw.githubusercontent.com/CMU-Perceptual-Computing-Lab/openpose/master/doc/media/keypoints_pose_18.png" width=20%>
-
-
-<h4 id="2-基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。"><a href="#2-基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。" class="headerlink" title="2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。"></a>2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。</h4><blockquote>
-<p>按照人的直观视觉理解的话，主要会涉及到以下问题：</p>
-<ul>
-<li>关键点及周围的局部特征是什么样的？</li>
-<li>关键点之间、人体肢体的空间约束关系是什么样的，以及层级的人体部件关系是什么样的？</li>
-<li>不同人体之间的交互关系是什么样的，人体与外界环境之间的交互关系是什么？</li>
-</ul>
+<h4 id="基本定义从单张rgb图像中精确地识别出多个人体的以及其骨架的的稀疏的关键点位置">1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。</h4>
+<p><img src="https://tse3-mm.cn.bing.net/th?id=OIP.u3JSsrIZJMhgjdxWK443vwHaHZ&w=221&h=211&c=7&o=5&pid=1.7"> <img src="https://raw.githubusercontent.com/CMU-Perceptual-Computing-Lab/openpose/master/doc/media/keypoints_pose_18.png" width="20%"></p>
+<h4 id="基本任务给定一张rgb图像定位图像中人体的关键点位置并确定其隶属的人体">2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。</h4>
+<blockquote>
+<p>按照人的直观视觉理解的话，主要会涉及到以下问题： - 关键点及周围的局部特征是什么样的？ - 关键点之间、人体肢体的空间约束关系是什么样的，以及层级的人体部件关系是什么样的？ - 不同人体之间的交互关系是什么样的，人体与外界环境之间的交互关系是什么？</p>
 </blockquote>
 <blockquote>
-<p>基于Deep CNN的方法的试图通过神经网络的拟合能力，建立一种隐式的预测模型来避开上述的显式问题：</p>
-<ul>
-<li>基于去显式分析人体姿态问题的方法是有的，传统的Pictorial Structure是其中一个较为经典的算法思路，目前也有少数方法用part-based的层级树结构建立人体姿态模型并利用CNN，来进行学习与预测。</li>
-<li>当下多数深度CNN回归的方式, 试图用模型强大的拟合能力去回避以上的显式问题，而从大量的图像数据和标签监督信息中用神经网络去学习图像数据与构建的标签信息之间的映射。</li>
-</ul>
+<p>基于Deep CNN的方法的试图通过神经网络的拟合能力，建立一种隐式的预测模型来避开上述的显式问题： - 基于去显式分析人体姿态问题的方法是有的，传统的Pictorial Structure是其中一个较为经典的算法思路，目前也有少数方法用part-based的层级树结构建立人体姿态模型并利用CNN，来进行学习与预测。 - 当下多数深度CNN回归的方式, 试图用模型强大的拟合能力去回避以上的显式问题，而从大量的图像数据和标签监督信息中用神经网络去学习图像数据与构建的标签信息之间的映射。</p>
 </blockquote>
-<h4 id="3-当前主流研究的基础问题和难点："><a href="#3-当前主流研究的基础问题和难点：" class="headerlink" title="3.当前主流研究的基础问题和难点："></a>3.当前主流研究的基础问题和难点：</h4><ul>
-<li><p>神经网络结构的设计是个永远（当下）都会伴随的问题（假如深度学习的热潮没有退去的话）</p>
-</li>
+<h4 id="当前主流研究的基础问题和难点">3.当前主流研究的基础问题和难点：</h4>
+<ul>
+<li><p>神经网络结构的设计是个永远（当下）都会伴随的问题（假如深度学习的热潮没有退去的话）</p></li>
 <li><p>Top-down：先检测人体，再做单人姿态估计两阶段的方法。</p>
 <ul>
-<li><p>必然受到了目标检测任务的制约。</p>
-</li>
-<li><p>基于bounding box的单人姿态估计问题，在面对遮挡问题容易受到挫折。</p>
-</li>
-<li><p>精度虽然髙实时性能较差</p>
-</li>
-<li><p>小尺寸图像与计算资源限制</p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
+<li><p>必然受到了目标检测任务的制约。</p></li>
+<li><p>基于bounding box的单人姿态估计问题，在面对遮挡问题容易受到挫折。</p></li>
+<li><p>精度虽然髙实时性能较差</p></li>
+<li><p>小尺寸图像与计算资源限制</p></li>
+</ul></li>
 <li><p>Bottom-up：针对整副图像的多人关键点检测，检测所有关键点候选位置的同时，关联相关人体</p>
 <ul>
 <li>精度不如单人估计的更加精准，但实时性能较好</li>
 <li>面对拥挤问题、遮挡问题仍然容易受到挫折</li>
 <li>小尺寸图像问题</li>
+</ul></li>
 </ul>
-</li>
+<h4 id="方法分类">4.方法分类：</h4>
+<ul>
+<li><p>标准1：:Top-Down和Bottom-up的方法。</p></li>
+<li><p>标准2：全局的长距离关系的隐式学习问题（大多数）和基于part的中短距离关系（ECCV-18 PersonLab，ECCV-18 Deeply learned compositional models）的学习问题</p></li>
+<li><p>标准3：heatmap回归（大多数），直接坐标回归方法（CVPR-14-DeepPose，ECCV-18的Integral Pose），向量场嵌入（CVPR-17 G-RMI，ECCV-18 PersonLab，CVPR-19 PIFPAF）的方法等等</p></li>
 </ul>
-<h4 id="4-方法分类："><a href="#4-方法分类：" class="headerlink" title="4.方法分类："></a>4.方法分类：</h4><ul>
-<li><p>标准1：:Top-Down和Bottom-up的方法。</p>
-</li>
-<li><p>标准2：全局的长距离关系的隐式学习问题（大多数）和基于part的中短距离关系（ECCV-18 PersonLab，ECCV-18 Deeply learned compositional models）的学习问题</p>
-</li>
-<li><p>标准3：heatmap回归（大多数），直接坐标回归方法（CVPR-14-DeepPose，ECCV-18的Integral Pose），向量场嵌入（CVPR-17 G-RMI，ECCV-18 PersonLab，CVPR-19 PIFPAF）的方法等等</p>
-</li>
-</ul>
-<h5 id="5-近几年的代表作"><a href="#5-近几年的代表作" class="headerlink" title="5.近几年的代表作"></a>5.近几年的代表作</h5><ul>
-<li>发迹于2014年, CVPR: Google的DeepPose，同年出现了MPII数据集（Max-Planck ）以及MS-COCO数据集。<ul>
+<h5 id="近几年的代表作">5.近几年的代表作</h5>
+<ul>
+<li>发迹于2014年, CVPR: Google的DeepPose，同年出现了MPII数据集（Max-Planck ）以及MS-COCO数据集。</li>
 <li>16年: CVPR：CMU的Convolutional Pose Machine (CPM)和德国的马克斯普朗克研究所Deepcut以及Stacked Hourglass 网络结构设计的出现。</li>
-</ul>
-</li>
 <li>17年: CVPR：Google的G-RMI开启基于目标检测的人体姿态估计方法。CMU的OpenPose系统出现，致力于打造实时姿态估计系统。Deepcut的改进版DeeperCut出现。同年ICCV上，Mask RCNN、上海交通大学的RMPE以及随后的AlphaPose崭露头角, NeurIPS17也出现了 Associative Embedding 以新的端到端的方式来避免人体姿态估计多阶段不连续学习的问题。</li>
-<li>18年：CVPR上出现了旷世的CPN拿下了17年COCO挑战赛的冠军, ECCV上微软亚洲研究院的SimpleBaseline用自上而下的方法为姿态估计打造最简单的baseline，并刷新了COCO数据集的新高。ECCV上还出现了来自中东技术大学的Muhammed Kocabas提出了MultiPoseNet，以及Google的自下而上多任务的新作PersonLab, 值得一提的是还有一些开辟新的研究角度的方法如ECCV上美国西北大学part-based的姿态估计方法Deeply learned compositional models 。18年的另外一个趋势就是，新问题新任务的出现，比如CVPR18的DensePose标志着密集关键点人体姿态估计任务的出现, 2D pose track 任务(CVPR18 PoseTrack数据集)的提出, 以及3D 姿态估计问题的兴起……</li>
-<li>19年CVPR, 姿态估计再次呈现一个小爆发（HRNET，PIFPAF，Seu-ByteDance Pose ，Related Parts Help，Crowded Pose , Fast Human Pose，Pose2Reg等等），并且出现了大量新的方向探讨姿态估计问题, 以及 3D 姿态估计成为主流。 当然, 2D姿态估计任务仍然是值得去深入探讨的问题, 因为一些本质上的难题目前还没有完全的洞察和有效的解决方案, 比如严重遮挡,多人重叠问题等等。另外， 数据集MPII, COCO数据集上的”刷性能” 也依然是大家孜孜不倦的追求，性能再次来到了新高。</li>
+<li>18年：CVPR上出现了旷世的CPN拿下了17年COCO挑战赛的冠军, ECCV上微软亚洲研究院的SimpleBaseline用自上而下的方法为姿态估计打造最简单的baseline，并刷新了COCO数据集的新高。ECCV上还出现了来自中东技术大学的Muhammed Kocabas提出了MultiPoseNet，以及Google的自下而上多任务的新作PersonLab, 值得一提的是还有一些开辟新的研究角度的方法如ECCV上美国西北大学part-based的姿态估计方法Deeply learned compositional models 。18年的另外一个趋势就是，新问题新任务的出现，比如CVPR18的DensePose标志着密集关键点人体姿态估计任务的出现, 2D pose track 任务(CVPR18 PoseTrack数据集)的提出, 以及3D 姿态估计问题的兴起......</li>
+<li>19年CVPR, 姿态估计再次呈现一个小爆发（HRNET，PIFPAF，Seu-ByteDance Pose ，Related Parts Help，Crowded Pose , Fast Human Pose，Pose2Reg等等），并且出现了大量新的方向探讨姿态估计问题, 以及 3D 姿态估计成为主流。 当然, 2D姿态估计任务仍然是值得去深入探讨的问题, 因为一些本质上的难题目前还没有完全的洞察和有效的解决方案, 比如严重遮挡,多人重叠问题等等。另外， 数据集MPII, COCO数据集上的&quot;刷性能&quot; 也依然是大家孜孜不倦的追求，性能再次来到了新高。</li>
 </ul>
-<h4 id="6-研究意义："><a href="#6-研究意义：" class="headerlink" title="6.研究意义："></a>6.研究意义：</h4><ul>
-<li><p>3D人体姿态估计的铺垫、3维人体重建的必备技术</p>
-</li>
-<li><p>人体关键点的视频追踪问题的基础（从静态到动态）</p>
-</li>
-<li><p>动作识别的信息来源（从关键点的时序空间特征映射到动作语义问题）</p>
-</li>
+<h4 id="研究意义">6.研究意义：</h4>
+<ul>
+<li><p>3D人体姿态估计的铺垫、3维人体重建的必备技术</p></li>
+<li><p>人体关键点的视频追踪问题的基础（从静态到动态）</p></li>
+<li><p>动作识别的信息来源（从关键点的时序空间特征映射到动作语义问题）</p></li>
 </ul>
-<h4 id="7-应用："><a href="#7-应用：" class="headerlink" title="7.应用："></a>7.应用：</h4><ul>
+<h4 id="应用">7.应用：</h4>
+<ul>
 <li>自动驾驶行业：自动驾驶道路街景中行人的检测以及姿态估计、动作预测等问题</li>
 <li>娱乐产业：动作特效的增加。快手、抖音、微视等视频软件</li>
 <li>安全领域：行人再识别问题，以及特殊场景的特定动作监控，婴儿、老人的照顾。</li>
 <li>影视产业：拍电影特效（复仇者联盟）</li>
 <li>人机交互：AR，VR，以及未来的人机交互方式</li>
 </ul>
-<h4 id="8-研究趋势的变化以及扩展："><a href="#8-研究趋势的变化以及扩展：" class="headerlink" title="8.研究趋势的变化以及扩展："></a>8.研究趋势的变化以及扩展：</h4><ul>
+<h4 id="研究趋势的变化以及扩展">8.研究趋势的变化以及扩展：</h4>
+<ul>
 <li>稀疏关键点到密集关键点（CVPR-18 FaceBook DensePose）</li>
-<li>静态图像到视频追踪  （CVPR-18 PoseTrack）</li>
+<li>静态图像到视频追踪 （CVPR-18 PoseTrack）</li>
 <li>从关键点定位到肢体的分割预测 （pose parsing,CVPR-19 Pose2Reg）</li>
 <li>从监督学习到弱监督 、半监督，甚至无监督有可能（如, ICLR2019 unsupervised discovery, parts, structure and dynamics）</li>
 <li>当然：神经网络结构的设计（ECCV-18 SimpleBaseline，CVPR-18 CPN， CVPR-19 HRNet，CVPR-19 Enhanced Channel-wise and Spatial Information，ICCV FPN-POSE等等）是个永远都会伴随的问题（假如深度学习的热潮没有退去的话）</li>
 </ul>
-<h4 id="个人思考"><a href="#个人思考" class="headerlink" title="个人思考"></a>个人思考</h4><p>当前所有的姿态估计方法几乎都使用了深度卷积神经网络的强大功能，但个人认为神经网络设计绝不是解决该问题的核心，用力搔靴和脱掉鞋子，哪个才是更好的止痒手段呢？</p>
+<h4 id="个人思考">个人思考</h4>
+<p>当前所有的姿态估计方法几乎都使用了深度卷积神经网络的强大功能，但个人认为神经网络设计绝不是解决该问题的核心，用力搔靴和脱掉鞋子，哪个才是更好的止痒手段呢？</p>
 <p>人体姿态估计是一个综合的问题，有很多的切入点和难题值得去研究，并且它是一个尚未实际落地的计算机视觉技术。在这个层面上，AI的产品经理们和投机者们应该想想这项技术怎么能更好地服务大众，并带来市场和利润。</p>
 <p>作为科学研究者，赚钱的考虑或应该暂时放到明天。我想讨论的是: 当我们面对一项任务和难题， 我们是应该忽略固有的困难和问题，提出新的问题，给出问题方案，去探索新的研究趋势呢？还是强行深入当前的固有问题，解决当下的难题呢？ 是不是有一些的问题是超前式的，也许放到以后才会有更加合适的方案和角度来解决？</p>
 <p>或者说，我们还可以用另一种粗暴的方案：把这一问题黑箱化或者半黑箱化，然后从神经网络结构设计、数据处理、增强以及其他机器学习数学方法去暴力式的解决。这样的解决方式实际上是，摒弃了人类本身做姿态估计的直观思路（上面所述），而是从更加“机器学习”的角度去处理这个问题。假如，我们寻找到一个“完美”结构的神经网络，让它去达到１００％或者近似１００％的准确率！这样以来，似乎预测问题被完完全全地解决了，但是问题是，我们不知道能不能找到这样的结构或者技术，或者说一旦找到了以后能不能解释性地理解这一技术? 这就又引出了大家探讨争论许久的可解释性问题、显式推理问题。其实今年CVPR19 的PifPaf的工作值得我们去思考，它继续引入复合场(Composite Field)的概念，预测人为得设计好的高维度向量来处理人体姿态预测问题，让模型预测更加巧妙的监督信息。该方法能降低量化误差，设计的关联肢体得分公式巧妙保持了期望的一致性，再加之一个快速贪心算法，利用人体的连通特性就能得到多人姿态。这样的设计与算法，尽管性能比那些注重网络结构设计的略差一些，但却遵循合理的直觉，并且可解释性强，启发性强，是不是需要我们更多的关注？</p>
@@ -438,6 +417,24 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://senyang-ml.github.io/2019/07/13/rethinking_human_pose/" title="Rethinking Human Pose Estimation  重新思考人体姿态估计">http://senyang-ml.github.io/2019/07/13/rethinking_human_pose/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -624,7 +621,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。"><span class="nav-number">1.</span> <span class="nav-text">1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。"><span class="nav-number">2.</span> <span class="nav-text">2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-当前主流研究的基础问题和难点："><span class="nav-number">3.</span> <span class="nav-text">3.当前主流研究的基础问题和难点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-方法分类："><span class="nav-number">4.</span> <span class="nav-text">4.方法分类：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-近几年的代表作"><span class="nav-number">4.1.</span> <span class="nav-text">5.近几年的代表作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-研究意义："><span class="nav-number">5.</span> <span class="nav-text">6.研究意义：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-应用："><span class="nav-number">6.</span> <span class="nav-text">7.应用：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-研究趋势的变化以及扩展："><span class="nav-number">7.</span> <span class="nav-text">8.研究趋势的变化以及扩展：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#个人思考"><span class="nav-number">8.</span> <span class="nav-text">个人思考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本定义从单张rgb图像中精确地识别出多个人体的以及其骨架的的稀疏的关键点位置"><span class="nav-number">1.</span> <span class="nav-text">1.基本定义：从单张RGB图像中，精确地识别出多个人体的以及其骨架的的稀疏的关键点位置。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本任务给定一张rgb图像定位图像中人体的关键点位置并确定其隶属的人体"><span class="nav-number">2.</span> <span class="nav-text">2.基本任务：给定一张RGB图像，定位图像中人体的关键点位置，并确定其隶属的人体。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当前主流研究的基础问题和难点"><span class="nav-number">3.</span> <span class="nav-text">3.当前主流研究的基础问题和难点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法分类"><span class="nav-number">4.</span> <span class="nav-text">4.方法分类：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#近几年的代表作"><span class="nav-number">4.1.</span> <span class="nav-text">5.近几年的代表作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#研究意义"><span class="nav-number">5.</span> <span class="nav-text">6.研究意义：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用"><span class="nav-number">6.</span> <span class="nav-text">7.应用：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#研究趋势的变化以及扩展"><span class="nav-number">7.</span> <span class="nav-text">8.研究趋势的变化以及扩展：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#个人思考"><span class="nav-number">8.</span> <span class="nav-text">个人思考</span></a></li></ol></div>
             
 
           </div>
@@ -881,6 +878,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 

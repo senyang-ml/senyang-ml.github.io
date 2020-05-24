@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -141,7 +141,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -150,7 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -328,29 +328,23 @@
 
       
         <p>解决了PyTorch 使用torch.nn.DataParallel 进行多GPU训练的一个BUG:</p>
-<p><strong>模型(参数)和数据不在相同设备上</strong></p>
-<a id="more"></a>
-<p>我使用<code>torch.nn.DataParallel</code>进行多GPU训练时出现了一个BUG，困扰了我许久：</p>
-<p><code>RuntimeError: Expected tensor for argument #1 &#39;input&#39; to have the same device as tensor for argument #2 &#39;weight&#39;; but device 1 does not equal 0 (while checking arguments for cudnn_convolution)</code></p>
+<p><strong>模型(参数)和数据不在相同设备上</strong> <a id="more"></a> 我使用<code>torch.nn.DataParallel</code>进行多GPU训练时出现了一个BUG，困扰了我许久：</p>
+<p><code>RuntimeError: Expected tensor for argument #1 'input' to have the same device as tensor for argument #2 'weight'; but device 1 does not equal 0 (while checking arguments for cudnn_convolution)</code></p>
 <p>这个错误表明, <code>input</code>数据在<code>device 1</code> 上, 而模型的参数在<code>device 0</code> 上 (暗示数据是被拆分到了各个GPU上,但是BUG出现位置的此处参数可能没有成功复制到其他GPU上, 或者说, 还是调用了复制前的那个参数地址)</p>
-<p>因为模型比较复杂，继承与调用太多，之前调试了好久, 也没有解决掉, 在Github上有一个issue和我的问题很像:<br><a href="https://github.com/pytorch/pytorch/issues/8637" target="_blank" rel="noopener">https://github.com/pytorch/pytorch/issues/8637</a><br>但是我还是没有找到自己的bug在哪里.</p>
-<h4 id="今天-我又准备再此尝试解决它"><a href="#今天-我又准备再此尝试解决它" class="headerlink" title="今天, 我又准备再此尝试解决它"></a>今天, 我又准备再此尝试解决它</h4><p>经过6个小时的<code>print调试法</code>以及后面关键的VScode的<code>Debug</code>功能, 我大功告成,找到了问题所在,原来</p>
+<p>因为模型比较复杂，继承与调用太多，之前调试了好久, 也没有解决掉, 在Github上有一个issue和我的问题很像: https://github.com/pytorch/pytorch/issues/8637 但是我还是没有找到自己的bug在哪里.</p>
+<h4 id="今天-我又准备再此尝试解决它">今天, 我又准备再此尝试解决它</h4>
+<p>经过6个小时的<code>print调试法</code>以及后面关键的VScode的<code>Debug</code>功能, 我大功告成,找到了问题所在,原来</p>
 <p>我的<code>A(nn.Module)</code>类的<code>forward</code> 前向计算函数里面, 有一处调用了一个该类的列表<code>self.cell_fabrics</code>, 其列表的元素是通过<code>self.cell_fabrics = [self.cell_1, self.cell_2,...,self.cell_n]</code> 来赋值的,其中每个<code>self.cell</code>也是<code>nn.Module</code>类</p>
 <p>即用<code>self.cell_fabrics = [self.cell_0_0, self.cell_0_1, … , self.cell_3_0, self.cell_3_1,…, self.cell_5_0]</code> 这样的方式,将所有的<code>cell类</code>放到<code>A类</code>的一个<code>列表属性</code>中, 而当整个<code>A类</code>通过<code>torch.nn.DataParallel</code>被复制了一份放到设备<code>cuda:1</code>上以后, 且在预计在设备<code>cuda:1</code>上执行下面代码段时:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self,x)</span></span></span><br><span class="line"><span class="function">    <span class="title">for</span> <span class="title">layer</span> <span class="title">in</span> <span class="title">self</span>.<span class="title">cell_fabrics</span>:</span></span><br><span class="line">        <span class="keyword">for</span> cell <span class="keyword">in</span> layer:</span><br><span class="line">           y = cell (x,)</span><br></pre></td></tr></table></figure>
-
-<p> 经验证，<code>x</code>是在设备<code>cuda:1</code> 上面, 但是  <code>cell</code> 中的参数却明显都在 <code>cuda:0</code>上</p>
+<p>经验证，<code>x</code>是在设备<code>cuda:1</code> 上面, 但是 <code>cell</code> 中的参数却明显都在 <code>cuda:0</code>上</p>
 <p>也就是说:</p>
-<p><strong>此时 <code>self.cell_fabrics</code> 的列表中保存的各个对象 (<code>self.cell</code>) 的地址，还是指向在没有进行<code>torch.nn.DataParallel</code>之前的<code>nn.Module</code> 的那些<code>self.cell</code>,  而<code>nn.DataParallel</code>类的<code>nn.Module</code>的参数都默认存放在<code>device(type=&#39;cuda&#39;,index=0)</code>上 .</strong> </p>
-<p><code>torch.nn.DataParallel(model,device_ids=[range(len(gpus))])</code>的机制是, 将属于<code>nn.Module</code>类的<code>model</code>以及其广播的所有<code>nn.Module</code>子类的上的所有参数,复制成<code>len(gpus)</code>份,送到各个GPU上.  这种广播机制的范围是注册(registered)成为其属性的<code>nn.Module</code>子类, <strong>属性为列表list中的各个对象是不会被复制的, 所以其list中的对象还是存放在默认设备<code>device 0</code>上</strong></p>
+<p><strong>此时 <code>self.cell_fabrics</code> 的列表中保存的各个对象 (<code>self.cell</code>) 的地址，还是指向在没有进行<code>torch.nn.DataParallel</code>之前的<code>nn.Module</code> 的那些<code>self.cell</code>, 而<code>nn.DataParallel</code>类的<code>nn.Module</code>的参数都默认存放在<code>device(type='cuda',index=0)</code>上 .</strong></p>
+<p><code>torch.nn.DataParallel(model,device_ids=[range(len(gpus))])</code>的机制是, 将属于<code>nn.Module</code>类的<code>model</code>以及其广播的所有<code>nn.Module</code>子类的上的所有参数,复制成<code>len(gpus)</code>份,送到各个GPU上. 这种广播机制的范围是注册(registered)成为其属性的<code>nn.Module</code>子类, <strong>属性为列表list中的各个对象是不会被复制的, 所以其list中的对象还是存放在默认设备<code>device 0</code>上</strong></p>
 <p>所以 在使用<code>torch.nn.DataParallel</code>进行多GPU训练的时候, 请注意：所有属于模型参数的模块以及其子模块必须以<code>nn.Module</code>的类型注册为模型的属性, 如果需要一个列表来批量存放子模块或者参数的话, 请采用<code>nn.ModuleList</code>或者<code>nn.ModuleDict</code>这样的继承了<code>nn.Module</code>的类来进行定义, 并且在<code>forward(self,)</code>前向传播的过程中，需要直接调用属于 <code>nn.Module</code>,<code>nn.ModuleList</code>或者<code>nn.ModuleDict</code> 这样的属性。</p>
 <p>那么<code>torch.nn.DataParallel</code>将会正常地将模型参数准确复制到多个GPU上, 并根据数据的<code>batchsize</code>的大小平分成GPU的数量分别送到相应的GPU设备上,</p>
 <p>然后运用<strong>多线程</strong>的方式, 同时对这些数据进行加工处理, 然后收集各个GPU上最终产生对模型的各参数的梯度, 最后汇总到一起更新原模型的参数!</p>
-<p>参考: </p>
-<ol>
-<li><a href="https://github.com/pytorch/pytorch/issues/8637" target="_blank" rel="noopener">https://github.com/pytorch/pytorch/issues/8637</a></li>
-<li><a href="https://pytorch.org/docs/stable/nn.html#dataparallel-layers-multi-gpu-distributed" target="_blank" rel="noopener">https://pytorch.org/docs/stable/nn.html#dataparallel-layers-multi-gpu-distributed</a></li>
-</ol>
+<p>参考: 1. https://github.com/pytorch/pytorch/issues/8637 2. https://pytorch.org/docs/stable/nn.html#dataparallel-layers-multi-gpu-distributed</p>
 
       
     </div>
@@ -362,6 +356,24 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://senyang-ml.github.io/2019/07/20/pytorch-multigpu/" title="PyTorch使用torch.nn.DataParallel进行多GPU训练的一个BUG，已解决">http://senyang-ml.github.io/2019/07/20/pytorch-multigpu/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -785,6 +797,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 

@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -83,12 +83,12 @@
 
 
 
-<meta name="description" content="2018.04.07： 论文阅读这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。">
+<meta name="description" content="2018.04.07： 论文阅读 这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Associative embedding End-to-End Learning for Joint Detection and Grouping">
 <meta property="og:url" content="http://senyang-ml.github.io/2018/07/12/AE-hourglass/index.html">
 <meta property="og:site_name" content="Sen Yang">
-<meta property="og:description" content="2018.04.07： 论文阅读这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。">
+<meta property="og:description" content="2018.04.07： 论文阅读 这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。">
 <meta property="article:published_time" content="2018-07-12T01:52:16.000Z">
 <meta property="article:modified_time" content="2020-03-13T11:01:58.000Z">
 <meta property="article:author" content="yangsenius">
@@ -140,7 +140,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -149,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -327,24 +327,19 @@
 
       
         <p>2018.04.07：</p>
-<h2 id="论文阅读"><a href="#论文阅读" class="headerlink" title="论文阅读"></a>论文阅读</h2><p>这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。</p>
-<a id="more"></a>
-
+<h2 id="论文阅读">论文阅读</h2>
+<p>这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。 <a id="more"></a></p>
 <p>从以下的视觉任务中可以体现：</p>
 <ul>
-<li><p><strong>人体姿态估计问题</strong>：一般按照bottom-to-up的方式，先检测出body key points然后按照约束来组合完整的人体，但多人姿态估计的问题又衍生出另一种up-down的方式，就是先检测出单个人体再识别其姿态，比如Mask R-CNN, RMPE等方法。 </p>
-</li>
-<li><p><strong>目标检测</strong>：往往先寻找不同位置和尺度下的bounding boxes，然后打分筛选</p>
-</li>
-<li><p><strong>实例分割</strong>：寻找相关联的像素，然后将像素合理重组成物体实例（mask）。</p>
-</li>
-<li><p><strong>多目标追踪</strong>：检测物体实例，重组其运动轨迹</p>
-</li>
+<li><p><strong>人体姿态估计问题</strong>：一般按照bottom-to-up的方式，先检测出body key points然后按照约束来组合完整的人体，但多人姿态估计的问题又衍生出另一种up-down的方式，就是先检测出单个人体再识别其姿态，比如Mask R-CNN, RMPE等方法。</p></li>
+<li><strong>目标检测</strong>：往往先寻找不同位置和尺度下的bounding boxes，然后打分筛选</li>
+<li><strong>实例分割</strong>：寻找相关联的像素，然后将像素合理重组成物体实例（mask）。</li>
+<li><p><strong>多目标追踪</strong>：检测物体实例，重组其运动轨迹</p></li>
 </ul>
 <p>这些方式，本质上都符合人类自身视觉从部分认识整体，以整体推理部分的直觉。以往的工作都认识到这一点，只是这篇论文做了一次提炼概括了，并指出了一个问题：</p>
 <p>以往的两步策略（detection ﬁrst and grouping second）忽略了两个环节之间内在的紧密耦合。</p>
 <blockquote>
-<p>（在之前看的CMU的Realtime Multi-Person2D Pose Estimation using Part Affinity<br>Fields, 他们的论文当中，除了人体关键点作为监督信息外，还引入了Part Affinity<br>Fields，也就是和肢体方向保持一致的单位向量作为监督信号，我的感觉是，这实际上就是没有充分利用两个环节上的耦合性，或者说是人体关键点与肢体连接的耦合性信息，毕竟人体的关节与整体的关系是统一的，<br>而OpenPose用的是寻找最佳的图匹配的方式，但同时将关键点位置，和肢体向量同时作为监督信息，会导致信息冗余，增加复杂度吧？所以我觉得作者这种融合两步的思想就很实际，很前卫）</p>
+<p>（在之前看的CMU的Realtime Multi-Person2D Pose Estimation using Part Affinity Fields, 他们的论文当中，除了人体关键点作为监督信息外，还引入了Part Affinity Fields，也就是和肢体方向保持一致的单位向量作为监督信号，我的感觉是，这实际上就是没有充分利用两个环节上的耦合性，或者说是人体关键点与肢体连接的耦合性信息，毕竟人体的关节与整体的关系是统一的， 而OpenPose用的是寻找最佳的图匹配的方式，但同时将关键点位置，和肢体向量同时作为监督信息，会导致信息冗余，增加复杂度吧？所以我觉得作者这种融合两步的思想就很实际，很前卫）</p>
 </blockquote>
 <p>所以作者针对多人体姿态估计，将两步工作融入到一个框架里，即在一般的输出Heatmap层，附加了一层作为“tag“（也就是论文提到的embedding的含义），并设计了一个grouping loss作为监督关键点是否分配给了正确的人体的函数。论文巧妙的地方就是没有给“tag”赋予”ground-truth”来作为强监督，而是用“tag“值的相似与差异来表示多个人体。用于预测Heatmap的网络架构基于作者之前的工作“Stacked Hourglass”.</p>
 <p>论文中Related work中的Perceptual Organization的叙述部分，给我了比较多的启示：</p>
@@ -353,6 +348,7 @@
 </blockquote>
 <hr>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">原创, 禁止转载</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -363,6 +359,24 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://senyang-ml.github.io/2018/07/12/AE-hourglass/" title="Associative embedding End-to-End Learning for Joint Detection and Grouping">http://senyang-ml.github.io/2018/07/12/AE-hourglass/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -804,6 +818,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 

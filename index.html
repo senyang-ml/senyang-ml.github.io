@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -139,7 +139,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -148,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-left 
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
   page-home">
     <div class="headband"></div>
 
@@ -329,7 +329,8 @@
 
       
         
-          <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><p>《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。<br><a href="https://arxiv.org/abs/1906.06818" target="_blank" rel="noopener">Stacked Capsule Autoencoders</a> 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：</p>
+          <h2 id="引言">1. 引言</h2>
+<p>《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。 <a href="https://arxiv.org/abs/1906.06818" target="_blank" rel="noopener">Stacked Capsule Autoencoders</a> 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：</p>
 <ul>
 <li><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="noopener">Dynamic Routing Between Capsules</a></li>
 <li><a href="https://openreview.net/pdf?id=HJWLfGWRb" target="_blank" rel="noopener">Matrix capsule with EM routing</a></li>
@@ -587,12 +588,9 @@
       
         
           <p>Bilinear interpolation kernel + Hough voting + Greedy Algorithm</p>
-<p>个人认为：</p>
+<p>个人认为： - PersonLab中最给人启发的是：构造 geometric embedding: short-range offsets, mid-range offsets and long-range offsets 几何信息来表示人体姿态, 以此监督神经网络的预测，并根据预测结果，施以贪婪算法，关联出所有人的姿态和分割区域。</p>
 <ul>
-<li><p>PersonLab中最给人启发的是：构造 geometric embedding: short-range offsets, mid-range offsets and long-range offsets 几何信息来表示人体姿态, 以此监督神经网络的预测，并根据预测结果，施以贪婪算法，关联出所有人的姿态和分割区域。</p>
-</li>
-<li><p>PersonLab中最值得琢磨的数学部分是：如何将表示keypoints大致位置的heatmaps和short-offsets maps通过双线性插值核，然后进行Hough Vote得到精确位置的Hough Score Maps的过程。</p>
-</li>
+<li>PersonLab中最值得琢磨的数学部分是：如何将表示keypoints大致位置的heatmaps和short-offsets maps通过双线性插值核，然后进行Hough Vote得到精确位置的Hough Score Maps的过程。</li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
@@ -719,13 +717,15 @@
 
       
         
-          <p>Neural Architecture Search (NAS) for Human Pose Estimation. </p>
-<center class="half"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell.jpg" width="50%"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell-based_fabric.jpg" width="40%"></center>
-
+          <p>Neural Architecture Search (NAS) for Human Pose Estimation.</p>
+<center class="half">
+<img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell.jpg" width="50%"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell-based_fabric.jpg" width="40%">
+</center>
 <p>Search part-specific Cell-based Neural Fabrics (CNFs) with the guide of prior knowledge of human body structure.</p>
-<center class="half"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/pnfs_framework.jpg"></center>
-
-<p>ArXiv: <a href="https://arxiv.org/abs/1909.07068" target="_blank" rel="noopener">https://arxiv.org/abs/1909.07068</a><br>Code: <a href="https://github.com/yangsenius/PoseNFS" target="_blank" rel="noopener">https://github.com/yangsenius/PoseNFS</a><br>Project Page: <a href="https://yangsenius.github.io/PoseNFS/" target="_blank" rel="noopener">https://yangsenius.github.io/PoseNFS/</a></p>
+<center class="half">
+<img src="/2019/08/26/Pose-Neural-Fabrics-Search/pnfs_framework.jpg">
+</center>
+<p><a href="https://arxiv.org/abs/1909.07068" target="_blank" rel="noopener">ArXiv</a> <a href="https://github.com/yangsenius/PoseNFS" target="_blank" rel="noopener">Code</a> <a href="https://yangsenius.github.io/PoseNFS/" target="_blank" rel="noopener">Project Page</a></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/08/26/Pose-Neural-Fabrics-Search/#meer" rel="contents">
@@ -851,9 +851,9 @@
 
       
         
-          <h1 id="PersonLab复现过程"><a href="#PersonLab复现过程" class="headerlink" title="PersonLab复现过程"></a>PersonLab复现过程</h1><blockquote>
-<p>我打算记录整个复现的心路历程,和代码实践遇到的问题<br>正在写完这一行字的我, 什么代码都没写~<br>所以以下的文字是一篇<code>记叙文</code>, 默认的叙述手法是<code>顺序</code></p>
-</blockquote>
+          <h1 id="personlab复现过程">PersonLab复现过程</h1>
+<blockquote>
+<p>我打算记录整个复现的心路历程,和代码实践遇到的问题 正在写完这一行字的我, 什么代码都没写~ 所以以下的文字是一篇<code>记叙文</code>, 默认的叙述手法是<code>顺序</code></p></blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/08/19/Reproduce-PersonLab/#meer" rel="contents">
@@ -1225,6 +1225,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 

@@ -7,7 +7,7 @@
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -83,17 +83,17 @@
 
 
 
-<meta name="description" content="Neural Architecture Search (NAS) for Human Pose Estimation.    Search part-specific Cell-based Neural Fabrics (CNFs) with the guide of prior knowledge of human body structure.   ArXiv: https:&#x2F;&#x2F;arxiv.o">
+<meta name="description" content="Neural Architecture Search (NAS) for Human Pose Estimation.    Search part-specific Cell-based Neural Fabrics (CNFs) with the guide of prior knowledge of human body structure.    ArXiv Code Project Pa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pose Neural Fabrics Search">
 <meta property="og:url" content="http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/index.html">
 <meta property="og:site_name" content="Sen Yang">
-<meta property="og:description" content="Neural Architecture Search (NAS) for Human Pose Estimation.    Search part-specific Cell-based Neural Fabrics (CNFs) with the guide of prior knowledge of human body structure.   ArXiv: https:&#x2F;&#x2F;arxiv.o">
+<meta property="og:description" content="Neural Architecture Search (NAS) for Human Pose Estimation.    Search part-specific Cell-based Neural Fabrics (CNFs) with the guide of prior knowledge of human body structure.    ArXiv Code Project Pa">
 <meta property="og:image" content="http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/cell.jpg">
 <meta property="og:image" content="http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/cell-based_fabric.jpg">
 <meta property="og:image" content="http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/pnfs_framework.jpg">
 <meta property="article:published_time" content="2019-08-26T08:23:53.000Z">
-<meta property="article:modified_time" content="2020-05-21T15:44:31.850Z">
+<meta property="article:modified_time" content="2020-05-24T05:42:11.296Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Human Pose Estimation">
 <meta property="article:tag" content="Neural Architecture Search">
@@ -144,7 +144,7 @@
 
 
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -153,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -330,18 +330,20 @@
       
 
       
-        <p>Neural Architecture Search (NAS) for Human Pose Estimation. </p>
-<center class="half"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell.jpg" width="50%"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell-based_fabric.jpg" width="40%"></center>
-
+        <p>Neural Architecture Search (NAS) for Human Pose Estimation.</p>
+<center class="half">
+<img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell.jpg" width="50%"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/cell-based_fabric.jpg" width="40%">
+</center>
 <p>Search part-specific Cell-based Neural Fabrics (CNFs) with the guide of prior knowledge of human body structure.</p>
-<center class="half"><img src="/2019/08/26/Pose-Neural-Fabrics-Search/pnfs_framework.jpg"></center>
-
-<p>ArXiv: <a href="https://arxiv.org/abs/1909.07068" target="_blank" rel="noopener">https://arxiv.org/abs/1909.07068</a><br>Code: <a href="https://github.com/yangsenius/PoseNFS" target="_blank" rel="noopener">https://github.com/yangsenius/PoseNFS</a><br>Project Page: <a href="https://yangsenius.github.io/PoseNFS/" target="_blank" rel="noopener">https://yangsenius.github.io/PoseNFS/</a></p>
+<center class="half">
+<img src="/2019/08/26/Pose-Neural-Fabrics-Search/pnfs_framework.jpg">
+</center>
+<p><a href="https://arxiv.org/abs/1909.07068" target="_blank" rel="noopener">ArXiv</a> <a href="https://github.com/yangsenius/PoseNFS" target="_blank" rel="noopener">Code</a> <a href="https://yangsenius.github.io/PoseNFS/" target="_blank" rel="noopener">Project Page</a></p>
 <a id="more"></a>
-
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Neural Architecture Search (NAS), the process of learning the structure of neural network, can play a potential role at automatically designing network architectures. Current methods mainly take image classification as a basic task and only search for a micro cell to build a chain-like structure, thus the neural search space is still at the limit of a micro search space. However, when applying NAS to dense prediction tasks such as semantic segmentation and human pose estimation, the micro search space is no longer able to generate more complex architectures. Therefore, it become a necessity to artificially design the macro search space allowing identifying hierarchical structure upon cells for these tasks. In addition, existing works focus on discovering an alternative to the human-designed module in a common pipeline. Such practice actually decouples the automating architecture engineering from tasks, and is thus unable to take advantage of the domain knowledge of a specific task. </p>
-<p>In this work, we study how to search neural architectures with the guide of prior knowledge for human pose estimation task and  propose a framework named Pose Neural Fabrics Search. We notice that modern methods conducting human pose estimation based on  deep CNNs, regardless of top-down or bottom-up pipeline, convert it into pixel-wise prediction problem; they usually focus on two  aspects: <strong>neural architecture design</strong> and <strong>pose representation</strong>. Next, we will discuss our motivations from these two aspects.<br>…</p>
-<p><a href="https://arxiv.org/pdf/1909.07068.pdf" target="_blank" rel="noopener">arXiv:1909.07068</a><br><a href="2019-pose_neural_fabrics_search.pdf">newly updated</a></p>
+<h2 id="introduction">Introduction</h2>
+<p>Neural Architecture Search (NAS), the process of learning the structure of neural network, can play a potential role at automatically designing network architectures. Current methods mainly take image classification as a basic task and only search for a micro cell to build a chain-like structure, thus the neural search space is still at the limit of a micro search space. However, when applying NAS to dense prediction tasks such as semantic segmentation and human pose estimation, the micro search space is no longer able to generate more complex architectures. Therefore, it become a necessity to artificially design the macro search space allowing identifying hierarchical structure upon cells for these tasks. In addition, existing works focus on discovering an alternative to the human-designed module in a common pipeline. Such practice actually decouples the automating architecture engineering from tasks, and is thus unable to take advantage of the domain knowledge of a specific task.</p>
+<p>In this work, we study how to search neural architectures with the guide of prior knowledge for human pose estimation task and propose a framework named Pose Neural Fabrics Search. We notice that modern methods conducting human pose estimation based on deep CNNs, regardless of top-down or bottom-up pipeline, convert it into pixel-wise prediction problem; they usually focus on two aspects: <strong>neural architecture design</strong> and <strong>pose representation</strong>. Next, we will discuss our motivations from these two aspects. ...</p>
+<p><a href="https://arxiv.org/pdf/1909.07068.pdf" target="_blank" rel="noopener">arXiv:1909.07068</a> <a href="2019-pose_neural_fabrics_search.pdf">newly updated</a></p>
 
       
     </div>
@@ -353,6 +355,24 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/" title="Pose Neural Fabrics Search">http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -537,7 +557,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li></ol></div>
             
 
           </div>
@@ -774,6 +794,26 @@
 
 
   
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
 
   
 
