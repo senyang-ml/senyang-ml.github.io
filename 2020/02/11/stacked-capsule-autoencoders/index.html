@@ -83,16 +83,16 @@
 
 
 
-<meta name="description" content="1. 引言 《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。 Stacked Capsule Autoencoders 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：  Dynamic Routing Between Capsules Matrix capsule wi">
+<meta name="description" content="1. 引言 《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。 Stacked Capsule Autoencoders 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：  Dynamic Routing Between Capsules1 Matrix capsule w">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Stacked Capsule Autoencoders-堆叠的胶囊自编码器">
 <meta property="og:url" content="http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/index.html">
 <meta property="og:site_name" content="Sen Yang">
-<meta property="og:description" content="1. 引言 《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。 Stacked Capsule Autoencoders 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：  Dynamic Routing Between Capsules Matrix capsule wi">
+<meta property="og:description" content="1. 引言 《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。 Stacked Capsule Autoencoders 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：  Dynamic Routing Between Capsules1 Matrix capsule w">
 <meta property="og:image" content="http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/scae.jpg">
 <meta property="og:image" content="http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/coincidence-filtering.jpg">
 <meta property="article:published_time" content="2020-02-11T11:18:17.000Z">
-<meta property="article:modified_time" content="2020-05-24T06:13:18.928Z">
+<meta property="article:modified_time" content="2020-05-29T09:43:24.496Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Deep Learning">
 <meta property="article:tag" content="Capsule Network">
@@ -334,8 +334,8 @@
         <h2 id="引言">1. 引言</h2>
 <p>《stacked capsule autoencoders》使用无监督的方式达到了98.5%的MNIST分类准确率。 <a href="https://arxiv.org/abs/1906.06818" target="_blank" rel="noopener">Stacked Capsule Autoencoders</a> 发表在 NeurIPS-2019，作者团队阵容豪华。可以说是官方capsule的第3个版本。前两个版本的是：</p>
 <ul>
-<li><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="noopener">Dynamic Routing Between Capsules</a></li>
-<li><a href="https://openreview.net/pdf?id=HJWLfGWRb" target="_blank" rel="noopener">Matrix capsule with EM routing</a></li>
+<li>Dynamic Routing Between Capsules<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
+<li>Matrix capsule with EM routing<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
 </ul>
 <a id="more"></a>
 <p>当然还有最早的<a href="http://www.cs.toronto.edu/~fritz/absps/transauto6.pdf" target="_blank" rel="noopener">Transforming Auto-encoders</a>，发表在2011年ICANN，论文第一次引入“capsule”的概念。值得一提的是，这篇论文的作者是Hinton、Alex Krizhevsky等人，对，是AlexNet的Alex。原来Alex本人在2012年发表AlexNet之前在研究这种“奇怪”的东西。2011年的他可能没想到，第二年的他们，为了参与ImageNet大规模数据集图像识别挑战赛而设计的一款基于的传统CNN的AlexNet，引爆了接下来已经持续7年之久的“Deep Learning”潮流，现如今CVPR 2020投稿量都过10000了，是谁惹得“祸“的还不清楚吗？</p>
@@ -383,6 +383,13 @@ h\times w\times c \Rightarrow M \times X
 <p><img src="/2020/02/11/stacked-capsule-autoencoders/coincidence-filtering.jpg" alt="SCAE"> &gt; [!NOTE] &gt;（~而且有时候，我们的实验结果和结论都有可能是“偶然的”）</p>
 <p>演讲地址在：<a href="https://www.bilibili.com/video/av88128940" target="_blank" rel="noopener">Geoffrey Hinton：Stacked Capsule Autoencoders(堆叠胶囊自编码器) (AAAI 2020)_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili</a> 另外，我也整理出了关于 Dynamic Routing Between Capsules，Matrix capsule with EM routing 和 Stacked Capsule Autoencoders 的PPT。百度云盘地址：https://pan.baidu.com/s/1BCdJiNWGqD-SNao7Lmv4sw 提取码：e58t</p>
 <p>Hinton联合了很多的学者在不断迭代着Capsule的概念和技术，不断地引入新鲜的东西到深度学习中。一方面我觉着我们需要相信大佬的直觉，另一方面我们也不能盲目地追捧，还是要尽量抛开作者光环，去探讨论文研究中是不是拥有着奇思妙想或者醍醐灌顶的东西存在。</p>
+<section class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="noopener">Dynamic Routing Between Capsules</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="https://openreview.net/pdf?id=HJWLfGWRb" target="_blank" rel="noopener">Matrix capsule with EM routing</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
 
       
     </div>

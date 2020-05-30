@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="Sen Yang">
 <meta property="og:description" content="2018.04.07： 论文阅读 这篇文章的核心思想是比较精炼概括的，它的亮点是用一个框架解决了在计算机视觉中常见的任务中经常遇到的两个通用环节：Detection and Grouping，用中文来讲就是，检测（小的视觉单元作为候选）和（根据得分）重组（一个合理的结构）。">
 <meta property="article:published_time" content="2018-07-12T01:52:16.000Z">
-<meta property="article:modified_time" content="2020-03-13T11:01:58.000Z">
+<meta property="article:modified_time" content="2020-05-29T05:30:46.446Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Human Pose Estimation">
 <meta property="article:tag" content="Deep Learning">
@@ -346,6 +346,7 @@
 <blockquote>
 <p>Perceptual Organization是感知组织的意思，我理解成人类在认识事物或概念所遵循的层级组织关系。所谓的强人工智能，就需要解决这一棘手问题吧。作者提到了这一工作涉及到的许多任务，有Figure–ground segmentation (perception)，hierarchical image parsing， spectral clustering，conditional random ﬁelds，generative probabilistic models等等一系列问题，这些方法都遵循，从pre-detect visual units到measure affinity，再到grouping，但是目前没有统一到一个统一的架构上来，作者就是从这角度出发，不加一些额外的设计来完成一个端到端的网络架构。作者提到了图像层级解析，特别符合人类认知图像，所以，作者的Hourglass模块设计成沙漏状，先是压缩图像，获得全局信息，然后利用全局信息与低层特征融合，输出一个与同样大小的heatmap，其实就是想将这样的层级解析的思想间接地蕴含在内，只不过网络的训练将这些信息都隐含在了参数里，无法与人的解析思路类比.</p>
 </blockquote>
+<p>详情查看博客 <a href="https://yangsenius.github.io/blog/embedding/" target="_blank" rel="noopener" class="uri">https://yangsenius.github.io/blog/embedding/</a></p>
 <hr>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">原创, 禁止转载</span><br></pre></td></tr></table></figure>
 

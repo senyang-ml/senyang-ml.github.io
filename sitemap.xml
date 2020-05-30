@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/</loc>
+    
+    <lastmod>2020-05-29T09:43:24.496Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://senyang-ml.github.io/2018/07/12/AE-hourglass/</loc>
+    
+    <lastmod>2020-05-29T05:30:46.446Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://senyang-ml.github.io/2019/11/02/distribution-aware/</loc>
+    
+    <lastmod>2020-05-29T04:57:07.945Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://senyang-ml.github.io/2018/04/25/capsule-pose/</loc>
+    
+    <lastmod>2020-05-29T03:00:12.586Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/</loc>
     
     <lastmod>2020-05-29T02:11:55.947Z</lastmod>
@@ -12,13 +40,6 @@
     <loc>http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/</loc>
     
     <lastmod>2020-05-25T04:01:48.475Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/</loc>
-    
-    <lastmod>2020-05-24T06:13:18.928Z</lastmod>
     
   </url>
   
@@ -47,13 +68,6 @@
     <loc>http://senyang-ml.github.io/2018/05/20/inference/</loc>
     
     <lastmod>2020-05-24T03:47:45.003Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/2019/11/02/distribution-aware/</loc>
-    
-    <lastmod>2020-05-24T03:29:36.622Z</lastmod>
     
   </url>
   
@@ -96,20 +110,6 @@
     <loc>http://senyang-ml.github.io/2019/08/19/Reproduce-PersonLab/</loc>
     
     <lastmod>2020-03-13T11:06:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/2018/07/12/AE-hourglass/</loc>
-    
-    <lastmod>2020-03-13T11:01:58.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/2018/04/25/capsule-pose/</loc>
-    
-    <lastmod>2020-03-13T11:01:16.000Z</lastmod>
     
   </url>
   

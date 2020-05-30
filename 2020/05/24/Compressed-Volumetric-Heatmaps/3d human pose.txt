@@ -1,0 +1,24 @@
+3d human pose
+	输入来源
+		RGB
+		RGB-D
+		Depth
+	处理人数
+		single person
+		multi-person
+			Bottom-up
+				Location Maps
+					Single-Shot Multi-Person 3D Pose Estimation From Monocular RGB
+				Compressed Volumetric Heatmaps
+					Compressed Volumetric Heatmaps for Multi-Person 3D Pose Estimation
+			Top-Down
+				RPN+refined using class-specific regressors
+					LCR-Net++: Multi-person 2D and 3D Pose Detection in Natural Images
+	输出形式
+		shape参数
+		体素voxel
+		xyz坐标
+			take argmax by 3d heatmaps
+			lifting from 2d pose coordinates
+			directly predicted from image 
+Compressed Volumetric Heatmaps for Multi-Person 3D Pose Estimation
