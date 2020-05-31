@@ -93,7 +93,7 @@
 <meta name="description" content="Talk is not cheap">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sen Yang">
-<meta property="og:url" content="http://senyang-ml.github.io/tags/PyTorch/index.html">
+<meta property="og:url" content="http://senyang-ml.github.io/page/5/index.html">
 <meta property="og:site_name" content="Sen Yang">
 <meta property="og:description" content="Talk is not cheap">
 <meta property="article:author" content="yangsenius">
@@ -130,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://senyang-ml.github.io/tags/PyTorch/"/>
+  <link rel="canonical" href="http://senyang-ml.github.io/page/5/"/>
 
 
 
 
 
-  <title>标签: PyTorch | Sen Yang</title>
+  <title>Sen Yang</title>
   
 
 
@@ -155,7 +155,8 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -248,83 +249,278 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
 
   
   
   
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>PyTorch<small>标签</small>
-        </h1>
-      </div>
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2018/04/29/label_limitation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/29/label_limitation/" itemprop="url">The limitation of thinking with 'label' in Deep Learning (深度学习中标签思维的局限)</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-29T11:52:16+08:00">
+                2018-04-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
 
       
         
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/20/pytorch-multigpu/" itemprop="url">
-              
-                <span itemprop="name">PyTorch使用torch.nn.DataParallel进行多GPU训练的一个BUG，已解决</span>
-              
+          <h1 id="深度学习中标签思维的局限">深度学习中标签思维的局限</h1>
+<p>在生活中，聪明的人常常告诫我们，不要给事物轻易下定义，不要轻易给他人打上标签，因为“标签”的一种贬义替代词汇是“偏见”。然而目前的机器学习正利用人类的标签思维进行学习，所以机器学习到头来，学习到的都是我们的偏见吗？</p>
+<h2 id="端到端是标签思维的一种表现">端到端是标签思维的一种表现</h2>
+<p>我们首先来谈论一下端到端的学习。什么是端到端学习？简单来讲就是，机器学习一个从特定输入到特定输出的过程。端到端的学习应该在深度学习产生后进入了巅峰状态。对物体特征的提取技术由手工设计，如（HOG、Har、SIFT、LBP等），被自动提取技术（CNN）所替代了，少了人工的介入，那么端到端就能够轻易实现了。但实际上，端到端是一种局限的智能，为什么说它是局限的？一方面，它导致了模型的黑箱化，不可解释性，即我们不能认知中间特征数据所表示的内涵，另外，一个样本的信息量是巨大的，若是从不同的角度去解读，提取它的内涵就会得到不同的“标签”，甚至可以提取出内涵对立的标签（<strong>比如，如果我们特意地让机器去区分人类和动物的差异，机器就不能学习到，人类本身就是动物，这一基本事实</strong>），然而机器将大量相似的图像进行归纳学习为一个单独的标签，那么模型学到的是一种呆板的、偏见的抽象，这绝对不是真正的智能，就像Judeal Pearl说的如今的机器学习就是曲线拟合而已。</p>
+<h2 id="标签思维导致对抗样本的产生">标签思维导致对抗样本的产生</h2>
+<p><a href="https://www.jiqizhixin.com/articles/2018-01-06-6" target="_blank" rel="noopener">近来的研究表明</a> DNN 容易受到对抗样本（adversarial example）的影响：在输入中加入精心设计的对抗扰动（adversarial perturbation）可以误导目标 DNN，使其在运行中给该输入加标签时出错。</p>
+<p>一个常见的对抗攻击来自于2014年Goodfellow提出的Fast Gradient Sign Method(FGSM),它通过在梯度方向上进行添加增量来诱导网络对生成的图片X’进行误分类 <span class="math display">\[ x^{,}=x+\varepsilon sign(\bigtriangledown _{x} J(\theta ,x,y)) \]</span></p>
+<center>
+<img src="https://raw.githubusercontent.com/yangsenius/yangsenius.github.io/master/FGSM.png" width="800">
+</center>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/29/label_limitation/#meer" rel="contents">
+              READ MORE &raquo;
             </a>
+          </div>
+          <!--/noindex-->
         
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-07-20T18:42:12+08:00"
-              content="2019-07-20" >
-          07-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/12/17/learning_to_learn/" itemprop="url">
-              
-                <span itemprop="name">Learning to learn by gradient descent by gradient descent-PyTorch实践</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-12-17T09:52:16+08:00"
-              content="2018-12-17" >
-          12-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
   
   
   
+  </article>
+
+
+    
+      
 
   
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2018/04/25/capsule-pose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/25/capsule-pose/" itemprop="url">Capsule Network and Human Pose</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-25T09:52:16+08:00">
+                2018-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="capsules-network">Capsules Network</h1>
+<h2 id="section">2018.4.25</h2>
+<h2 id="引言">引言</h2>
+<p>因为最近同时在看Matrix Capsules with EM routing (https://openreview.net/pdf?id=HJWLfGWRb)和人体姿态估计相关的论文如Associative Embedding, stacked hourglass等，我渐渐发现了这两类研究方向在核心思想上的一些共通之处，即自下而上地获得全局信息，利用全局信息去解析局部特征，并进行预测。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/25/capsule-pose/#meer" rel="contents">
+              READ MORE &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+ <nav class="pagination">
+   <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="accessibility.prev_page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+ </nav>
 
 
           </div>
