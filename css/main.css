@@ -180,7 +180,7 @@ th {
   padding: 0;
 }
 ::selection {
-  background: #262a30;
+  background: rgba(125,74,225,0.769);
   color: #fff;
 }
 body {
@@ -189,7 +189,7 @@ body {
   font-size: 16px;
   line-height: 2;
   color: #000;
-  background: #fff;
+  background: #000;
 }
 @media (max-width: 767px) {
   body {
@@ -545,7 +545,7 @@ pre code {
 }
 .highlight figcaption a {
   float: right;
-  color: #eaeaea;
+  color: #679c69;
 }
 .highlight figcaption a:hover {
   border-bottom-color: #eaeaea;
@@ -985,10 +985,10 @@ pre .javascript .function {
   padding: 0 20px;
   font-size: 14px;
   color: #000;
-  background: #fff;
-  border: 2px solid #000;
+  background: #24212b;
+  border: 0px solid #843cf7;
   text-decoration: none;
-  border-radius: 2px;
+  border-radius: 15px;
   transition-property: background-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
@@ -999,6 +999,7 @@ pre .javascript .function {
   border-color: #222;
   color: #fff;
   background: #222;
+  border: 1px solid #843cf7;
 }
 .btn +.btn {
   margin: 0 0 8px 8px;
@@ -1021,6 +1022,9 @@ pre .javascript .function {
   margin: 120px 0 40px;
   text-align: center;
   border-top: 1px solid #eee;
+  color: #fff;
+  border-radius: 15px;
+  background: #000;
 }
 .page-number-basic,
 .pagination .prev,
@@ -1108,10 +1112,10 @@ pre .javascript .function {
   z-index: 1050;
   padding: 0 6px;
   width: 24px;
-  background: #222;
-  font-size: 12px;
+  background: #fff;
+  font-size: 14px;
   opacity: 0.6;
-  color: #fff;
+  color: #000;
   cursor: pointer;
   text-align: center;
   -webkit-transform: translateZ(0);
@@ -1595,11 +1599,19 @@ pre .javascript .function {
 .posts-expand .post-tags {
   margin-top: 40px;
   text-align: center;
+  color: #9c27b0;
 }
 .posts-expand .post-tags a {
   display: inline-block;
   margin-right: 10px;
   font-size: 13px;
+  text-decoration: none;
+  color: #658a3a;
+  border-bottom: none;
+}
+.posts-expand .post-tags a:hover {
+  color: #658a3a;
+  border-bottom: 1px solid #999;
 }
 .post-nav {
   display: table;
@@ -1622,11 +1634,11 @@ pre .javascript .function {
   display: block;
   line-height: 25px;
   font-size: 14px;
-  color: #000;
+  color: #8bc34a;
   border-bottom: none;
 }
 .post-nav-item a:hover {
-  color: #222;
+  color: #008000;
   border-bottom: none;
 }
 .post-nav-item a:active {
@@ -1690,13 +1702,13 @@ pre .javascript .function {
   margin: 2em 0 0;
   padding: 0.5em 1em;
   border-left: 3px solid #ff1700;
-  background-color: #f9f9f9;
+  background-color: #002;
   list-style: none;
 }
+.post-copyright a {
+  color: #658a3a;
+}
 .post-widgets {
-  border-top: 1px solid #eee;
-  padding-top: 9px;
-  margin-top: 45px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -1833,8 +1845,9 @@ pre .javascript .function {
 .site-author-name {
   margin: 0;
   text-align: center;
-  color: #222;
+  color: #fff 4;
   font-weight: 600;
+  font-size: 24px;
 }
 .site-description {
   margin-top: 0;
@@ -1901,6 +1914,7 @@ pre .javascript .function {
   margin-bottom: 10px;
   border-bottom-color: #000;
   font-size: 13px;
+  color: #808080;
 }
 .links-of-author a:before {
   display: inline-block;
@@ -1910,7 +1924,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #dfe0ec;
+  background: #d23d3c;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -1945,7 +1959,7 @@ pre .javascript .function {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   font-size: 14px;
-  color: #000;
+  color: #808080;
 }
 .sidebar-nav li:hover {
   color: #fc6423;
@@ -2687,7 +2701,7 @@ pre .javascript .function {
   overflow: hidden;
   padding: 0;
   width: 240px;
-  background: #fff;
+  background: none;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
   border-radius: initial;
 }
@@ -2746,7 +2760,7 @@ pre .javascript .function {
   box-sizing: border-box;
   padding: 40px;
   width: calc(100% - 252px);
-  background: #fff;
+  background: none;
   min-height: 700px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
   border-radius: initial;
@@ -2771,7 +2785,7 @@ pre .javascript .function {
   float: left;
   margin-top: 300px;
   width: 240px;
-  background: #fff;
+  background: #000;
   box-shadow: none;
 }
 @media (min-width: 768px) and (max-width: 991px) {
@@ -2822,9 +2836,9 @@ pre .javascript .function {
   position: relative;
 }
 .site-meta {
-  padding: 20px 0;
+  padding: 10px 0;
   color: #fff;
-  background: #0074c8;
+  background: rgba(65,13,166,0.561);
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .site-meta {
@@ -2871,6 +2885,8 @@ pre .javascript .function {
   position: relative;
   box-sizing: border-box;
   padding: 5px 20px;
+  background: none;
+  color: #fff;
   text-align: left;
   line-height: inherit;
   transition-property: background-color;
@@ -2880,8 +2896,9 @@ pre .javascript .function {
 }
 .menu .menu-item a:hover,
 .menu-item-active a {
-  background: #f9f9f9;
-  border-bottom-color: #fff;
+  color: #fff;
+  background: rgba(65,13,166,0.561);
+  border-bottom-color: rgba(65,13,166,0.561);
 }
 .menu .menu-item br {
   display: none;
@@ -2895,7 +2912,7 @@ pre .javascript .function {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #bbb;
+  background-color: rgba(65,13,166,0.561);
 }
 .btn-bar {
   background-color: #fff;
@@ -2928,7 +2945,7 @@ pre .javascript .function {
   box-sizing: border-box;
   width: 240px;
   color: #000;
-  background: #fff;
+  background: none;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
   border-radius: initial;
   opacity: 0;
@@ -2943,6 +2960,9 @@ pre .javascript .function {
 .site-overview {
   text-align: left;
 }
+.site-author {
+  color: #fff;
+}
 .site-author:before,
 .site-author:after {
   content: " ";
@@ -2952,10 +2972,11 @@ pre .javascript .function {
   clear: both;
 }
 .sidebar a {
-  color: #000;
+  color: #fff;
 }
 .sidebar a:hover {
-  color: #222;
+  color: #fff;
+  background: rgba(1,116,200,0.831);
 }
 .site-state-item {
   padding: 0 10px;
@@ -2966,11 +2987,13 @@ pre .javascript .function {
 .links-of-author-item a {
   border-bottom: none;
   text-decoration: underline;
+  color: #808080;
 }
 .feed-link {
   border-top: 1px dotted #ccc;
   border-bottom: 1px dotted #ccc;
   text-align: center;
+  color: #808080;
 }
 .feed-link a {
   display: block;
@@ -3010,7 +3033,7 @@ pre .javascript .function {
 }
 .links-of-author-item a:hover {
   border-radius: 4px;
-  background: #eee;
+  background: #808080;
 }
 .links-of-author-item .fa {
   margin-right: 2px;
@@ -3058,13 +3081,15 @@ pre .javascript .function {
 }
 .content-wrap {
   padding: initial;
+  color: rgba(255,255,255,0.769);
   background: initial;
   box-shadow: initial;
   border-radius: initial;
+  font-size: 18px;
 }
 .post-block {
   padding: 40px;
-  background: #fff;
+  background: #000;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
   border-radius: initial;
 }
@@ -3096,11 +3121,12 @@ pre .javascript .function {
 }
 .pagination {
   margin: 12px 0 0;
-  border-top: initial;
-  background: #fff;
+  border-top: 2px;
+  color: #000;
+  background: rgba(80,73,95,0.769);
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12), 0 -1px 0.5px 0 rgba(0,0,0,0.09);
-  border-radius: initial;
-  padding: 10px 0 10px;
+  border-radius: 15px;
+  padding: 2px 0 2px;
 }
 .pagination .prev,
 .pagination .next,
@@ -3120,21 +3146,22 @@ pre .javascript .function {
 }
 .posts-expand .post-title-link {
   line-height: inherit;
+  color: rgba(144,90,255,0.78);
 }
 .posts-expand .post-title {
   font-size: 1.7em;
 }
 .post-body h1 {
   font-size: 1.6em;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #000;
 }
 .post-body h2 {
   font-size: 1.45em;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #000;
 }
 .post-body h3 {
   font-size: 1.3em;
-  border-bottom: 1px dotted #fff;
+  border-bottom: 1px dotted #000;
 }
 .post-body h4 {
   font-size: 1.2em;
@@ -3216,6 +3243,7 @@ pre .javascript .function {
 }
 .post-body a {
   color: #0593d3;
+  border-bottom: none;
 }
 .post-body a:link {
   text-decoration: none;

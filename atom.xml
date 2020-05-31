@@ -332,9 +332,9 @@
     
     
     
-      <category term="Meta Learning" scheme="http://senyang-ml.github.io/tags/Meta-Learning/"/>
-    
       <category term="Deep Learning" scheme="http://senyang-ml.github.io/tags/Deep-Learning/"/>
+    
+      <category term="Meta Learning" scheme="http://senyang-ml.github.io/tags/Meta-Learning/"/>
     
       <category term="Object Detection" scheme="http://senyang-ml.github.io/tags/Object-Detection/"/>
     
