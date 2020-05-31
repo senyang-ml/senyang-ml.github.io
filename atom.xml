@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://senyang-ml.github.io/"/>
-  <updated>2020-05-31T07:25:57.262Z</updated>
+  <updated>2020-05-31T08:42:55.093Z</updated>
   <id>http://senyang-ml.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Enhance hexo next</title>
+    <title>Enhance Hexo Next</title>
     <link href="http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/"/>
     <id>http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/</id>
     <published>2020-05-24T07:08:20.000Z</published>
-    <updated>2020-05-31T07:25:57.262Z</updated>
+    <updated>2020-05-31T08:42:55.093Z</updated>
     
     <content type="html"><![CDATA[<p>目标：希望让hexo的next主题，能达到vscode markdown enhanced插件的markdown和MathJax的渲染效果, 并同时提高写博客效率</p><p>方法：</p><ul><li>修改Next相关配置文件</li><li>利用Mac的截图和Typora的快速插图动作</li><li>利用edge浏览器的集锦功能</li></ul><a id="more"></a><p>在我寻找方案的过程中，我利用了新版的Mircosoft的Edge浏览器搜索相关资料。它完美衔接google的Chromium内核，增加了很独特的集锦功能，可以把整理的网页以及笔记放在一起。如下图所示，右侧简洁地记下了所有过程。</p><figure><img src="/2020/05/24/enhance-hexo-next/image-20200524153534179.png" alt="image-20200524153534179"><figcaption>image-20200524153534179</figcaption></figure><p><a href="https://blog.csdn.net/littlehaes/article/details/81503455" target="_blank" rel="noopener">hexo博客迁移到另一台电脑_json_littlehaes的博客-CSDN博客</a></p><p><a href="https://www.jianshu.com/p/0ee8b976ceab" target="_blank" rel="noopener">多个github帐号更新多个hexo博客 - 简书</a></p><p>修改Mathjax的渲染引擎，用了新的渲染链接</p><p><a href="http://docs.mathjax.org/en/v2.7-latest/configuration.html?highlight=cdn#using-a-local-configuration-file-with-a-cdn" target="_blank" rel="noopener">Loading and Configuring MathJax — MathJax 2.7 documentation</a></p><p>修改Next/source中的相关文件</p><p><a href="https://blog.csdn.net/qw8880000/article/details/80235648" target="_blank" rel="noopener">修改文章内链接样式 ｜ hexo_好好编程的博客-CSDN博客</a></p><p>最后，直接把集锦里的所有链接，都复制到你的markdown里面就可以里</p><p><strong>快速插图</strong></p><p>在markdown插入图片时，有一个非常方便的操作，前提是你使用了<strong>Tpyora</strong>这个完美的markdown工具</p><p>你打开偏好设置，点击图像，选择以下图中的<code>插入图片时```复制到指定路径为./filename</code>, 那么</p><p>你在直接复制图片到markdown的内容里时，图片会自动保存在hexo-assert-image自动生成的文件里，比如这里的enhance hexo next.md对应的文件夹<code>enhance hexo next</code> 下面。这样就可以快速地生成有效的图片路径</p><figure><img src="/2020/05/24/enhance-hexo-next/image-20200524152842014.png" alt="image-20200524152842014"><figcaption>image-20200524152842014</figcaption></figure><p>从windows写博客，到Macbook Pro写博客，效率和体验确实有挺大的提升。</p><h4 id="彩蛋----网页风格配色">彩蛋 -- 网页风格配色</h4><p>本网站的配色，完全手工挑选。怎么可以做到呢？很简单: 1. 可以点击你当前博客的某个要素，右击查看该元素的样式(css style)，现在的浏览器都有这个调试功能， 2. 在浏览器的一侧下方的样式中，出现了 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.posts-expand</span> <span class="selector-class">.post-tags</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: inline-block;</span><br><span class="line">    <span class="attribute">margin-right</span>: <span class="number">10px</span>;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">13px</span>;</span><br><span class="line">    <span class="attribute">text-decoration</span>: none;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#658a3a</span>;</span><br><span class="line">    <span class="attribute">border-bottom</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 3. 复制<code>.posts-expand .post-tags</code> 在 vscode中搜索相关的<code>.styl</code>的文件，找到<code>color、background</code>等属性的位置，可以稍微学习一下语法 4. 在浏览器中调试好颜色后，直接复制粘贴色号到你的相关的<code>.styl</code>的文件的相关位置就可以了！</p><p>本次的分享到这里结束啦～</p>]]></content>
     
