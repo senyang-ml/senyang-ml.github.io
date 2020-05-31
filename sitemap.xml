@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/</loc>
+    
+    <lastmod>2020-05-31T07:25:57.262Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://senyang-ml.github.io/research/index.html</loc>
+    
+    <lastmod>2020-05-31T06:25:24.012Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://senyang-ml.github.io/2020/02/11/stacked-capsule-autoencoders/</loc>
     
     <lastmod>2020-05-29T09:43:24.496Z</lastmod>
@@ -33,13 +47,6 @@
     <loc>http://senyang-ml.github.io/2019/08/26/Pose-Neural-Fabrics-Search/</loc>
     
     <lastmod>2020-05-29T02:11:55.947Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/</loc>
-    
-    <lastmod>2020-05-25T04:01:48.475Z</lastmod>
     
   </url>
   
@@ -159,13 +166,6 @@
     <loc>http://senyang-ml.github.io/schedule/index.html</loc>
     
     <lastmod>2019-11-27T04:29:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/research/index.html</loc>
-    
-    <lastmod>2019-11-27T04:04:34.000Z</lastmod>
     
   </url>
   

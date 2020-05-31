@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/image-20200524153534179.png">
 <meta property="og:image" content="http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/image-20200524152842014.png">
 <meta property="article:published_time" content="2020-05-24T07:08:20.000Z">
-<meta property="article:modified_time" content="2020-05-25T04:01:48.475Z">
+<meta property="article:modified_time" content="2020-05-31T07:25:57.262Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Mac">
 <meta property="article:tag" content="Hexo">
@@ -357,8 +357,9 @@
 <img src="/2020/05/24/enhance-hexo-next/image-20200524152842014.png" alt="image-20200524152842014"><figcaption>image-20200524152842014</figcaption>
 </figure>
 <p>从windows写博客，到Macbook Pro写博客，效率和体验确实有挺大的提升。</p>
+<h4 id="彩蛋----网页风格配色">彩蛋 -- 网页风格配色</h4>
+<p>本网站的配色，完全手工挑选。怎么可以做到呢？很简单: 1. 可以点击你当前博客的某个要素，右击查看该元素的样式(css style)，现在的浏览器都有这个调试功能， 2. 在浏览器的一侧下方的样式中，出现了 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.posts-expand</span> <span class="selector-class">.post-tags</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: inline-block;</span><br><span class="line">    <span class="attribute">margin-right</span>: <span class="number">10px</span>;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">13px</span>;</span><br><span class="line">    <span class="attribute">text-decoration</span>: none;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#658a3a</span>;</span><br><span class="line">    <span class="attribute">border-bottom</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 3. 复制<code>.posts-expand .post-tags</code> 在 vscode中搜索相关的<code>.styl</code>的文件，找到<code>color、background</code>等属性的位置，可以稍微学习一下语法 4. 在浏览器中调试好颜色后，直接复制粘贴色号到你的相关的<code>.styl</code>的文件的相关位置就可以了！</p>
 <p>本次的分享到这里结束啦～</p>
-
 
       
     </div>
@@ -485,8 +486,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Toc
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -553,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#彩蛋----网页风格配色"><span class="nav-number">1.</span> <span class="nav-text">彩蛋 -- 网页风格配色</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
