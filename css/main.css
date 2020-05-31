@@ -1925,7 +1925,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #a3380a;
+  background: #bdff6f;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2932,26 +2932,42 @@ position
   display: inline-block;
 }
 .btn {
-  text-align: left;
-  margin-top: 20px;
-  display: inline-block;
   font-size: 14px;
   color: #000;
   background: #24212b;
   border: 0px solid #843cf7;
   text-decoration: none;
   border-radius: 15px;
-  transition-property: background-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
   line-height: 2;
+  display: inline-block;
+  transition-property: background-color;
+  padding: 0px 20px;
+  border-width: 0px;
+  border-style: solid;
+  border-image: initial;
 }
 .btn:hover {
   border-color: #222;
   color: #222;
   background: #24212b;
   border: 1px solid #843cf7;
+}
+.btn {
+  display: inline-block;
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
+  line-height: 2;
+  padding: 0px 20px;
+  border-width: 0px;
+  border-style: solid;
+  border-image: initial;
+  text-decoration: none;
+  border-radius: 15px;
 }
 .headband {
   display: none;
