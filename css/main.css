@@ -1925,7 +1925,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #bdff6f;
+  background: #ff6781;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2310,6 +2310,19 @@ pre .javascript .function {
 .theme-next .this_ua.browser.QQBrowser {
   background-color: #78ace9 !important;
   border-color: #4cae4c !important;
+}
+#gitment-display-button {
+  display: inline-block;
+  padding: 0 15px;
+  color: #0a9caf;
+  cursor: pointer;
+  font-size: 14px;
+  border: 1px solid #0a9caf;
+  border-radius: 4px;
+}
+#gitment-display-button:hover {
+  color: #fff;
+  background: #0a9caf;
 }
 .post-spread {
   margin-top: 20px;
@@ -2740,6 +2753,7 @@ body .sidebar {
 @media (max-width: 767px) {
   .site-meta {
     margin-left: 10px;
+    float: right;
   }
 }
 .site-meta .brand {
@@ -2749,6 +2763,7 @@ body .sidebar {
 @media (max-width: 767px) {
   .site-meta .brand {
     display: block;
+    float: right;
   }
 }
 .site-meta .logo {
@@ -2811,6 +2826,7 @@ position
   .menu {
     margin: 20px 0 0 0;
     padding: 0;
+    position: right;
   }
 }
 .menu br {
@@ -2838,7 +2854,7 @@ position
   }
 }
 .menu .menu-item a:hover {
-  background: #000;
+  background: #e1e1e1;
 }
 .menu a::before {
   display: none;

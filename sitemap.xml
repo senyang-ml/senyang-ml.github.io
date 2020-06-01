@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://senyang-ml.github.io/research/index.html</loc>
+    
+    <lastmod>2020-06-01T02:47:16.207Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/</loc>
     
     <lastmod>2020-05-31T08:44:40.993Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://senyang-ml.github.io/archives/index.html</loc>
     
     <lastmod>2020-05-31T08:40:59.424Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://senyang-ml.github.io/research/index.html</loc>
-    
-    <lastmod>2020-05-31T06:25:24.012Z</lastmod>
     
   </url>
   
