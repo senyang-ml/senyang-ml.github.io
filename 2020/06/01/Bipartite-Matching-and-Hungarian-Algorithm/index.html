@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Algorithm,Graph,Bipartite Matching and Hungarian Algorithm," />
+  <meta name="keywords" content="Algorithm," />
 
 
 
@@ -107,11 +107,9 @@
 <meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152240643.png">
 <meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152520026.png">
 <meta property="article:published_time" content="2020-06-01T10:53:41.000Z">
-<meta property="article:modified_time" content="2020-06-02T08:09:08.628Z">
+<meta property="article:modified_time" content="2020-06-02T09:37:08.693Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Algorithm">
-<meta property="article:tag" content="Graph">
-<meta property="article:tag" content="Bipartite Matching and Hungarian Algorithm">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094646170.png">
 
@@ -365,7 +363,7 @@
 <li>多目标跟踪领域内的，前后相邻帧匹配问题</li>
 <li>在Instance Segmentation领域，这也是很常见的</li>
 </ul>
-<p>顾名思义，其本质的目标是在做<code>分配</code>问题 (Assignment Problem)。 Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
+<p>顾名思义，二分图匹配是一个<code>分配</code>问题 (Assignment Problem)。 Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
 <p>如果想要彻底理解它，需要先掌握它所涉及到的一些概念，作为先验知识。如下所示： <a id="more"></a></p>
 <ul>
 <li><p>图</p></li>
@@ -380,16 +378,19 @@
 <li><p><a href="https://www.jianshu.com/p/b06ea43b7c07" target="_blank" rel="noopener">BFS搜索与队列思想解决迷宫最短路径问题</a></p></li>
 </ul>
 <h2 id="二分图的最大匹配">二分图的最大匹配</h2>
-<h3 id="一言以蔽之">一言以蔽之</h3>
-<p>我们可以将我们的问题转换成<strong>分配</strong>问题，我们的数据以一种<strong>二分图的数据结构</strong>呈现，我们的目标是寻找一个<strong>最优的匹配</strong>结果，使得匹配结果最合理。</p>
-<p><strong>最大匹配</strong>和我们的最优匹配目标是一致的，那么，如何<strong>求解出一种匹配方式</strong>，能够达到最大匹配（最多的匹配边）呢？</p>
+<h3 id="名词解释">名词解释</h3>
+<p>首先将我们遇到的问题转换成<strong>分配问题</strong>。我们的数据以一种<strong>二分图的数据结构</strong>呈现。</p>
+<p>什么是二分图呢，它是一种特殊的图，即可以将图分为两组，两组内的节点之间没有连接边，两组之间节点存在连接关系。</p>
+<p>我们的目标是寻找一个<strong>最大的匹配</strong>结果，使得匹配结果最合理。</p>
+<p>比如说，我们想在一群男生和一群女生之间，根据他们各自喜欢的异性，找到一种能够成全更多对情侣的方案。又比如说，我们打算把工作项目，指派给员工们，希望用一种最大效率或者最低成本的方案。</p>
+<p><strong>最大匹配</strong>，即尽可能使得两组之间的匹配边数最多，在任意一个节点最多只有一个边与之相连接的条件下。这就是我们的最优匹配目标，那么，如何<strong>求解出一种匹配方式</strong>，能够达到最大匹配呢？</p>
 <p>最粗暴的算法就是暴力搜索，然而它的时间复杂度是指数级O(n!)</p>
-<p>那有没有可降低复杂度，并能够确定找到最优解的算法？</p>
-<p>答案就是<strong>匈牙利算法</strong>！</p>
+<p>那有没有可以降低复杂度，并能够确定找到最优解的算法呢？</p>
+<p>有，<strong>匈牙利算法</strong>就是！</p>
 <p>匈牙利算法是一个什么算法呢？一种<strong>搜索</strong>算法，怎么样去搜索解呢？</p>
-<p>我们引入了一种<strong>增广路</strong>的概念，它能在暴力搜索的过程中能够用一种简单的策略来<strong>改进当前匹配</strong>结果，直到我们无法找到更优的匹配。</p>
+<p>其中，引入一种<strong>增广路</strong>的概念，它能在暴力搜索的过程中能够用一种简单的策略来<strong>改进当前匹配</strong>结果，直到我们无法找到更优的匹配。</p>
 <p>增广路是什么意思呢，就是一种特殊的<strong>交错路</strong>，它<strong>从一个未匹配点出发</strong>，经过未匹配边、已匹配边、未匹配边,...,直到<strong>到达另外一个未匹配点</strong>，那么这样交换交错路径（匹配边和未匹配边），就总能改进匹配，<strong>因为增广路上的未匹配边总比匹配边多1个，交换就意味着改进</strong>，因为我们想要最多的匹配边。</p>
-<h3 id="直观理解">直观理解</h3>
+<h3 id="术语理解">术语理解</h3>
 <p>基本概念讲完了。求解最大匹配问题的一个算法是<strong>匈牙利算法</strong>，下面讲的概念都为这个算法服务。</p>
 <p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094646170.png" alt="Fig 5" style="zoom:50%;"></p>
 <p><strong>交替路</strong>：从一个未匹配点出发，依次经过非匹配边、匹配边、非匹配边…形成的路径叫交替路。</p>
@@ -410,8 +411,7 @@
 <p>那么，<strong>Kuhn-Munkres</strong> 算法的原理是什么呢？</p>
 <h4 id="先一言以蔽之">先一言以蔽之</h4>
 <blockquote>
-<p>The KM theorem transforms the problem from an op- timization problem of finding a max-weight matching into a combinatorial one of finding a perfect match- ing. It combinatorializes the weights. This is a classic technique in combinatorial optimization.</p>
-<p>KM定理将问题从寻找最大权重匹配的优化问题转变为寻找完美匹配的组合问题。 它组合了权重。 这是组合优化中的经典技术。</p>
+<p>The KM theorem transforms the problem from an op- timization problem of finding a max-weight matching into a combinatorial one of finding a perfect match- ing. It combinatorializes the weights. This is a classic technique in combinatorial optimization. KM定理将问题从寻找最大权重匹配的优化问题转变为寻找完美匹配的组合问题。 它组合了权重。 这是组合优化中的经典技术。</p>
 </blockquote>
 <p><strong>如何转换的呢</strong>？</p>
 <p>KM又引入了<code>Feasible Labelings</code>&amp; <code>Equality Graphs</code>这两个概念</p>
@@ -451,11 +451,15 @@ w\left(M^{\prime}\right)=\sum_{e \in M^{\prime}} w(e) \leq \sum_{e \in M^{\prime
 <h3 id="具体步骤">具体步骤</h3>
 <p><code>1.Finding an Initial Feasible Labelling</code>--其中一边端点为0，另一边取节点连接边权重的最大值</p>
 <p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602095707628.png" alt="image-20200602095707628" style="zoom: 25%;"></p>
-<p>Finding an initial feasible labeling is simple. Just use: <span class="math display">\[
+<p>Finding an initial feasible labeling is simple. Just use:</p>
+<p><span class="math display">\[
 \forall y \in Y, \ell(y)=0, \quad \forall x \in X, \ell(x)=\max _{y \in Y}\{w(x, y)\}
-\]</span> With this labelling it is obvious that <span class="math display">\[
+\]</span></p>
+<p>With this labelling it is obvious that</p>
+<p><span class="math display">\[
 \forall x \in X, y \in Y, w(x) \leq \ell(x)+\ell(y)
-\]</span> <code>2.Improving Labellings</code></p>
+\]</span></p>
+<p><code>2.Improving Labellings</code></p>
 <blockquote>
 <p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602110856305.png" alt="equality graph" style="zoom: 25%;"></p>
 <p>这是初始labeling产生的equality graph的<span class="math inline">\(E_{\ell}\)</span>，节点和边用红色标注了出来. Note: 这个时候红色的图，只能找到最大匹配，形成不了完美匹配</p>
@@ -465,8 +469,7 @@ w\left(M^{\prime}\right)=\sum_{e \in M^{\prime}} w(e) \leq \sum_{e \in M^{\prime
 N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in S} N_{\ell}(u)
 \]</span> Lemma: Let <span class="math inline">\(S \subseteq X\)</span> and <span class="math inline">\(T=N_{\ell}(S) \neq Y.\)</span> Set</p>
 <blockquote>
-<p><code>Sen Yang Note:</code></p>
-<p>Bipartite graph：the neighbours of <span class="math inline">\(x\in S\)</span> are the $ yY$, so <span class="math inline">\(T \subseteq Y\)</span>.</p>
+<p><code>Sen Yang Note:</code> Bipartite graph：the neighbours of <span class="math inline">\(x\in S\)</span> are the $ yY$, so <span class="math inline">\(T \subseteq Y\)</span>.</p>
 </blockquote>
 <p><span class="math display">\[
 \alpha_{\ell}=\min _{x \in S, y \notin T}\{\ell(x)+\ell(y)-w(x, y)\}
@@ -478,8 +481,7 @@ N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in
 \end{array}\right.
 \]</span></p>
 <blockquote>
-<p><code>Sen Yang Note:</code></p>
-<p>比如拿此时equality graph为例，<span class="math inline">\(x \in S, y \notin T\)</span>的条件就是 <span class="math inline">\(Y_3\)</span>和<span class="math inline">\(X_2,X_3\)</span>,那么<span class="math inline">\(\alpha_{\ell}=\min_{X_2,X_3,Y_3}\{8+0-6,4+0-1 \}=2\)</span></p>
+<p><code>Sen Yang Note:</code> 比如拿此时equality graph为例，<span class="math inline">\(x \in S, y \notin T\)</span>的条件就是 <span class="math inline">\(Y_3\)</span>和<span class="math inline">\(X_2,X_3\)</span>,那么<span class="math inline">\(\alpha_{\ell}=\min_{X_2,X_3,Y_3}\{8+0-6,4+0-1 \}=2\)</span></p>
 <p>然后上面构造<span class="math inline">\(\ell^{\prime}(v)\)</span>的逻辑是，因为<span class="math inline">\(S\cup T= E_{\ell}\)</span>，这样还能保证其中每个边对应labeling的和<span class="math inline">\(\ell(v_S)-\alpha_{\ell}+\ell(v_T)+\alpha_{\ell}=\ell^{\prime}(v_S)+\ell^{\prime}(v_T)\)</span>依然是保持不变，那么原来属于,并且<span class="math inline">\(Y\)</span>的label值增加，<span class="math inline">\(X\)</span>的label值减少</p>
 </blockquote>
 <p>Then <span class="math inline">\(\ell^{\prime}\)</span> is a feasible labeling and (i) If <span class="math inline">\((x, y) \in E_{\ell}\)</span> for <span class="math inline">\(x \in S, y \in T\)</span> then <span class="math inline">\((x, y) \in E_{\ell^{\prime}}\)</span> (ii) If <span class="math inline">\((x, y) \in E_{\ell}\)</span> for <span class="math inline">\(x \notin S, y \notin T\)</span> then <span class="math inline">\((x, y) \in E_{\ell^{\prime}}\)</span> (iii) There is some edge <span class="math inline">\((x, y) \in E_{\ell^{\prime}}\)</span> for <span class="math inline">\(x \in S, y \notin T\)</span></p>
@@ -560,12 +562,12 @@ N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in
 <p><a href="http://csclab.murraystate.edu/~bob.pilgrim/445/munkres.html" target="_blank" rel="noopener">Munkres' Assignment Algorithm /Modified for Rectangular Matrices</a></p>
 <p><a href="http://hungarianalgorithm.com/examplehungarianalgorithm.php" target="_blank" rel="noopener">Weighted Hungarian Algorithm</a></p>
 <p><a href="https://www.iteye.com/blog/philoscience-1754498" target="_blank" rel="noopener">博主对KM的理解</a></p>
-<p><code>建议阅读这两个文档，从数学和算法的角度分析了加权二分图的最大权匹配问题</code></p>
+<p><code>建议阅读下面两个文档，从数学和算法的角度分析了加权二分图的最大权匹配问题</code></p>
 <ul>
 <li><p><a href="http://www.cse.ust.hk/~golin/COMP572/Notes/Matching.pdf" target="_blank" rel="noopener">Bipartite Matching &amp; the Hungarian Metho</a></p></li>
 <li><p><a href="https://sites.cs.ucsb.edu/~suri/cs231/Matching.pdf" target="_blank" rel="noopener">Matching</a></p></li>
-<li><p>这个教授整理的<a href="https://sites.cs.ucsb.edu/~suri/cs231/231.html" target="_blank" rel="noopener">数据结构与算法、组合优化的课程网站</a></p></li>
 </ul>
+<p>-<a href="https://sites.cs.ucsb.edu/~suri/cs231/231.html" target="_blank" rel="noopener">数据结构与算法、组合优化的课程网站</a></p>
 <section class="footnotes">
 <hr>
 <ol>
@@ -612,10 +614,6 @@ N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in
         <div class="post-tags">
           
             <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
-          
-            <a href="/tags/Graph/" rel="tag"># Graph</a>
-          
-            <a href="/tags/Bipartite-Matching-and-Hungarian-Algorithm/" rel="tag"># Bipartite Matching and Hungarian Algorithm</a>
           
         </div>
       
@@ -738,7 +736,7 @@ N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -787,7 +785,7 @@ N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分图的最大匹配"><span class="nav-number">2.</span> <span class="nav-text">二分图的最大匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一言以蔽之"><span class="nav-number">2.1.</span> <span class="nav-text">一言以蔽之</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直观理解"><span class="nav-number">2.2.</span> <span class="nav-text">直观理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kuhn-munkres算法二分图最大权匹配"><span class="nav-number">3.</span> <span class="nav-text">Kuhn-Munkres算法(二分图最大权匹配)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#先一言以蔽之"><span class="nav-number">3.1.1.</span> <span class="nav-text">先一言以蔽之</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理论与证明"><span class="nav-number">3.2.</span> <span class="nav-text">理论与证明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体步骤"><span class="nav-number">3.3.</span> <span class="nav-text">具体步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展e_ell-subset-e_ellprime-的技巧"><span class="nav-number">3.3.1.</span> <span class="nav-text">扩展\(E_{\ell} \subset E_{\ell^{\prime}}\) 的技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#km算法二分图加权最大匹配的匈牙利方法"><span class="nav-number">4.</span> <span class="nav-text">KM算法：二分图加权最大匹配的匈牙利方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整体思路"><span class="nav-number">4.1.</span> <span class="nav-text">整体思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战"><span class="nav-number">4.2.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">4.2.1.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分图的最大匹配"><span class="nav-number">2.</span> <span class="nav-text">二分图的最大匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#名词解释"><span class="nav-number">2.1.</span> <span class="nav-text">名词解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#术语理解"><span class="nav-number">2.2.</span> <span class="nav-text">术语理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kuhn-munkres算法二分图最大权匹配"><span class="nav-number">3.</span> <span class="nav-text">Kuhn-Munkres算法(二分图最大权匹配)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#先一言以蔽之"><span class="nav-number">3.1.1.</span> <span class="nav-text">先一言以蔽之</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理论与证明"><span class="nav-number">3.2.</span> <span class="nav-text">理论与证明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体步骤"><span class="nav-number">3.3.</span> <span class="nav-text">具体步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展e_ell-subset-e_ellprime-的技巧"><span class="nav-number">3.3.1.</span> <span class="nav-text">扩展\(E_{\ell} \subset E_{\ell^{\prime}}\) 的技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#km算法二分图加权最大匹配的匈牙利方法"><span class="nav-number">4.</span> <span class="nav-text">KM算法：二分图加权最大匹配的匈牙利方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整体思路"><span class="nav-number">4.1.</span> <span class="nav-text">整体思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战"><span class="nav-number">4.2.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">4.2.1.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
