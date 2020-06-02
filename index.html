@@ -264,6 +264,153 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/" itemprop="url">Bipartite Matching and Hungarian Algorithm</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T18:53:41+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/" class="leancloud_visitors" data-flag-title="Bipartite Matching and Hungarian Algorithm">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="引言">引言</h2>
+<p>二分图匹配和匈牙利算法（Bipartite Matching and Hungarian Algorithm）在CV领域的后处理算法中是经常可以看到的，比如以下的一些论文：</p>
+<ul>
+<li>2017年的CVPR工作，OpenPose 利用bipartite matching 来进行，同关节类型的多个人体关键点分配到不同的隶属人体</li>
+<li>2020年的End-to-end Object Detection with Transformer直接构造了一个Hungarian Loss，来解决预测目标与真实目标的分配问题</li>
+<li>2020年CVPR Compressed Volumetric Heatmaps for Multi-Person 3D Pose Estimation中多人人体3D距离匹配算法</li>
+<li>多目标跟踪领域内的，前后相邻帧匹配问题</li>
+<li>在Instance Segmentation领域，这也是很常见的</li>
+</ul>
+<p>顾名思义，其本质的目标是在做<code>分配</code>问题 (Assignment Problem)。 Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
+<p>如果想要彻底理解它，需要先掌握它所涉及到的一些概念，作为先验知识。如下所示：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/#meer" rel="contents">
+              READ MORE &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -674,147 +821,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2019/09/02/personlab-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yangsenius">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Sen Yang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/02/personlab-2/" itemprop="url">Reproduce PersonLab (2)</a></h1>
-        
-
-        <div class="post-meta">
-                  
-
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">posted on</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-02T16:17:42+08:00">
-                2019-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2019/09/02/personlab-2/" class="leancloud_visitors" data-flag-title="Reproduce PersonLab (2)">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">visitors&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Bilinear interpolation kernel + Hough voting + Greedy Algorithm</p>
-<p>个人认为： - PersonLab中最给人启发的是：构造 geometric embedding: short-range offsets, mid-range offsets and long-range offsets 几何信息来表示人体姿态, 以此监督神经网络的预测，并根据预测结果，施以贪婪算法，关联出所有人的姿态和分割区域。</p>
-<ul>
-<li>PersonLab中最值得琢磨的数学部分是：如何将表示keypoints大致位置的heatmaps和short-offsets maps通过双线性插值核，然后进行Hough Vote得到精确位置的Hough Score Maps的过程。</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/09/02/personlab-2/#meer" rel="contents">
-              READ MORE &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -864,7 +870,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -877,7 +883,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1310,7 +1316,7 @@
       else if (!isArchive && !isCategory && !isTag) { //is index page
         var titles = [] //array to titles
 
-        var postsstr = 'titles.push("Enhance Hexo Next");titles.push("Stacked Capsule Autoencoders-堆叠的胶囊自编码器");titles.push("Distribution-Aware Coordinate Representation for Human Pose Estimation");titles.push("Reproduce PersonLab (2)");' //if you have a better way to get titles of posts, please change it
+        var postsstr = 'titles.push("Bipartite Matching and Hungarian Algorithm");titles.push("Enhance Hexo Next");titles.push("Stacked Capsule Autoencoders-堆叠的胶囊自编码器");titles.push("Distribution-Aware Coordinate Representation for Human Pose Estimation");' //if you have a better way to get titles of posts, please change it
         eval(postsstr)
 
         var promises = titles.map(function (title) {

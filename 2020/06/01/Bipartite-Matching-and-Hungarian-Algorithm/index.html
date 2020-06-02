@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Algorithm,Graph,Bipartite Matching and Hungarian Algorithm," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="引言 二分图匹配和匈牙利算法（Bipartite Matching and Hungarian Algorithm）在CV领域的后处理算法中是经常可以看到的，比如以下的一些论文：  2017年的CVPR工作，OpenPose 利用bipartite matching 来进行，同关节类型的多个人体关键点分配到不同的隶属人体 2020年的End-to-end Object Detection with">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bipartite Matching and Hungarian Algorithm">
+<meta property="og:url" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="引言 二分图匹配和匈牙利算法（Bipartite Matching and Hungarian Algorithm）在CV领域的后处理算法中是经常可以看到的，比如以下的一些论文：  2017年的CVPR工作，OpenPose 利用bipartite matching 来进行，同关节类型的多个人体关键点分配到不同的隶属人体 2020年的End-to-end Object Detection with">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094646170.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094720047.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094844320.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200601182550299.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602095707628.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602110856305.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602115818179.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602151923976.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152240643.png">
+<meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152520026.png">
+<meta property="article:published_time" content="2020-06-01T10:53:41.000Z">
+<meta property="article:modified_time" content="2020-06-02T08:09:08.628Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="Graph">
+<meta property="article:tag" content="Bipartite Matching and Hungarian Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094646170.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":2},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/"/>
+
+
+
+
+
+  <title>Bipartite Matching and Hungarian Algorithm | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Bipartite Matching and Hungarian Algorithm</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T18:53:41+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/" class="leancloud_visitors" data-flag-title="Bipartite Matching and Hungarian Algorithm">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言">引言</h2>
+<p>二分图匹配和匈牙利算法（Bipartite Matching and Hungarian Algorithm）在CV领域的后处理算法中是经常可以看到的，比如以下的一些论文：</p>
+<ul>
+<li>2017年的CVPR工作，OpenPose 利用bipartite matching 来进行，同关节类型的多个人体关键点分配到不同的隶属人体</li>
+<li>2020年的End-to-end Object Detection with Transformer直接构造了一个Hungarian Loss，来解决预测目标与真实目标的分配问题</li>
+<li>2020年CVPR Compressed Volumetric Heatmaps for Multi-Person 3D Pose Estimation中多人人体3D距离匹配算法</li>
+<li>多目标跟踪领域内的，前后相邻帧匹配问题</li>
+<li>在Instance Segmentation领域，这也是很常见的</li>
+</ul>
+<p>顾名思义，其本质的目标是在做<code>分配</code>问题 (Assignment Problem)。 Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
+<p>如果想要彻底理解它，需要先掌握它所涉及到的一些概念，作为先验知识。如下所示： <a id="more"></a></p>
+<ul>
+<li><p>图</p></li>
+<li><p>边与节点</p></li>
+<li><p>增广路</p></li>
+<li><p>匹配</p></li>
+<li><p>最大匹配</p></li>
+<li><p>完美匹配</p></li>
+<li><p>二分图</p></li>
+<li><p>匈牙利算法</p></li>
+<li><p>KM算法</p></li>
+<li><p><a href="https://www.jianshu.com/p/b06ea43b7c07" target="_blank" rel="noopener">BFS搜索与队列思想解决迷宫最短路径问题</a></p></li>
+</ul>
+<h2 id="二分图的最大匹配">二分图的最大匹配</h2>
+<h3 id="一言以蔽之">一言以蔽之</h3>
+<p>我们可以将我们的问题转换成<strong>分配</strong>问题，我们的数据以一种<strong>二分图的数据结构</strong>呈现，我们的目标是寻找一个<strong>最优的匹配</strong>结果，使得匹配结果最合理。</p>
+<p><strong>最大匹配</strong>和我们的最优匹配目标是一致的，那么，如何<strong>求解出一种匹配方式</strong>，能够达到最大匹配（最多的匹配边）呢？</p>
+<p>最粗暴的算法就是暴力搜索，然而它的时间复杂度是指数级O(n!)</p>
+<p>那有没有可降低复杂度，并能够确定找到最优解的算法？</p>
+<p>答案就是<strong>匈牙利算法</strong>！</p>
+<p>匈牙利算法是一个什么算法呢？一种<strong>搜索</strong>算法，怎么样去搜索解呢？</p>
+<p>我们引入了一种<strong>增广路</strong>的概念，它能在暴力搜索的过程中能够用一种简单的策略来<strong>改进当前匹配</strong>结果，直到我们无法找到更优的匹配。</p>
+<p>增广路是什么意思呢，就是一种特殊的<strong>交错路</strong>，它<strong>从一个未匹配点出发</strong>，经过未匹配边、已匹配边、未匹配边,...,直到<strong>到达另外一个未匹配点</strong>，那么这样交换交错路径（匹配边和未匹配边），就总能改进匹配，<strong>因为增广路上的未匹配边总比匹配边多1个，交换就意味着改进</strong>，因为我们想要最多的匹配边。</p>
+<h3 id="直观理解">直观理解</h3>
+<p>基本概念讲完了。求解最大匹配问题的一个算法是<strong>匈牙利算法</strong>，下面讲的概念都为这个算法服务。</p>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094646170.png" alt="Fig 5" style="zoom:50%;"></p>
+<p><strong>交替路</strong>：从一个未匹配点出发，依次经过非匹配边、匹配边、非匹配边…形成的路径叫交替路。</p>
+<p><strong>增广路</strong>：从一个未匹配点出发，走交替路，如果途径另一个未匹配点（出发的点不算），则这条交替路称为增广路（agumenting path）。例如，图 5 中的一条增广路如图 6 所示（图中的匹配点均用红色标出）：</p>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094720047.png" alt="Fig6" style="zoom:50%;"></p>
+<p>增广路有一个重要特点：非匹配边比匹配边多一条。因此，研究增广路的意义是<strong>改进匹配</strong>。只要把增广路中的匹配边和非匹配边的身份交换即可。由于中间的匹配节点不存在其他相连的匹配边，所以这样做不会破坏匹配的性质。交换后，图中的匹配边数目比原来多了 1 条。</p>
+<p>我们可以通过不停地找增广路来增加匹配中的匹配边和匹配点。找不到增广路时，达到最大匹配（这是增广路定理）。匈牙利算法正是这么做的。在给出匈牙利算法 DFS 和 BFS 版本的代码之前，先讲一下匈牙利树。</p>
+<p><strong>匈牙利树</strong>一般由 BFS 构造（类似于 BFS 树）。从一个未匹配点出发运行 BFS（唯一的限制是，必须走交替路），直到不能再扩展为止。例如，由图 7，可以得到如图 8 的一棵 BFS 树：</p>
+<figure>
+<img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602094844320.png" alt="匈牙利树"><figcaption>匈牙利树</figcaption>
+</figure>
+<p>这棵树存在一个叶子节点为非匹配点（7 号），但是匈牙利树要求所有叶子节点均为匹配点，因此这不是一棵匈牙利树。如果原图中根本不含 7 号节点，那么从 2 号节点出发就会得到一棵匈牙利树。这种情况如图 9 所示（顺便说一句，图 8 中根节点 2 到非匹配叶子节点 7 显然是一条增广路，沿这条增广路扩充后将得到一个完美匹配）。</p>
+<h2 id="kuhn-munkres算法二分图最大权匹配">Kuhn-<em>Munkres</em>算法(二分图最大权匹配)</h2>
+<p>在进入加权二分图之前，我们默认已经掌握了图、交错路径、增广路径、最大匹配和完美匹配的概念</p>
+<p>上面探讨的二分图匹配问题中，任意两个节点之间，要么是有边的，要么是没有边。在很多情况下，节点之间的候选连接是有强度的，带权值的。</p>
+<p>在这种情况下，整体最优的匹配是，我们希望找到一种方案（依然是一点至多只有一个边的条件）使得我们的成本最少或者权重和最大。</p>
+<h3 id="原理">原理</h3>
+<p>那么，<strong>Kuhn-Munkres</strong> 算法的原理是什么呢？</p>
+<h4 id="先一言以蔽之">先一言以蔽之</h4>
+<blockquote>
+<p>The KM theorem transforms the problem from an op- timization problem of finding a max-weight matching into a combinatorial one of finding a perfect match- ing. It combinatorializes the weights. This is a classic technique in combinatorial optimization.</p>
+<p>KM定理将问题从寻找最大权重匹配的优化问题转变为寻找完美匹配的组合问题。 它组合了权重。 这是组合优化中的经典技术。</p>
+</blockquote>
+<p><strong>如何转换的呢</strong>？</p>
+<p>KM又引入了<code>Feasible Labelings</code>&amp; <code>Equality Graphs</code>这两个概念</p>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200601182550299.png" alt="Feasible Labelings &amp; Equality Graphs" style="zoom:50%;"></p>
+<ul>
+<li><p>A vetex labeling is a function <span class="math inline">\(\ell: V \rightarrow \mathcal{R}\)</span></p></li>
+<li><p>A feasible labeling is one such that <span class="math display">\[
+\ell(x)+\ell(y) \geq w(x, y), \quad \forall x \in X, y \in Y
+\]</span></p></li>
+<li><p>the Equality Graph (with respect to <span class="math inline">\(\ell\)</span>) is <span class="math inline">\(G=\left(V, E_{\ell}\right)\)</span> where <span class="math display">\[
+E_{\ell}=\{(x, y): \ell(x)+\ell(y)=w(x, y)\}
+\]</span></p></li>
+</ul>
+<h3 id="理论与证明">理论与证明</h3>
+<p><code>Theorem[Kuhn-Munkres]:</code> If <span class="math inline">\(\ell\)</span> is feasible and <span class="math inline">\(M\)</span> is a Perfect matching in <span class="math inline">\(E_{\ell}\)</span> then <span class="math inline">\(M\)</span> is a max-weight matching.</p>
+<blockquote>
+<p>如果能找到一个取值节点策略 <span class="math inline">\(\ell: V \rightarrow \mathcal{R}\)</span> ，使得满足Feasible Labelings &amp; Equality Graphs 两个条件，就可以找到最大匹配</p>
+</blockquote>
+<p>The KM theorem transforms the problem from an optimization problem of finding a max-weight matching into a combinatorial one of finding a perfect matching. It combinatorializes the weights. This is a classic technique in combinatorial optimization.</p>
+<p>Notice that the proof of the KM theorem says that for any matching <span class="math inline">\(M\)</span> and any feasible labeling <span class="math inline">\(\ell\)</span> we have <span class="math display">\[
+w(M) \leq \sum_{v \in V} \ell(v)
+\]</span> This has very strong echos of the max-flow min-cut theorem.</p>
+<p><code>Proof:</code></p>
+<blockquote>
+<p>只要证明：任意一个匹配解的权重和的上界都不大于 <span class="math inline">\(\sum_{v \in V} \ell(v)\)</span></p>
+</blockquote>
+<p>Denote edge <span class="math inline">\(e \in E\)</span> by <span class="math inline">\(e=\left(e_{x}, e_{y}\right)\)</span> Let <span class="math inline">\(M^{\prime}\)</span> be any PM in <span class="math inline">\(G\)</span> (not necessarily in in <span class="math inline">\(E_{\ell}\)</span> ). since every <span class="math inline">\(v \in \bar{V}\)</span> is covered exactly once by <span class="math inline">\(M\)</span> we have <span class="math display">\[
+w\left(M^{\prime}\right)=\sum_{e \in M^{\prime}} w(e) \leq \sum_{e \in M^{\prime}}\left(\ell\left(e_{x}\right)+\ell\left(e_{y}\right)\right)\leq \sum_{v \in V} \ell(v)
+\]</span> so <span class="math inline">\(\sum_{v \in V} \ell(v)\)</span> is an upper-bound on the cost of any perfect matching. Now let <span class="math inline">\(M\)</span> be a PM in <span class="math inline">\(E_{\ell}\)</span>. Then <span class="math inline">\(w(M)=\sum_{e \in M} w(e)=\sum_{v \in V} \ell(v)\)</span> So <span class="math inline">\(w\left(M^{\prime}\right) \leq w(M)\)</span> and <span class="math inline">\(M\)</span> is optimal.</p>
+<p><code>算法思路</code></p>
+<p>This algorithm will be to Start with any feasible labeling <span class="math inline">\(\ell\)</span> and some matching <span class="math inline">\(M\)</span> in <span class="math inline">\(E_{\ell}\)</span> While <span class="math inline">\(M\)</span> is not perfect repeat the following:</p>
+<ol type="1">
+<li>Find an augmenting path for <span class="math inline">\(M\)</span> in <span class="math inline">\(E_{\ell}\)</span> this increases size of <span class="math inline">\(M\)</span></li>
+<li>If no augmenting path exists, improve <span class="math inline">\(\ell\)</span> to <span class="math inline">\(\ell^{\prime}\)</span> such that <span class="math inline">\(E_{\ell} \subset E_{\ell^{\prime}}\)</span> Go to 1 Note that in each step of the loop we will either be increasing the size of <span class="math inline">\(M\)</span> or <span class="math inline">\(E_{\ell}\)</span> so this process must terminate.</li>
+</ol>
+<p>Furthermore, when the process terminates, <span class="math inline">\(M\)</span> will be a perfect matching in <span class="math inline">\(E_{\ell}\)</span> for some feasible labeling <span class="math inline">\(\ell\)</span> So, by the Kuhn-Munkres theorem, <span class="math inline">\(M\)</span> will be a maxweight matching.</p>
+<h3 id="具体步骤">具体步骤</h3>
+<p><code>1.Finding an Initial Feasible Labelling</code>--其中一边端点为0，另一边取节点连接边权重的最大值</p>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602095707628.png" alt="image-20200602095707628" style="zoom: 25%;"></p>
+<p>Finding an initial feasible labeling is simple. Just use: <span class="math display">\[
+\forall y \in Y, \ell(y)=0, \quad \forall x \in X, \ell(x)=\max _{y \in Y}\{w(x, y)\}
+\]</span> With this labelling it is obvious that <span class="math display">\[
+\forall x \in X, y \in Y, w(x) \leq \ell(x)+\ell(y)
+\]</span> <code>2.Improving Labellings</code></p>
+<blockquote>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602110856305.png" alt="equality graph" style="zoom: 25%;"></p>
+<p>这是初始labeling产生的equality graph的<span class="math inline">\(E_{\ell}\)</span>，节点和边用红色标注了出来. Note: 这个时候红色的图，只能找到最大匹配，形成不了完美匹配</p>
+</blockquote>
+<h4 id="扩展e_ell-subset-e_ellprime-的技巧">扩展<span class="math inline">\(E_{\ell} \subset E_{\ell^{\prime}}\)</span> 的技巧</h4>
+<p>Let <span class="math inline">\(\ell\)</span> be a feasible labeling. Define neighbor of <span class="math inline">\(u \in V\)</span> and <span class="math inline">\(\operatorname{set} S \subseteq V\)</span> to be <span class="math display">\[
+N_{\ell}(u)=\left\{v:(u, v) \in E_{\ell},\right\}, \quad N_{\ell}(S)=\cup_{u \in S} N_{\ell}(u)
+\]</span> Lemma: Let <span class="math inline">\(S \subseteq X\)</span> and <span class="math inline">\(T=N_{\ell}(S) \neq Y.\)</span> Set</p>
+<blockquote>
+<p><code>Sen Yang Note:</code></p>
+<p>Bipartite graph：the neighbours of <span class="math inline">\(x\in S\)</span> are the $ yY$, so <span class="math inline">\(T \subseteq Y\)</span>.</p>
+</blockquote>
+<p><span class="math display">\[
+\alpha_{\ell}=\min _{x \in S, y \notin T}\{\ell(x)+\ell(y)-w(x, y)\}
+\]</span> and <span class="math display">\[
+\ell^{\prime}(v)=\left\{\begin{array}{ll}
+\ell(v)-\alpha_{\ell} &amp; \text { if } v \in S \\
+\ell(v)+\alpha_{\ell} &amp; \text { if } v \in T \\
+\ell(v) &amp; \text { otherwise }
+\end{array}\right.
+\]</span></p>
+<blockquote>
+<p><code>Sen Yang Note:</code></p>
+<p>比如拿此时equality graph为例，<span class="math inline">\(x \in S, y \notin T\)</span>的条件就是 <span class="math inline">\(Y_3\)</span>和<span class="math inline">\(X_2,X_3\)</span>,那么<span class="math inline">\(\alpha_{\ell}=\min_{X_2,X_3,Y_3}\{8+0-6,4+0-1 \}=2\)</span></p>
+<p>然后上面构造<span class="math inline">\(\ell^{\prime}(v)\)</span>的逻辑是，因为<span class="math inline">\(S\cup T= E_{\ell}\)</span>，这样还能保证其中每个边对应labeling的和<span class="math inline">\(\ell(v_S)-\alpha_{\ell}+\ell(v_T)+\alpha_{\ell}=\ell^{\prime}(v_S)+\ell^{\prime}(v_T)\)</span>依然是保持不变，那么原来属于,并且<span class="math inline">\(Y\)</span>的label值增加，<span class="math inline">\(X\)</span>的label值减少</p>
+</blockquote>
+<p>Then <span class="math inline">\(\ell^{\prime}\)</span> is a feasible labeling and (i) If <span class="math inline">\((x, y) \in E_{\ell}\)</span> for <span class="math inline">\(x \in S, y \in T\)</span> then <span class="math inline">\((x, y) \in E_{\ell^{\prime}}\)</span> (ii) If <span class="math inline">\((x, y) \in E_{\ell}\)</span> for <span class="math inline">\(x \notin S, y \notin T\)</span> then <span class="math inline">\((x, y) \in E_{\ell^{\prime}}\)</span> (iii) There is some edge <span class="math inline">\((x, y) \in E_{\ell^{\prime}}\)</span> for <span class="math inline">\(x \in S, y \notin T\)</span></p>
+<blockquote>
+<p><code>Sen Yang Note:</code></p>
+<p>(i)一定可以满足，（ii）不一定能找到这样的(x,y)比如当前的图中找不到一个<span class="math inline">\((x, y) \in E_{\ell}\)</span> for <span class="math inline">\(x \notin S, y \notin T\)</span></p>
+<p>（iii）多产生了一个新边 <span class="math inline">\((X_2, Y_3) \in E_{\ell^{\prime}}\)</span>，如下图。为什么会产生，这是因为我们<span class="math inline">\(\alpha_{\ell}=\min_{X_2,X_3,Y_3}\{8+0-6,4+0-1 \}\)</span></p>
+<p>我们可以知道了这个</p>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602115818179.png" alt="image-20200602115818179" style="zoom: 25%;"></p>
+</blockquote>
+<p>上面我们展示了扩展<span class="math inline">\(E_{\ell} \subset E_{\ell^{\prime}}\)</span> 的技巧，请注意，它并不是实际KM算法（Hungarian ）中的步骤，下面是真正的算法过程</p>
+<h2 id="km算法二分图加权最大匹配的匈牙利方法">KM算法：二分图加权最大匹配的匈牙利方法</h2>
+<h3 id="整体思路">整体思路</h3>
+<ol type="1">
+<li><p>Generate initial labelling <span class="math inline">\(\ell\)</span> and matching <span class="math inline">\(M\)</span> in <span class="math inline">\(E_{\ell}\)</span></p></li>
+<li><ul>
+<li><p>If <span class="math inline">\(M\)</span> perfect, stop.</p></li>
+<li><p>Otherwise pick free vertex <span class="math inline">\(u \in X\)</span> <span class="math inline">\(\operatorname{Set} S=\{u\}, T=\emptyset\)</span></p></li>
+</ul></li>
+<li><p>If <span class="math inline">\(\left.N_{\ell}(S)=T, \text { update labels (forcing } N_{\ell}(S) \neq T\right)\)</span> <span class="math display">\[\begin{array}{l}
+ \alpha_{\ell}=\min _{s \in S, y \notin T}\{\ell(x)+\ell(y)-w(x, y)\} \\
+ \ell^{\prime}(v)=\left\{\begin{array}{ll}
+ \ell(v)-\alpha_{\ell} &amp; \text { if } v \in S \\
+ \ell(v)+\alpha_{\ell} &amp; \text { if } v \in T \\
+ \ell(v) &amp; \text { otherwise }
+ \end{array}\right.
+ \end{array}\]</span></p></li>
+<li><p>If <span class="math inline">\(N_{\ell}(S) \neq T,\)</span> pick <span class="math inline">\(y \in N_{\ell}(S)-T\)</span></p></li>
+</ol>
+<ul>
+<li>If $ y$ free, <span class="math inline">\(u-y\)</span> is augmenting path. Augment <span class="math inline">\(M\)</span> and go to 2. <code>Note that:增强路为什么会在这个时候产生？</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
+<li>If <span class="math inline">\(y\)</span> matched, say to<span class="math inline">\(z\)</span>, extend <code>alternating tree:</code> <span class="math inline">\(S=S \cup\{z\}, T=T \cup\{y\} .\)</span><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Go to 3</li>
+</ul>
+<h3 id="实战">实战</h3>
+<p>迭代扩展匹配M至完美匹配</p>
+<p>迭代等价图<span class="math inline">\(E_l\)</span></p>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602151923976.png" alt="image-20200602151923976" style="zoom:50%;"></p>
+<ul>
+<li>Initial Graph, trivial labelling and associated Equality Graph</li>
+<li>Initial matching: <span class="math inline">\(\left(x_{3}, y_{1}\right),\left(x_{2}, y_{2}\right)\)</span> <code>初始的任意一种匹配M'</code> <span class="math inline">\(S=\left\{x_{1}\right\}, T=\emptyset\)</span></li>
+<li>since <span class="math inline">\(N_{\ell}(S) \neq T,\)</span> do step 4 Choose <span class="math inline">\(y_{2} \in N_{\ell}(S)-T\)</span></li>
+<li><span class="math inline">\(y_{2}\)</span> is matched so grow tree by adding <span class="math inline">\(\left(y_{2}, x_{2}\right)\)</span> ¡.e., <span class="math inline">\(S=\left\{x_{1}, x_{2}\right\}, T=\left\{y_{2}\right\}\)</span></li>
+<li>At this point <span class="math inline">\(N_{\ell}(S)=T,\)</span> so goto 3</li>
+</ul>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152240643.png" alt="image-20200602152240643" style="zoom:50%;"></p>
+<ul>
+<li><p><span class="math inline">\(S=\left\{x_{1}, x_{2}\right\}, T=\left\{y_{2}\right\}\)</span> and <span class="math inline">\(N_{\ell}(S)=T\)</span></p></li>
+<li><p>Calculate <span class="math inline">\(\alpha_{\ell}\)</span> <span class="math display">\[
+\begin{aligned}
+\alpha_{\ell} &amp;=\min _{x \in S, y \notin T}\left\{\begin{array}{ll}
+6+0-1, &amp; \left(x_{1}, y_{1}\right) \\
+6+0-0, &amp; \left(x_{1}, y_{3}\right) \\
+8+0-0, &amp; \left(x_{2}, y_{1}\right) \\
+8+0-6, &amp; \left(x_{2}, y_{3}\right)
+\end{array}\right.\\
+&amp;=2
+\end{aligned}
+\]</span></p></li>
+<li><p>Reduce labels of <span class="math inline">\(S\)</span> by 2</p>
+<p>Increase labels of <span class="math inline">\(T\)</span> by 2</p></li>
+<li><p>Now <span class="math inline">\(N_{\ell}(S)=\left\{y_{2}, y_{3}\right\} \neq\left\{y_{2}\right\}=T\)</span></p></li>
+</ul>
+<p><img src="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152520026.png" alt="image-20200602152520026" style="zoom:50%;"></p>
+<ul>
+<li><p><span class="math inline">\(\boldsymbol{S}=\left\{x_{1}, x_{2}\right\}, N_{\ell}(S)=\left\{y_{2}, y_{3}\right\}, T=\left\{y_{2}\right\}\)</span></p></li>
+<li>Choose <span class="math inline">\(y_{3} \in N_{\ell}(S)-T\)</span> and add it to <span class="math inline">\(T\)</span></li>
+<li><span class="math inline">\(y_{3}\)</span> is not matched in <span class="math inline">\(M\)</span> so we have just found an alternating path <span class="math inline">\(x_{1}, y_{2}, x_{2}, y_{3}\)</span> with two free endpoints. We can therefore augment <span class="math inline">\(M\)</span> to get a larger matching in the new equality graph. This matching is perfect, so it must be optimal.</li>
+<li><p>Note that matching <span class="math inline">\(\left(x_{1}, y_{2}\right),\left(x_{2}, y_{3}\right),\left(x_{3}, y_{1}\right)\)</span> has cost <span class="math inline">\(6+6+4=16\)</span> which is exactly the sum of the labels in our final feasible labelling.</p></li>
+</ul>
+<p>至此，我们从名词解释，到术语概念，到问题转换目标，到问题区分（二分图匹配和二分图加权最大匹配），到KM算法的原理与证明，再到算法步骤，最后举一个实际例分析，完整介绍了匈牙利算法。</p>
+<p>后续，我们还会进一步研究匈牙利算法如何和一些CV任务进行结合。</p>
+<h4 id="参考文献">参考文献</h4>
+<p><a href="https://econweb.ucsd.edu/~v2crawford/hungar.pdf" target="_blank" rel="noopener">pdf 1960年手稿</a></p>
+<p><a href="https://luzhijun.github.io/2016/10/10/匈牙利算法详解/" target="_blank" rel="noopener">匈牙利算法详解博客</a></p>
+<p><a href="https://www.renfei.org/blog/bipartite-matching.html" target="_blank" rel="noopener">二分图的最大匹配、完美匹配和匈牙利算法</a></p>
+<p><a href="https://github.com/tdedecko/hungarian-algorithm" target="_blank" rel="noopener">python算法实现 Hungarain</a></p>
+<p><a href="https://blog.csdn.net/xuguangsoft/article/details/7861988" target="_blank" rel="noopener">匈牙利算法求二分图的最大匹配</a></p>
+<p><a href="http://csclab.murraystate.edu/~bob.pilgrim/445/munkres.html" target="_blank" rel="noopener">Munkres' Assignment Algorithm /Modified for Rectangular Matrices</a></p>
+<p><a href="http://hungarianalgorithm.com/examplehungarianalgorithm.php" target="_blank" rel="noopener">Weighted Hungarian Algorithm</a></p>
+<p><a href="https://www.iteye.com/blog/philoscience-1754498" target="_blank" rel="noopener">博主对KM的理解</a></p>
+<p><code>建议阅读这两个文档，从数学和算法的角度分析了加权二分图的最大权匹配问题</code></p>
+<ul>
+<li><p><a href="http://www.cse.ust.hk/~golin/COMP572/Notes/Matching.pdf" target="_blank" rel="noopener">Bipartite Matching &amp; the Hungarian Metho</a></p></li>
+<li><p><a href="https://sites.cs.ucsb.edu/~suri/cs231/Matching.pdf" target="_blank" rel="noopener">Matching</a></p></li>
+<li><p>这个教授整理的<a href="https://sites.cs.ucsb.edu/~suri/cs231/231.html" target="_blank" rel="noopener">数据结构与算法、组合优化的课程网站</a></p></li>
+</ul>
+<section class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Kuhn, H.W.: The hungarian method for the assignment problem (1955)<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>因为初始的<span class="math inline">\(\operatorname{Set} S=\{u\}, T=\emptyset\)</span> <span class="math inline">\(u\)</span>是一个未匹配（free, 即不在<span class="math inline">\(M\)</span>内）的一个顶点，而<span class="math inline">\(y \in N_{\ell}(S)-T\)</span>表示此时M匹配（）的一个末端顶点又连接到的一个未匹配顶点，增广路形成了！增广路形成可以让我们的<span class="math inline">\(M\)</span>匹配走向完美匹配！真的是太妙了！一定要注意到这一点。<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>扩展交替路的一种方法。添加的<span class="math inline">\(S=S \cup\{z\}, T=T \cup\{y\},(z,y)\)</span>是一个匹配边<a href="#fnref3" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Author：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>Link：</strong>
+    <a href="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/" title="Bipartite Matching and Hungarian Algorithm">http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>License： </strong>
+    Unless otherwise stated,  all blogs use the <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> protocol, please indicate the source
+  </li>
+</ul>
+
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+            <a href="/tags/Graph/" rel="tag"># Graph</a>
+          
+            <a href="/tags/Bipartite-Matching-and-Hungarian-Algorithm/" rel="tag"># Bipartite Matching and Hungarian Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/24/enhance-hexo-next/" rel="next" title="Enhance Hexo Next">
+                <i class="fa fa-chevron-left"></i> Enhance Hexo Next
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Toc
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分图的最大匹配"><span class="nav-number">2.</span> <span class="nav-text">二分图的最大匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一言以蔽之"><span class="nav-number">2.1.</span> <span class="nav-text">一言以蔽之</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直观理解"><span class="nav-number">2.2.</span> <span class="nav-text">直观理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kuhn-munkres算法二分图最大权匹配"><span class="nav-number">3.</span> <span class="nav-text">Kuhn-Munkres算法(二分图最大权匹配)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#先一言以蔽之"><span class="nav-number">3.1.1.</span> <span class="nav-text">先一言以蔽之</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理论与证明"><span class="nav-number">3.2.</span> <span class="nav-text">理论与证明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体步骤"><span class="nav-number">3.3.</span> <span class="nav-text">具体步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展e_ell-subset-e_ellprime-的技巧"><span class="nav-number">3.3.1.</span> <span class="nav-text">扩展\(E_{\ell} \subset E_{\ell^{\prime}}\) 的技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#km算法二分图加权最大匹配的匈牙利方法"><span class="nav-number">4.</span> <span class="nav-text">KM算法：二分图加权最大匹配的匈牙利方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#整体思路"><span class="nav-number">4.1.</span> <span class="nav-text">整体思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战"><span class="nav-number">4.2.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文献"><span class="nav-number">4.2.1.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+  
+<!-- END LOCAL -->
+
+
+    
+      <script src="https://utteranc.es/client.js"
+        repo="senyang-ml/Comments"
+        issue-term="title"
+        label="utt-comment"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>
+  
+  <script>
+    (function () {
+
+      firebase.initializeApp({
+        apiKey: '',
+        projectId: ''
+      })
+
+      function getCount(doc, increaseCount) {
+        //increaseCount will be false when not in article page
+
+        return doc.get().then(function (d) {
+          var count
+          if (!d.exists) { //has no data, initialize count
+            if (increaseCount) {
+              doc.set({
+                count: 1
+              })
+              count = 1
+            }
+            else {
+              count = 0
+            }
+          }
+          else { //has data
+            count = d.data().count
+            if (increaseCount) {
+              if (!(window.localStorage && window.localStorage.getItem(title))) { //if first view this article
+                doc.set({ //increase count
+                  count: count + 1
+                })
+                count++
+              }
+            }
+          }
+          if (window.localStorage && increaseCount) { //mark as visited
+            localStorage.setItem(title, true)
+          }
+
+          return count
+        })
+      }
+
+      function appendCountTo(el) {
+        return function (count) {
+          $(el).append(
+            $('<span>').addClass('post-visitors-count').append(
+              $('<span>').addClass('post-meta-divider').text('|')
+            ).append(
+              $('<span>').addClass('post-meta-item-icon').append(
+                $('<i>').addClass('fa fa-users')
+              )
+              ).append($('<span>').text('visitors ' + count))
+          )
+        }
+      }
+
+      var db = firebase.firestore()
+      var articles = db.collection('articles')
+
+      //https://hexo.io/zh-tw/docs/variables.html
+      var isPost = 'Bipartite Matching and Hungarian Algorithm'.length > 0
+      var isArchive = '' === 'true'
+      var isCategory = ''.length > 0
+      var isTag = ''.length > 0
+
+      if (isPost) { //is article page
+        var title = 'Bipartite Matching and Hungarian Algorithm'
+        var doc = articles.doc(title)
+
+        getCount(doc, true).then(appendCountTo($('.post-meta')))
+      }
+      else if (!isArchive && !isCategory && !isTag) { //is index page
+        var titles = [] //array to titles
+
+        var postsstr = '' //if you have a better way to get titles of posts, please change it
+        eval(postsstr)
+
+        var promises = titles.map(function (title) {
+          return articles.doc(title)
+        }).map(function (doc) {
+          return getCount(doc)
+        })
+        Promise.all(promises).then(function (counts) {
+          var metas = $('.post-meta')
+          counts.forEach(function (val, idx) {
+            appendCountTo(metas[idx])(val)
+          })
+        })
+      }
+    })()
+  </script>
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+      
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>
