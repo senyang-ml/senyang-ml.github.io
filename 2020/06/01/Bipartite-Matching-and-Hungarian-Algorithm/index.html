@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152240643.png">
 <meta property="og:image" content="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/image-20200602152520026.png">
 <meta property="article:published_time" content="2020-06-01T10:53:41.000Z">
-<meta property="article:modified_time" content="2020-06-02T09:37:08.693Z">
+<meta property="article:modified_time" content="2020-06-02T15:22:36.386Z">
 <meta property="article:author" content="yangsenius">
 <meta property="article:tag" content="Algorithm">
 <meta name="twitter:card" content="summary">
@@ -363,7 +363,8 @@
 <li>多目标跟踪领域内的，前后相邻帧匹配问题</li>
 <li>在Instance Segmentation领域，这也是很常见的</li>
 </ul>
-<p>顾名思义，二分图匹配是一个<code>分配</code>问题 (Assignment Problem)。 Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
+<p>顾名思义，二分图匹配是一个<code>分配</code>问题 (Assignment Problem)。</p>
+<p>Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
 <p>如果想要彻底理解它，需要先掌握它所涉及到的一些概念，作为先验知识。如下所示： <a id="more"></a></p>
 <ul>
 <li><p>图</p></li>
@@ -383,7 +384,7 @@
 <p>什么是二分图呢，它是一种特殊的图，即可以将图分为两组，两组内的节点之间没有连接边，两组之间节点存在连接关系。</p>
 <p>我们的目标是寻找一个<strong>最大的匹配</strong>结果，使得匹配结果最合理。</p>
 <p>比如说，我们想在一群男生和一群女生之间，根据他们各自喜欢的异性，找到一种能够成全更多对情侣的方案。又比如说，我们打算把工作项目，指派给员工们，希望用一种最大效率或者最低成本的方案。</p>
-<p><strong>最大匹配</strong>，即尽可能使得两组之间的匹配边数最多，在任意一个节点最多只有一个边与之相连接的条件下。这就是我们的最优匹配目标，那么，如何<strong>求解出一种匹配方式</strong>，能够达到最大匹配呢？</p>
+<p><strong>最大匹配</strong>，即，在任意一个节点最多只有一个边与之相连接的条件下，尽可能使得两组之间的匹配边数最多。这就是我们的最优匹配目标，那么，如何<strong>求解出一种匹配方式</strong>，能够达到最大匹配呢？</p>
 <p>最粗暴的算法就是暴力搜索，然而它的时间复杂度是指数级O(n!)</p>
 <p>那有没有可以降低复杂度，并能够确定找到最优解的算法呢？</p>
 <p>有，<strong>匈牙利算法</strong>就是！</p>
@@ -408,7 +409,7 @@
 <p>上面探讨的二分图匹配问题中，任意两个节点之间，要么是有边的，要么是没有边。在很多情况下，节点之间的候选连接是有强度的，带权值的。</p>
 <p>在这种情况下，整体最优的匹配是，我们希望找到一种方案（依然是一点至多只有一个边的条件）使得我们的成本最少或者权重和最大。</p>
 <h3 id="原理">原理</h3>
-<p>那么，<strong>Kuhn-Munkres</strong> 算法的原理是什么呢？</p>
+<p><strong>Kuhn-Munkres</strong> 算法的原理是什么呢？</p>
 <h4 id="先一言以蔽之">先一言以蔽之</h4>
 <blockquote>
 <p>The KM theorem transforms the problem from an op- timization problem of finding a max-weight matching into a combinatorial one of finding a perfect match- ing. It combinatorializes the weights. This is a classic technique in combinatorial optimization. KM定理将问题从寻找最大权重匹配的优化问题转变为寻找完美匹配的组合问题。 它组合了权重。 这是组合优化中的经典技术。</p>
