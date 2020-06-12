@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://senyang-ml.github.io/2020/06/04/detr/</loc>
+    
+    <lastmod>2020-06-12T12:54:57.377Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/</loc>
     
-    <lastmod>2020-06-02T15:22:36.386Z</lastmod>
+    <lastmod>2020-06-12T12:27:15.388Z</lastmod>
     
   </url>
   

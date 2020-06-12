@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hungarian Match,Object Detection,Transformer," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Detr （DEtection TRansformer） 是最近很受关注的一个工作。论文叫做「End-to-end object detection with Transformers」， Facebook Research目前把它投稿到了2020年的ECCV。 鉴于网上有太多关于DETR的解读和评价，本文就不做太多的探讨，而致力于分析这两个概念：  Set prediction and Hung">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Detr">
+<meta property="og:url" content="http://senyang-ml.github.io/2020/06/04/detr/index.html">
+<meta property="og:site_name" content="Sen Yang">
+<meta property="og:description" content="Detr （DEtection TRansformer） 是最近很受关注的一个工作。论文叫做「End-to-end object detection with Transformers」， Facebook Research目前把它投稿到了2020年的ECCV。 鉴于网上有太多关于DETR的解读和评价，本文就不做太多的探讨，而致力于分析这两个概念：  Set prediction and Hung">
+<meta property="article:published_time" content="2020-06-04T10:19:09.000Z">
+<meta property="article:modified_time" content="2020-06-12T12:54:57.377Z">
+<meta property="article:author" content="yangsenius">
+<meta property="article:tag" content="Hungarian Match">
+<meta property="article:tag" content="Object Detection">
+<meta property="article:tag" content="Transformer">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":2},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://senyang-ml.github.io/2020/06/04/detr/"/>
+
+
+
+
+
+  <title>Detr | Sen Yang</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sen Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-blogs">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Blogs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/research/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/06/04/detr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Detr</h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-04T18:19:09+08:00">
+                2020-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Detr （DEtection TRansformer） 是最近很受关注的一个工作。论文叫做「End-to-end object detection with Transformers」， Facebook Research目前把它投稿到了2020年的ECCV。</p>
+<p>鉴于网上有太多关于DETR的解读和评价，本文就不做太多的探讨，而致力于分析这两个概念：</p>
+<ul>
+<li>Set prediction and Hungarian Loss</li>
+<li>Permutation Invariance</li>
+</ul>
+<a id="more"></a>
+<h2 id="object-detection-set-prediction-loss">Object detection set prediction loss</h2>
+<p>与以往的目标检测模型不一样，DETR模型推断一个固定长度（<span class="math inline">\(N\)</span>）的预测集合（可以理解为<span class="math inline">\(N\)</span>长度的序列），即输出<span class="math inline">\(N\)</span>个预测出的目标bbox和类别置信度<span class="math inline">\(\hat{y}=\left(\hat{b},\hat{c}\right)\)</span>，其中<span class="math inline">\(N\)</span>远大于图像中的真实目标数目。</p>
+<blockquote>
+<p>Note: 原文中，为了公式上的表达，作者假设真实目标数目也是<span class="math inline">\(N\)</span>,然后用<span class="math inline">\(\varnothing\)</span>来填充，表示非物体。</p>
+</blockquote>
+<h3 id="hungarian-loss">Hungarian Loss</h3>
+<p>Hungarian loss 是在这篇论文<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>提出，是bipartite matching and Hungarian Algorithm 第一次中被用到Deep Learning的检测任务中。下面，我们来解释一下Hungarian Loss的用法和含义。</p>
+<blockquote>
+<p>如果需要了解「hungarian algorithm」，可以参考<a href="https://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/">bipartite matching and hungarian algorithm</a>。</p>
+</blockquote>
+<p>Hungarian Algorithm是一种求解二分图（加权）最大匹配的一种算法，它必然可以求出一个最优解。首先，根据字面上，我们不要陷入一个误区：<code>Hungarian Loss是用来优化最大匹配的，用损失函数的方式来梯度反传求解最大匹配</code>。并不是这样，实际上是：<code>我们在使用Hungarian Algorithm求解出最大匹配之后，真实的目标框找到了与之相匹配的预测出的目标框，然后, 我们根据相匹配的的GT和Prediction,计算受损失函数。</code>计算的是两者的类别置信度对应的交叉熵损失和bbox对应<span class="math inline">\(\mathcal{L}_{\mathrm{box}}(\cdot)\)</span>损失。</p>
+<p>所谓Hungarian Loss就是</p>
+<p><strong>先用Hungarian Algorithm匹配，然后计算一个常规的loss。</strong></p>
+<p>所以它是一个两步的过程：</p>
+<ul>
+<li>第一步是用Hungarian Method求解最优匹配</li>
+</ul>
+<p><span class="math display">\[
+\hat{\sigma}=\underset{\sigma \in \mathfrak{S}_{N}}{\arg \min } \sum_{i}^{N} \mathcal{L}_{\mathrm{match}}\left(y_{i}, \hat{y}_{\sigma(i)}\right)
+\]</span></p>
+<p><span class="math display">\[
+\mathcal{L}_{\mathrm{match}} \left(y_{i}, \hat{y}_{\sigma(i)}\right)=-\mathbb{1}_{\left\{c_{i} \neq \varnothing\right\}} \hat{p}_{\sigma(i)}\left(c_{i}\right)+\mathbb{1}_{\left\{c_{i} \neq \varnothing\right\}} \mathcal{L}_{\mathrm{box}}\left(b_{i}, \hat{b}_{\sigma(i)}\right)
+\]</span></p>
+<ul>
+<li>第二步是固定匹配后，计算损失函数，进行梯度反传 <span class="math display">\[
+\mathcal{L}_{\text {Hungarian }}(y, \hat{y})=\sum_{i=1}^{N}\left[-\log \hat{p}_{\hat{\sigma}(i)}\left(c_{i}\right)+\mathbb{1}_{\left\{c_{i} \neq \varnothing\right\}} \mathcal{L}_{\mathrm{box}}\left(b_{i}, \hat{b}_{\hat{\sigma}}(i)\right)\right]
+\]</span></li>
+</ul>
+<blockquote>
+<p>Sen Yang Note: 注意到一点，论文中在二分图匹配时，是以GT为参考，为每个<span class="math inline">\(y_{i}\)</span>考虑其最好的匹配选择, <span class="math inline">\(\hat{y}_{\sigma(i)}\)</span>. 所以Prediction的下标直接使用了真实gt的下标<span class="math inline">\(i\)</span>的索引<span class="math inline">\(\sigma(i)\)</span>，代表gt所匹配的prediciton。所以不管预测序列的<span class="math inline">\(N\)</span>个元素的排列顺序(permutation)是什么样的, Hungarian Method最后的匹配都是同一种最优解，用索引<span class="math inline">\(\sigma(i)\)</span>表示的好处就是，它可以来表达出<code>置换不变性(Permutation Invariant)</code>。这在论文中有提到。</p>
+</blockquote>
+<p>我们上面的论文都可以在Detr中代码中找到描述。</p>
+<p><code>SetCriterion</code>的计算准则的说明文档是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SetCriterion</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">""" This class computes the loss for DETR.</span></span><br><span class="line"><span class="string">    The process happens in two steps:</span></span><br><span class="line"><span class="string">        1) we compute hungarian assignment between ground truth boxes and the outputs of the model</span></span><br><span class="line"><span class="string">        2) we supervise each pair of matched ground-truth / prediction (supervise class and box)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes, matcher, weight_dict, eos_coef, losses)</span>:</span></span><br><span class="line">        <span class="string">""" Create the criterion.</span></span><br><span class="line"><span class="string">        Parameters:</span></span><br><span class="line"><span class="string">            num_classes: number of object categories, omitting the special no-object category</span></span><br><span class="line"><span class="string">            matcher: module able to compute a matching between targets and proposals</span></span><br><span class="line"><span class="string">            weight_dict: dict containing as key the names of the losses and as values their relative weight.</span></span><br><span class="line"><span class="string">            eos_coef: relative classification weight applied to the no-object category</span></span><br><span class="line"><span class="string">            losses: list of all the losses to be applied. See get_loss for list of available losses.</span></span><br><span class="line"><span class="string">        """</span></span><br></pre></td></tr></table></figure>
+<p><code>HungarianMatcher</code>匹配的说明文档和代码是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Modules to compute the matching cost and solve the corresponding LSAP.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> linear_sum_assignment</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> util.box_ops <span class="keyword">import</span> box_cxcywh_to_xyxy, generalized_box_iou</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HungarianMatcher</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">"""This class computes an assignment between the targets and the predictions of the network</span></span><br><span class="line"><span class="string">    For efficiency reasons, the targets don't include the no_object. Because of this, in general,</span></span><br><span class="line"><span class="string">    there are more predictions than targets. In this case, we do a 1-to-1 matching of the best predictions,</span></span><br><span class="line"><span class="string">    while the others are un-matched (and thus treated as non-objects).</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, cost_class: float = <span class="number">1</span>, cost_bbox: float = <span class="number">1</span>, cost_giou: float = <span class="number">1</span>)</span>:</span></span><br><span class="line">        <span class="string">"""Creates the matcher</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            cost_class: This is the relative weight of the classification error in the matching cost</span></span><br><span class="line"><span class="string">            cost_bbox: This is the relative weight of the L1 error of the bounding box coordinates in the matching cost</span></span><br><span class="line"><span class="string">            cost_giou: This is the relative weight of the giou loss of the bounding box in the matching cost</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        super().__init__()</span><br><span class="line">        self.cost_class = cost_class</span><br><span class="line">        self.cost_bbox = cost_bbox</span><br><span class="line">        self.cost_giou = cost_giou</span><br><span class="line">        <span class="keyword">assert</span> cost_class != <span class="number">0</span> <span class="keyword">or</span> cost_bbox != <span class="number">0</span> <span class="keyword">or</span> cost_giou != <span class="number">0</span>, <span class="string">"all costs cant be 0"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @torch.no_grad()</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, outputs, targets)</span>:</span></span><br><span class="line">        <span class="string">""" Performs the matching</span></span><br><span class="line"><span class="string">        Params:</span></span><br><span class="line"><span class="string">            outputs: This is a dict that contains at least these entries:</span></span><br><span class="line"><span class="string">                 "pred_logits": Tensor of dim [batch_size, num_queries, num_classes] with the classification logits</span></span><br><span class="line"><span class="string">                 "pred_boxes": Tensor of dim [batch_size, num_queries, 4] with the predicted box coordinates</span></span><br><span class="line"><span class="string">            targets: This is a list of targets (len(targets) = batch_size), where each target is a dict containing:</span></span><br><span class="line"><span class="string">                 "labels": Tensor of dim [num_target_boxes] (where num_target_boxes is the number of ground-truth</span></span><br><span class="line"><span class="string">                           objects in the target) containing the class labels</span></span><br><span class="line"><span class="string">                 "boxes": Tensor of dim [num_target_boxes, 4] containing the target box coordinates</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            A list of size batch_size, containing tuples of (index_i, index_j) where:</span></span><br><span class="line"><span class="string">                - index_i is the indices of the selected predictions (in order)</span></span><br><span class="line"><span class="string">                - index_j is the indices of the corresponding selected targets (in order)</span></span><br><span class="line"><span class="string">            For each batch element, it holds:</span></span><br><span class="line"><span class="string">                len(index_i) = len(index_j) = min(num_queries, num_target_boxes)</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        bs, num_queries = outputs[<span class="string">"pred_logits"</span>].shape[:<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># We flatten to compute the cost matrices in a batch</span></span><br><span class="line">        out_prob = outputs[<span class="string">"pred_logits"</span>].flatten(<span class="number">0</span>, <span class="number">1</span>).softmax(<span class="number">-1</span>)  <span class="comment"># [batch_size * num_queries, num_classes]</span></span><br><span class="line">        out_bbox = outputs[<span class="string">"pred_boxes"</span>].flatten(<span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># [batch_size * num_queries, 4]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Also concat the target labels and boxes</span></span><br><span class="line">        tgt_ids = torch.cat([v[<span class="string">"labels"</span>] <span class="keyword">for</span> v <span class="keyword">in</span> targets])</span><br><span class="line">        tgt_bbox = torch.cat([v[<span class="string">"boxes"</span>] <span class="keyword">for</span> v <span class="keyword">in</span> targets])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute the classification cost. Contrary to the loss, we don't use the NLL,</span></span><br><span class="line">        <span class="comment"># but approximate it in 1 - proba[target class].</span></span><br><span class="line">        <span class="comment"># The 1 is a constant that doesn't change the matching, it can be ommitted.</span></span><br><span class="line">        cost_class = -out_prob[:, tgt_ids]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute the L1 cost between boxes</span></span><br><span class="line">        cost_bbox = torch.cdist(out_bbox, tgt_bbox, p=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute the giou cost betwen boxes</span></span><br><span class="line">        cost_giou = -generalized_box_iou(box_cxcywh_to_xyxy(out_bbox), box_cxcywh_to_xyxy(tgt_bbox))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Final cost matrix</span></span><br><span class="line">        C = self.cost_bbox * cost_bbox + self.cost_class * cost_class + self.cost_giou * cost_giou</span><br><span class="line">        C = C.view(bs, num_queries, <span class="number">-1</span>).cpu()</span><br><span class="line"></span><br><span class="line">        sizes = [len(v[<span class="string">"boxes"</span>]) <span class="keyword">for</span> v <span class="keyword">in</span> targets]</span><br><span class="line">        indices = [linear_sum_assignment(c[i]) <span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(C.split(sizes, <span class="number">-1</span>))]</span><br><span class="line">        <span class="keyword">return</span> [(torch.as_tensor(i, dtype=torch.int64), torch.as_tensor(j, dtype=torch.int64)) <span class="keyword">for</span> i, j <span class="keyword">in</span> indices]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_matcher</span><span class="params">(args)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> HungarianMatcher(cost_class=args.set_cost_class, cost_bbox=args.set_cost_bbox, cost_giou=args.set_cost_giou)</span><br></pre></td></tr></table></figure>
+<p>这个函数的目标就是我们刚才讲到的第一步，用Hungarian Method求解最优匹配。</p>
+<p>函数的返回值是最后的最优匹配结果：index_i 和index_j的匹配结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A list of size batch_size, containing tuples of (index_i, index_j) where:</span><br><span class="line">                - index_i is the indices of the selected predictions (in order)</span><br><span class="line">                - index_j is the indices of the corresponding selected targets (in order)</span><br><span class="line">            For each batch element, it holds:</span><br><span class="line">                len(index_i) &#x3D; len(index_j) &#x3D; min(num_queries, num_target_boxes)</span><br></pre></td></tr></table></figure>
+<p>因为这个过程是不参与反向传播的，是一个只有前向计算的过程，所以我们可以注意到</p>
+<p>在前向计算中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, outputs, targets)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>直接用<code>@torch.no_grad()</code>取消了梯度的产生。</p>
+<p>另外需要说明的是：<code>scipy.optimize.linear_sum_assignment(cost_matrix)</code>就是一个用匈牙利算法进行分配的API。Detr直接调用了这个库来求解匹配结果。</p>
+<h2 id="permutation-invariant">Permutation Invariant</h2>
+<p>我们先来讲一下permutation invariant的概念。置换不变性是什么意思呢？</p>
+<p>举一个简单的例子：<strong>maxpooling就是一个对集合具有置换不变性的特性</strong>。 <span class="math display">\[
+max\left\{1,3,4,2,6\right\}=max\left\{4,6,3,2,1\right\}=6
+\]</span> 无论1,2,3,4,6这几个元素构成序列的位置顺序是怎么样的，取max的结果一定是6。</p>
+<h3 id="positional-encoding">Positional Encoding</h3>
+<p>Detr提到了可以用embedding或者position encoding来消除<code>置换不变性</code>，这是为什么呢？</p>
+<p>因为，位置嵌入编码是可以影响<code>置换不变性</code>，使其变为<code>置换同变性(Permutation Variant)</code>。</p>
+<p>比如，我们给max操作，引入乘以位置位置下标的编码方式：</p>
+<p>即，位置编码为<span class="math inline">\(p_1,p_2,...,p_i=1,2,...,i\)</span> <span class="math display">\[
+max\left\{1*p_1,3*p_2,4*p_3,2*p_4,6*p_5\right\}=30\\
+max\left\{4*p_1,6*p_2,3*p_3,2*p_4,1*p_5\right\}=12
+\]</span></p>
+<p>Detr把图像特征的<strong><code>[ Batchsize, Feature number, height, weight]</code></strong>的形状，展开成<strong><code>[Batchsize, height*weight, feature number]</code></strong>的形状，其2D空间结构消失了，这种信息的丢失就必然需要用位置编码的策略来表达原来完整的2D结构信息。Transformer的position encoding策略就可以达到满足这个要求。</p>
+<h3 id="集合与序列">集合与序列</h3>
+<p><code>Position encoding</code>让<code>集合</code>变成了<code>序列</code>，使得<code>置换不变性(permutation-invariance)</code>消失，<code>置换同变性(permutation-envariance)</code>产生。</p>
+<h2 id="后言">后言</h2>
+<blockquote>
+<p>只关注性能的提升是学界的灾难；</p>
+<p>我在想，把从2012年到2020年所有顶会提出的改良性能的方法或者技巧，都组合在一起，在COCO detection的性能上的mAP就真得可以刷到100%吗？或者说技巧们都是互不影响的增量式前进？</p>
+<p>第一性原理可以促使我们不断去对一个问题的本质追根溯源，而优秀方法的强大力场，又会让我们活在前人思维框架的束缚当中。这几年目标检测方法，明显能感受到某些框架在束缚着它们。而Detr是一次追根溯源的思考，尽管有很多相似的影子，但它还是充满了活力。</p>
+</blockquote>
+<p>本文先介绍了【Hungarian Loss】和【Permutation Invariant】，【Transformer】部分且听下回分解。</p>
+<section class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>End-to-end people detection in crowed scene, In CVPR 2015<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Author：</strong>
+    yangsenius
+  </li>
+  <li class="post-copyright-link">
+    <strong>Link：</strong>
+    <a href="http://senyang-ml.github.io/2020/06/04/detr/" title="Detr">http://senyang-ml.github.io/2020/06/04/detr/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>License： </strong>
+    Unless otherwise stated,  all blogs use the <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> protocol, please indicate the source
+  </li>
+</ul>
+
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hungarian-Match/" rel="tag"># Hungarian Match</a>
+          
+            <a href="/tags/Object-Detection/" rel="tag"># Object Detection</a>
+          
+            <a href="/tags/Transformer/" rel="tag"># Transformer</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/" rel="next" title="Bipartite Matching and Hungarian Algorithm">
+                <i class="fa fa-chevron-left"></i> Bipartite Matching and Hungarian Algorithm
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Toc
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangsenius</p>
+              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#object-detection-set-prediction-loss"><span class="nav-number">1.</span> <span class="nav-text">Object detection set prediction loss</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hungarian-loss"><span class="nav-number">1.1.</span> <span class="nav-text">Hungarian Loss</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#permutation-invariant"><span class="nav-number">2.</span> <span class="nav-text">Permutation Invariant</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#positional-encoding"><span class="nav-number">2.1.</span> <span class="nav-text">Positional Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集合与序列"><span class="nav-number">2.2.</span> <span class="nav-text">集合与序列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后言"><span class="nav-number">3.</span> <span class="nav-text">后言</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangsenius</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+  
+<!-- END LOCAL -->
+
+
+    
+      <script src="https://utteranc.es/client.js"
+        repo="senyang-ml/Comments"
+        issue-term="title"
+        label="utt-comment"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+</script>
+
+      
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: ,
+    el: 'wpac-rating',
+    color: 'fc6423'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+      
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+  
+
+</body>
+</html>
