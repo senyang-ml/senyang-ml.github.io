@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://senyang-ml.github.io/research/index.html</loc>
+    <loc>http://senyang-ml.github.io/2020/09/22/coordconv/</loc>
     
-    <lastmod>2020-07-17T08:21:17.302Z</lastmod>
+    <lastmod>2020-09-22T13:18:47.847Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/</loc>
     
-    <lastmod>2020-06-26T15:35:02.258Z</lastmod>
+    <lastmod>2020-09-21T10:37:46.311Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://senyang-ml.github.io/research/index.html</loc>
+    
+    <lastmod>2020-07-17T08:21:17.302Z</lastmod>
     
   </url>
   
