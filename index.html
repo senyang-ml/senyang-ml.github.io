@@ -339,7 +339,7 @@
           <h1 id="coordconv-的研究与分析">CoordConv 的研究与分析</h1>
 <p>本文主要进行了如下的代码实验和分析：</p>
 <ul>
-<li><p>数据集：构造由坐标生成的one-hot heatmap与数值坐标之间的数据集：遵循<a href="https://arxiv.org/abs/1807.03247" target="_blank" rel="noopener">An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution</a>的**quarter split*方式。</p></li>
+<li><p>数据集：构造由坐标生成的one-hot heatmap与数值坐标之间的数据集：遵循<a href="https://arxiv.org/abs/1807.03247" target="_blank" rel="noopener">An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution</a>的<em>quarter split</em>方式。</p></li>
 <li><p>模型：利用神经网络加坐标嵌入（MLP+Coord and Conv+Coord）的方式进行拟合与泛化测试。</p></li>
 <li><p>效果分析与发现：用Pytorch复现验证了An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution中Superivised Coordinates Regression任务的CoordConv的泛化性能！</p></li>
 </ul>
