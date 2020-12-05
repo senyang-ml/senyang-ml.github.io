@@ -336,13 +336,11 @@
 
       
         
-          <p>Uber团队在2018NeurIPS上提出了CoordConv，它分析了卷积神经网络在进行坐标预测时存在的缺陷，并引入坐标嵌入方式来解决这个问题。但本人也注意到网上有人质疑这个方法，比如<a href="https://www.zhihu.com/search?type=content&amp;q=coordconv" target="_blank" rel="noopener">量子位小编</a>报道了一个<a href="https://blog.piekniewski.info/2018/07/14/autopsy-dl-paper/" target="_blank" rel="noopener">国外博主</a>的质疑。</p>
-<p>本人看了他的质疑，他主要是在强调：</p>
+          <p>Uber团队在2018NeurIPS上提出了CoordConv，它分析了卷积神经网络在进行坐标预测时存在的缺陷，并引入坐标嵌入方式来解决这个问题。但本人也注意到网上有人质疑这个方法，比如<a href="https://www.zhihu.com/search?type=content&amp;q=coordconv" target="_blank" rel="noopener">量子位小编</a>报道了一个<a href="https://blog.piekniewski.info/2018/07/14/autopsy-dl-paper/" target="_blank" rel="noopener">国外博主</a>的质疑。本人看了他的质疑，他主要是在强调：</p>
 <blockquote>
 <p>用完全数学的方式就可以构造出一个由one-hot heatmap映射到坐标的神经网络，并且根本不需要训练</p>
 </blockquote>
-<p>实际上，他讲的这个和soft-argmax对heatmap求积分得到坐标的方法很像。</p>
-<p>首先，我想说，数学的归纳是一种非常高阶的手段和智能，很多问题本身就可以直接去用数学问题去解决，但是，这是直接注入了人类专家的知识，并不是神经网络本身从头学习到的（from scratch）。</p>
+<p>实际上，他讲的这个和soft-argmax对heatmap求积分得到坐标的方法很像。首先，我想说，数学的归纳是一种非常高阶的手段和智能，很多问题本身就可以直接去用数学问题去解决，但是，这是直接注入了人类专家的知识，并不是神经网络本身从头学习到的（from scratch）。</p>
 <p>CoordConv探讨的是，神经网络在拟合能力上以及<em>泛化</em>能力上存在的缺陷。CoorConv的亮点之一在于构造数据集划分的巧妙，一个是普通的train和test坐标数值分布一致的数据集，另外一个是test中的坐标取汁是train中完全没有的取值分布的数据集（正方形的1/4一角区域拿出来做测试），后者在考验模型在未见到的坐标分布上的泛化能力。</p>
 <p>该论文的实验以及本人的实验验证发现，大多数普通的MLP或者Conv是很难调出一个好的泛化效果。而CoordConv神奇之处在于，它通过训练的方式来获取一种数学上的严格计算能力，结果确实做到了，因为train loss 和 test loss同时收敛到0，模型可以100%地精确预测坐标，这对于普通神经网络真的挺难的。</p>
 <p>本文主要进行了如下的代码实验和分析：</p>
@@ -350,7 +348,7 @@
 <li>数据集：构造由坐标生成的one-hot heatmap与数值坐标之间的数据集：遵循<a href="https://arxiv.org/abs/1807.03247" target="_blank" rel="noopener">An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution</a>的<em>quarter split</em>方式。</li>
 <li>模型：利用神经网络加坐标嵌入（MLP+Coord and Conv+Coord）的方式进行拟合与泛化测试。</li>
 <li>效果分析与发现：用Pytorch复现验证了An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution中Superivised Coordinates Regression任务的CoordConv的泛化性能！</li>
-<li>可视化神经网络的某些层，发倔出了神经网络学习坐标信息的过程</li>
+<li>可视化神经网络的某些层和输出，来发掘神经网络学习坐标信息的过程</li>
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
