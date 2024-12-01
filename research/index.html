@@ -23,37 +23,6 @@
 <link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 <style>
-body {
-  background-color: #F0F2F9;
-}
-
-.container {
-  background-color: #F0F2F9;
-}
-
-.headband {
-  background: #F0F2F9;
-}
-
-.header {
-  background: #F0F2F9;
-}
-
-.main {
-  background: #F0F2F9;
-}
-
-.content-wrap {
-  background: #F0F2F9;
-}
-
-.sidebar {
-  background: #F0F2F9;
-}
-
-.footer {
-  background: #F0F2F9;
-}
 
 .profile-container {
   display: flex;
@@ -77,10 +46,11 @@ body {
 .section {
   margin: 30px 0;
   padding: 20px;
-  background: #fff;
+  background: #E6E6FA;  /* 浅蓝紫色背景 */
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
+  color: #6B7C93;  /* 改为灰色前景 */
 }
 
 .section:hover {
@@ -90,13 +60,26 @@ body {
 .publication-item {
   margin: 15px 0;
   padding: 15px;
-  background: #f8f9fa;
+  background: #FFFFFF;  /* 白色背景 */
   border-radius: 5px;
   transition: transform 0.3s ease;
+  color: #666666;  /* 浅灰色文字 */
 }
 
 .publication-item:hover {
   transform: translateY(-3px);
+}
+
+h2 {
+  color: #4A5568;  /* 深一点的灰色，用于标题 */
+}
+
+a {
+  color: #3182CE;  /* 链接使用蓝色 */
+}
+
+a:hover {
+  color: #2C5282;  /* 鼠标悬停时的颜色 */
 }
 
 .social-icons {
@@ -113,6 +96,24 @@ body {
 
 .social-icons img:hover {
   transform: translateY(-2px);
+}
+
+.sidebar {
+  background: #E6F3FF;
+}
+
+.footer {
+  background: #E6F3FF;
+}
+
+.post-body {
+  background: #E6E6FA;  /* 浅蓝紫色背景 */
+  color: #6B7C93;  /* 改为灰色前景 */
+}
+
+.publication-item {
+  background: #E6E6FA;  /* 与post-body相同的浅蓝紫色背景 */
+  color: #6B7C93;  /* 改为灰色前景 */
 }
 </style>
 
@@ -345,13 +346,13 @@ body {
 
     <div class="publication-item">
       <p><strong>TokenPose: Learning Keypoint Tokens for Human Pose Estimation</strong><br>
-        Yanjie Li, Shoukui Zhang, Zhicheng Wang, <strong>Sen Yang</strong>, Wankou Yang, Shu-Tao Xia, Erjin Zhou. ICCV 2021. (Google Scholar citations: 57, Github Stars: 76)<br>
+        Yanjie Li, Shoukui Zhang, Zhicheng Wang, <strong>Sen Yang</strong>, Wankou Yang, Shu-Tao Xia, Erjin Zhou. ICCV 2021. <br>
       <a href="https://arxiv.org/abs/2104.03516">[Paper]</a> <a href="https://github.com/leeyegy/TokenPose">[Code]</a></p>
     </div>
 
     <div class="publication-item">
       <p><strong>TransPose: Keypoint Localization via Transformer</strong><br>
-        <strong>Sen Yang</strong>, Zhibin Quan, Mu Nie, Wankou Yang. ICCV 2021. (Google Scholar citations: 103, Github Stars: 262)<br>
+        <strong>Sen Yang</strong>, Zhibin Quan, Mu Nie, Wankou Yang. ICCV 2021. <br>
       <a href="https://arxiv.org/abs/2012.14214">[Paper]</a> <a href="https://github.com/yangsenius/TransPose">[Code]</a></p>
     </div>
   </div>
