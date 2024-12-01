@@ -70,18 +70,6 @@
   transform: translateY(-3px);
 }
 
-h2 {
-  color: #4A5568;  /* 深一点的灰色，用于标题 */
-}
-
-a {
-  color: #3182CE;  /* 链接使用蓝色 */
-}
-
-a:hover {
-  color: #2C5282;  /* 鼠标悬停时的颜色 */
-}
-
 .social-icons {
   margin-top: 15px;
   display: flex;
@@ -102,9 +90,9 @@ a:hover {
   background: #E6F3FF;
 }
 
-.footer {
+/* .footer {
   background: #E6F3FF;
-}
+} */
 
 .post-body {
   background: #E6E6FA;  /* 浅蓝紫色背景 */
@@ -112,8 +100,8 @@ a:hover {
 }
 
 .publication-item {
-  background: #E6E6FA;  /* 与post-body相同的浅蓝紫色背景 */
-  color: #6B7C93;  /* 改为灰色前景 */
+  background: #c7c7dc;  /* 与post-body相同的浅蓝紫色背景 */
+  color: #4a6b99;  /* 改为灰色前景 */
 }
 </style>
 
@@ -279,7 +267,9 @@ a:hover {
             <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5" alt="Sen Yang" class="profile-image">
             <div class="profile-content">
               <h2 id="biography">Biography</h2>
-              <p>I am currently a Senior Engineer at Baidu. Before that I obtained Ph.D. degree from Southeast University in 2023. My research interests includes computer vision and deep learning, with a particular emphasis on 2D/3D human pose estimation and autonomous driving. I am dedicated to developing cutting-edge solutions for real-world computer vision applications.</p>
+              <p>I am currently a Senior Engineer at Baidu. Before that I obtained Ph.D. degree from Southeast University in 2023. 
+                My research interests includes computer vision and deep learning, particularly focusing on 2D/3D human pose estimation, autonomous driving and multimodal models. 
+                I am dedicated to developing cutting-edge solutions for real-world computer vision applications.</p>
               <div class="social-icons">
                 <a href="mailto:yangsenius@seu.edu.cn" title="Email">
                     <img src="https://cdn-icons-png.flaticon.com/512/561/561188.png" alt="Email">
@@ -297,7 +287,7 @@ a:hover {
 <div class="section">
   <h2 id="experience">Experience</h2>
   <ul>
-    <li><strong>Senior Research & Developer</strong>, Baidu (2023.7-Present)
+    <li><strong>Senior Research & Developer</strong>, Baidu VIS (2023.7-Present)
     <li><strong>Internship</strong>, Tencent TPG (2021.12-2022.8)
     <li><strong>Internship</strong>, MEGVII (2021.1-2021.10)
     </li>
@@ -317,31 +307,33 @@ a:hover {
   <div class="publications">
     <div class="publication-item">
       <p><strong>TopoSD: Topology-Enhanced Lane Segment Perception with SDMap Prior</strong><br>
-        <strong>Sen Yang</strong>, Minyue Jiang, Ziwei Fan, Xiaolu Xie, Xiao Tan, Yingying Li, Errui Ding, Liang Wang, Jingdong Wang. (Under Review)<br>
+        <strong>Sen Yang</strong>, Minyue Jiang, Ziwei Fan, Xiaolu Xie, Xiao Tan, Yingying Li, Errui Ding, Liang Wang, Jingdong Wang. (2024 preprint)<br>
         <a href="https://arxiv.org/abs/2411.14751">[Paper]</a></p>
     </div>
 
     <div class="publication-item">
-      <p><strong>Detecting and grouping keypoints for multi-person pose estimation using instance-aware attentionn</strong><br>
-      <strong>Sen Yang</strong>, Ze Feng, Zhicheng Wang, Yanjie Li, Shoukui Zhang, Zhibin Quan, Shu-tao Xia, Wankou Yang. Pattern Recognition</p>
+      <p><strong>Detecting and grouping keypoints for multi-person pose estimation using instance-aware attention</strong><br>
+      <strong>Sen Yang</strong>, Ze Feng, Zhicheng Wang, Yanjie Li, Shoukui Zhang, Zhibin Quan, Shu-tao Xia, Wankou Yang. Pattern Recognition<br>
+      <a href="https://www.sciencedirect.com/science/article/abs/pii/S0031320322007117">[Journal Paper]</a> 
+    </p>
     </div>
 
     <div class="publication-item">
       <p><strong>Capturing the motion of every joint: 3D human pose and mesh recovery with independent tokens</strong><br>
         <strong>Sen Yang</strong>, Wen Heng, Gang Liu, Guozhong Luo, Wankou Yang, Gang Yu. ICLR 2023 (spotlight, top 25%)<br>
-        <a href="https://arxiv.org/abs/2303.00298">[Paper]</a> <a href="https://github.com/yangsenius/INT_HMR_Model">[Code]</a></p>
+        <a href="https://arxiv.org/abs/2303.00298">[Paper]</a> <a href="https://github.com/yangsenius/INT_HMR_Model">[Code]</a> <a href="https://yangsenius.github.io/INT_HMR_Model/">[Project]</a></p>
     </div>
 
     <div class="publication-item">
       <p><strong>Searching part-specific neural fabrics for human pose estimation</strong><br>
         <strong>Sen Yang</strong>, Wankou Yang, Zhen Cui. Pattern Recognition. <br>
-      <a href="https://arxiv.org/abs/2111.12892">[Paper]</a> <a href="https://github.com/yangsenius/ssa_pose">[Code]</a></p>
+      <a href="https://www.sciencedirect.com/science/article/abs/pii/S0031320322001339">[Journal Paper]</a> <a href="https://github.com/yangsenius/ssa_pose">[Code]</a></p>
     </div>
 
     <div class="publication-item">
       <p><strong>SimCC: A Simple Coordinate Classification perspective for human pose estimation</strong><br>
         Yanjie Li, <strong>Sen Yang</strong>, Peidong Liu, Shoukui Zhang, Yunxiao Wang, Zhicheng Wang, Wankou Yang, Shu-Tao Xia. ECCV 2022 (oral, top 5%). <br>
-      <a href="https://arxiv.org/abs/2107.03332">[Paper]</a> <a href="https://github.com/leeyegy/SimDR">[Code]</a></p>
+      <a href="https://arxiv.org/abs/2107.03332">[Paper]</a> <a href="https://github.com/leeyegy/SimDR">[Code]</a> <a href="https://zhuanlan.zhihu.com/p/664996998">[Zhihu]</a></p>
     </div>
 
     <div class="publication-item">
@@ -358,8 +350,10 @@ a:hover {
   </div>
 </div>
 
+
+
 <h2 id="contact">Contact</h2>
-<p>Email: yangsenius@seu.edu.cn</p>
+<p>Email: yangsenius@gmail.com</p>
 <p>Personal Blog: <a href="https://senyang-ml.github.io">https://senyang-ml.github.io</a></p>
 
       </div>
