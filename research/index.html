@@ -1,18 +1,10 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
 <html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
-
-
 
   
   
@@ -21,90 +13,103 @@
   <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
   <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
-
-
-
-
-
-
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-
-
+<link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
 <link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
+<style>
+.profile-container {
+  display: flex;
+  align-items: flex-start;
+  margin: 20px 0;
+  gap: 30px;
+}
+
+.profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2c5282;
+}
+
+.profile-content {
+  flex: 1;
+}
+
+.section {
+  margin: 30px 0;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-5px);
+}
+
+.publication-item {
+  margin: 15px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  transition: transform 0.2s ease;
+}
+
+.publication-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.social-icons {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.social-icons img {
+  width: 25px;
+  height: 25px;
+  transition: transform 0.2s ease;
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);
+}
+</style>
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
 
-
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
 
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
-
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
 
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-  
-
+  <meta name="keywords" content="Computer Vision, Deep Learning, Human Pose Estimation" />
 
   <link rel="alternate" href="/atom.xml" title="Sen Yang" type="application/atom+xml" />
 
-
-
-
-
-
-<meta name="description" content="About Me I am a Ph.D. Candidate in Southeast University. My research interests are human pose estimation, neural network and meta-learning.  Papers TransPose: Keypoint Localization via Transformer, 20">
+<meta name="description" content="Senior Engineer at Baidu specializing in Computer Vision and Human Pose Estimation">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sen Yang">
 <meta property="og:url" content="http://senyang-ml.github.io/research/index.html">
 <meta property="og:site_name" content="Sen Yang">
-<meta property="og:description" content="About Me I am a Ph.D. Candidate in Southeast University. My research interests are human pose estimation, neural network and meta-learning.  Papers TransPose: Keypoint Localization via Transformer, 20">
+<meta property="og:description" content="Senior Engineer at Baidu specializing in Computer Vision and Human Pose Estimation">
 <meta property="article:published_time" content="2021-12-03T12:06:27.828Z">
 <meta property="article:modified_time" content="2021-12-03T12:06:27.828Z">
-<meta property="article:author" content="杨森 &amp; yangsenius">
-<meta property="article:tag" content="machine learning">
-<meta property="article:tag" content=" computer vision">
-<meta property="article:tag" content=" meta-learning">
+<meta property="article:author" content="Sen Yang">
+<meta property="article:tag" content="computer vision">
+<meta property="article:tag" content="deep learning">
+<meta property="article:tag" content="pose estimation">
 <meta name="twitter:card" content="summary">
-
-
 
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
@@ -130,32 +135,13 @@
   };
 </script>
 
-
-
   <link rel="canonical" href="http://senyang-ml.github.io/research/"/>
 
-
-
-
-
-  <title> | Sen Yang</title>
-  
-
-
-
-
-
-
-
+  <title>Sen Yang</title>
 
 <meta name="generator" content="Hexo 4.2.1"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-  
-    
-  
 
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
@@ -164,7 +150,6 @@
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
-
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
@@ -188,11 +173,8 @@
 
 <nav class="site-nav">
   
-
-  
     <ul id="menu" class="menu">
       
-        
         <li class="menu-item menu-item-blogs">
           <a href="/" rel="section">
             
@@ -202,7 +184,6 @@
           </a>
         </li>
       
-        
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
@@ -212,7 +193,6 @@
           </a>
         </li>
       
-        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -222,7 +202,6 @@
           </a>
         </li>
       
-        
         <li class="menu-item menu-item-about">
           <a href="/research/" rel="section">
             
@@ -232,15 +211,9 @@
           </a>
         </li>
       
-
-      
     </ul>
   
-
-  
 </nav>
-
-
 
  </div>
     </header>
@@ -250,186 +223,107 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
   <div id="posts" class="posts-expand">
-    
-    
     
     <div class="post-block page">
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline"></h1>
+      </header>
 
-	<h1 class="post-title" itemprop="name headline"></h1>
-
-
-
-</header>
-
-      
-      
-      
       <div class="post-body">
         
-        
-          <h2 id="about-me">About Me</h2>
-<p>I am a Ph.D. Candidate in Southeast University. My research interests are human pose estimation, neural network and meta-learning.</p>
-<!-- ### Drafts
+          <div class="profile-container">
+            <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5" alt="Sen Yang" class="profile-image">
+            <div class="profile-content">
+              <h2 id="biography">Biography</h2>
+              <p>I am currently a Senior Engineer at Baidu. Before that I obtained Ph.D. degree from Southeast University in 2023. My research interests includes computer vision and deep learning, with a particular emphasis on 2D/3D human pose estimation and autonomous driving. I am dedicated to developing cutting-edge solutions for real-world computer vision applications.</p>
+              <div class="social-icons">
+                <a href="mailto:yangsenius@seu.edu.cn" title="Email">
+                    <img src="https://cdn-icons-png.flaticon.com/512/561/561188.png" alt="Email">
+                </a>
+                <a href="https://scholar.google.com/citations?user=z5O3DLcAAAAJ" target="_blank" title="Google Scholar">
+                  <img src="https://cdn-icons-png.flaticon.com/512/2784/2784504.png" alt="Google Scholar">
+                </a>
+                <a href="https://github.com/yangsenius" target="_blank" title="GitHub">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub">
+                </a>
+              </div>
+            </div>
+          </div>
 
-*Searching for Neural Fabrics for Body Part Representation with Vector in Pixel*, 2019. [[draft: 2019-4-25]](/2019/08/26/Pose-Neural-Fabrics-Search/draft_search_neural_fabrics_for_part.pdf) -->
-<h2 id="papers">Papers</h2>
-<p>TransPose: Keypoint Localization via Transformer, 2021 ICCV. <a href="https://arxiv.org/abs/2012.14214" target="_blank" rel="noopener">[arXiv]</a> <a href="https://github.com/yangsenius/TransPose" target="_blank" rel="noopener">[code]</a> <a href="https://arxiv.org/abs/2012.14214" target="_blank" rel="noopener">[pdf]</a></p>
-<p>TokenPose: Learning Keypoint Tokens for Human Pose Estimation, 2021 ICCV. <a href="https://arxiv.org/abs/2104.03516" target="_blank" rel="noopener">[arXiv]</a> <a href="https://github.com/leeyegy/TokenPose" target="_blank" rel="noopener">[code]</a></p>
-<p>Pose Neural Fabrics Search, 2019. <a href="https://arxiv.org/abs/1909.07068" target="_blank" rel="noopener">[arXiv]</a> <a href="https://github.com/yangsenius/Pose-Neural-Fabrics-Search" target="_blank" rel="noopener">[code]</a> <a href="/2019/08/26/Pose-Neural-Fabrics-Search/2019-pose_neural_fabrics_search.pdf">[pdf]</a></p>
-<p>Is 2D Heatmap Representation Even Necessary for Human Pose Estimation? 2021 <a href="https://arxiv.org/abs/2107.03332" target="_blank" rel="noopener">[Arxiv]</a><a href="https://github.com/leeyegy/SimDR" target="_blank" rel="noopener">[Code]</a></p>
-<p>Attend to Who You Are: Supervising Self-Attention for Keypoint Detection and Instance-Aware Association, 2021. <a href="https://arxiv.org/abs/2111.12892" target="_blank" rel="noopener">[arXiv]</a> <a href="https://github.com/yangsenius/ssa_pose" target="_blank" rel="noopener">[code]</a></p>
+<div class="section">
+  <h2 id="experience">Experience</h2>
+  <ul>
+    <li><strong>Senior Research & Developer</strong>, Baidu (2023.7-Present)
+    <li><strong>Internship</strong>, Tencent TPG (2021.12-2022.8)
+    <li><strong>Internship</strong>, MEGVII (2021.1-2021.10)
+    </li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2 id="education">Education</h2>
+  <ul>
+    <li>Ph.D. - Pattern Recognition and Intelligent Systems, School of Automation, Southeast University, May 2019 - Mar 2023</li>
+    <li>Master - Pattern Recognition and Intelligent Systems, School of Automation, Southeast University, Sep 2017 - Jan 2019</li>
+    <li>Bachelor - Automation, College of Communication Engineering, Jilin University, Sep 2013 - Jul 2017</li>
+  </ul>
+</div>
+<div class="section">
+  <h2 id="publications">Publications</h2>
+  <div class="publications">
+    <div class="publication-item">
+      <p><strong>TopoSD: Topology-Enhanced Lane Segment Perception with SDMap Prior</strong><br>
+        <strong>Sen Yang</strong>, Minyue Jiang, Ziwei Fan, Xiaolu Xie, Xiao Tan, Yingying Li, Errui Ding, Liang Wang, Jingdong Wang. (Under Review)<br>
+        <a href="https://arxiv.org/abs/2411.14751">[Paper]</a></p>
+    </div>
+
+    <div class="publication-item">
+      <p><strong>Detecting and grouping keypoints for multi-person pose estimation using instance-aware attentionn</strong><br>
+      <strong>Sen Yang</strong>, Ze Feng, Zhicheng Wang, Yanjie Li, Shoukui Zhang, Zhibin Quan, Shu-tao Xia, Wankou Yang. Pattern Recognition</p>
+    </div>
+
+    <div class="publication-item">
+      <p><strong>Capturing the motion of every joint: 3D human pose and mesh recovery with independent tokens</strong><br>
+        <strong>Sen Yang</strong>, Wen Heng, Gang Liu, Guozhong Luo, Wankou Yang, Gang Yu. ICLR 2023 (spotlight, top 25%)<br>
+        <a href="https://arxiv.org/abs/2303.00298">[Paper]</a> <a href="https://github.com/yangsenius/INT_HMR_Model">[Code]</a></p>
+    </div>
+
+    <div class="publication-item">
+      <p><strong>Searching part-specific neural fabrics for human pose estimation</strong><br>
+        <strong>Sen Yang</strong>, Wankou Yang, Zhen Cui. Pattern Recognition. <br>
+      <a href="https://arxiv.org/abs/2111.12892">[Paper]</a> <a href="https://github.com/yangsenius/ssa_pose">[Code]</a></p>
+    </div>
+
+    <div class="publication-item">
+      <p><strong>SimCC: A Simple Coordinate Classification perspective for human pose estimation</strong><br>
+        Yanjie Li, <strong>Sen Yang</strong>, Peidong Liu, Shoukui Zhang, Yunxiao Wang, Zhicheng Wang, Wankou Yang, Shu-Tao Xia. ECCV 2022 (oral, top 5%). <br>
+      <a href="https://arxiv.org/abs/2107.03332">[Paper]</a> <a href="https://github.com/leeyegy/SimDR">[Code]</a></p>
+    </div>
+
+    <div class="publication-item">
+      <p><strong>TokenPose: Learning Keypoint Tokens for Human Pose Estimation</strong><br>
+        Yanjie Li, Shoukui Zhang, Zhicheng Wang, <strong>Sen Yang</strong>, Wankou Yang, Shu-Tao Xia, Erjin Zhou. ICCV 2021. (Google Scholar citations: 57, Github Stars: 76)<br>
+      <a href="https://arxiv.org/abs/2104.03516">[Paper]</a> <a href="https://github.com/leeyegy/TokenPose">[Code]</a></p>
+    </div>
+
+    <div class="publication-item">
+      <p><strong>TransPose: Keypoint Localization via Transformer</strong><br>
+        <strong>Sen Yang</strong>, Zhibin Quan, Mu Nie, Wankou Yang. ICCV 2021. (Google Scholar citations: 103, Github Stars: 262)<br>
+      <a href="https://arxiv.org/abs/2012.14214">[Paper]</a> <a href="https://github.com/yangsenius/TransPose">[Code]</a></p>
+    </div>
+  </div>
+</div>
+
 <h2 id="contact">Contact</h2>
-<p>E-Mail: yangsenius@seu.edu.cn</p>
-<p>Personal Blogs: <a href="https://yangsenius.github.io" target="_blank" rel="noopener">the original</a> and <a href="https://senyang-ml.github.io">the current</a></p>
+<p>Email: yangsenius@seu.edu.cn</p>
+<p>Personal Blog: <a href="https://senyang-ml.github.io">https://senyang-ml.github.io</a></p>
 
-        
       </div>
-      
-      
-      
-    </div>
-    
-    
-    
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
   </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Toc
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">杨森 & yangsenius</p>
-              <p class="site-description motion-element" itemprop="description">Talk is not cheap</p>
           </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives">
-              
-                  <span class="site-state-item-count">21</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
-
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
-            </div>
-          
-
-          
-            <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/yangsenius" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:yangsenius@seu.edu.cn" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-            </div>
-          
-
-          
-          
-
-          
-          
-
-          
         </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#about-me"><span class="nav-number">1.</span> <span class="nav-text">About Me</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#papers"><span class="nav-number">2.</span> <span class="nav-text">Papers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#contact"><span class="nav-number">3.</span> <span class="nav-text">Contact</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
       </div>
     </main>
 
@@ -439,241 +333,10 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">杨森 & yangsenius</span>
-
-  
+  <span class="author" itemprop="copyrightHolder">Sen Yang</span>
 </div>
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-        
       </div>
     </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
   </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/three/three.min.js"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-  
-<!-- END LOCAL -->
-
-
-    
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
-
-  
-  
-
-  
-  
-
-
-  
-  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
-  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
-
-
-  
-
 </body>
 </html>
