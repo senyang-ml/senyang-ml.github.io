@@ -3,23 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>杨森 | Computer Vision Researcher</title>
+    <title>杨森 | 计算机视觉研究员</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* 为 markmap 容器添加明确的尺寸，确保其正确显示 */
+        .markmap {
+            width: 100%;
+            max-width: 900px;
+            min-height: 350px; /* Adjusted for more flexibility */
+            height: 800px; /* Set a fixed height for Markmap container */
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            background-color: #f9f9f9; /* Light background for the mindmap area */
+            padding: 20px; /* Add some internal padding */
+        }
+
+        /* 删除回到中心按钮样式 */
+        
+        /* 添加视觉指示，帮助用户理解思维导图的边界 */
+        .markmap-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: linear-gradient(to bottom right, #f5f5f5, #ffffff);
+        }
+
+        .markmap-controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .markmap-controls .control-button {
+            background-color: #007bff;
+            color: rgb(175, 17, 17);
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .markmap-controls .control-button:hover {
+            background-color: #0056b3;
+        }
+        .mindmap .container {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        /* 为 Mermaid 图表添加一些基础样式，确保其可见性 */
+        .mermaid-chart-section {
+            margin-top: 40px; /* 与上方内容保持一定间距 */
+            padding-bottom: 40px;
+        }
+        .mermaid {
+            text-align: center; /* 让图表居中 */
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">杨森</div>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#publications">Publications</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#experience">工作经历</a></li>
+                <li><a href="#education">教育背景</a></li>
+                <li><a href="#publications">研究成果</a></li>
+                <li><a href="#skills">专业技能</a></li>
+                <li><a href="#contact">联系方式</a></li>
             </ul>
             <div class="language-switch">
-                <span class="active">EN</span> | <a href="index_cn.html">中文</a>
+                <a href="index_en.html">EN</a> | <span class="active">中文</span>
             </div>
         </nav>
     </header>
@@ -28,42 +91,127 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-image">
-                    <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5" alt="杨森 Photo">
+                    <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5" alt="杨森照片">
                 </div>
                 <div class="hero-text">
                     <h1>杨森</h1>
-                    <h2>Computer Vision | Multimodal LLM | Autonomous Driving </h2>
-                    <p>Currently as a Senior Research Engineer at Baidu, focusing on computer vision, multimodal large language models and  autonomous driving.</p>
+                    <h2>计算机视觉 | 多模态大语言模型 | 自动驾驶</h2>
+                    <p>现任百度高级研发工程师，专注于计算机视觉、多模态大语言模型和自动驾驶研究</p>
                     
                     <div class="contact-brief">
-                        <p><i class="fas fa-envelope"></i> Email: <a href="mailto:yangsenius@gmail.com">yangsenius@gmail.com</a></p>
-                        <p><i class="fas fa-graduation-cap"></i> Google Scholar: <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">Profile</a></p>
-                        <p><i class="fas fa-blog"></i> Blog: <a href="https://senyang-ml.github.io" target="_blank">senyang-ml.github.io</a></p>
+                        <p><i class="fas fa-envelope"></i> 邮箱: <a href="mailto:yangsenius@gmail.com">yangsenius@gmail.com</a></p>
+                        <p><i class="fas fa-graduation-cap"></i> 谷歌学术: <a href="https://scholar.google.com/citations?user=z5O3DLcAAAAJ" target="_blank" rel="noopener noreferrer">个人主页</a></p>
+                        <p><i class="fas fa-blog"></i> 博客: <a href="https://senyang-ml.github.io" target="_blank" rel="noopener noreferrer">senyang-ml.github.io</a></p>
                     </div>
                     
                     <div class="social-links">
-                        <a href="mailto:yangsenius@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-                        <a href="https://scholar.google.com/citations?user=YOUR_ID" title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
-                        <a href="https://github.com/senyang-ml" title="GitHub"><i class="fab fa-github"></i></a>
-                        <a href="https://senyang-ml.github.io" title="Blog"><i class="fas fa-blog"></i></a>
+                        <a href="mailto:yangsenius@gmail.com" title="邮箱"><i class="fas fa-envelope"></i></a>
+                        <a href="https://scholar.google.com/citations?user=z5O3DLcAAAAJ" title="谷歌学术" target="_blank" rel="noopener noreferrer"><i class="fas fa-graduation-cap"></i></a>
+                        <a href="https://github.com/senyang-ml" title="GitHub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                        <a href="https://senyang-ml.github.io" title="博客" target="_blank" rel="noopener noreferrer"><i class="fas fa-blog"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- 思维导图区域 -->
+    <section id="mindmap" class="mindmap">
+        <div class="container">
+            <h2 class="section-title">太长不看（预览图）</h2>
+            <!-- 添加容器包裹思维导图和回到中心按钮 -->
+            <div class="markmap-container">
+                <!-- 删除回到中心按钮 -->
+                <div class="markmap">
+                    <pre>
+# **杨森个人主页**
+## 关于我
+- **计算机视觉研究员**
+- 研究方向：
+  - 计算机视觉
+  - 多模态大语言模型
+  - 自动驾驶
+## 教育背景
+- **博士**：东南大学（2019.5-2023.3）
+- 硕士：东南大学（2017.9-2019.1）
+- 学士：吉林大学（2013.9-2017.7）
+## 工作经历
+- **百度 VIS 高级研发工程师**（2023.7-至今）
+- 腾讯 TPG 实习生（2021.12-2022.8）
+- 旷视科技 实习生（2021.1-2021.10）
+## 研究成果
+- **自动驾驶**
+  - TopoSD: Topology-Enhanced Lane Segment Perception
+  - MGMapNet: Multi-Granularity Representation Learning
+- **多模态大模型**
+  - Vision Remember: Alleviating Visual Forgetting in Efficient MLLM
+- **姿态估计**
+  - Detecting and grouping keypoints
+  - Capturing the motion of every joint
+  - Searching part-specific neural fabrics
+  - SimCC: A Simple Coordinate Classification
+  - TokenPose: Learning Keypoint Tokens
+  - TransPose: Keypoint Localization via Transformer
+## 技术栈
+- **多模态大模型**
+  - MLLM架构：自回归模型、LLaVA、Qwen2.5-VL、LISA、Grounding Models
+  - 训练技术：SFT、强化学习
+  - 视觉Token压缩、大规模分布式训练
+- **自动驾驶感知**
+  - BEV视觉建图、时序建模、概率规划
+  - 多模态融合：视觉+地图结构化数据
+  - VLM
+- **深度学习框架**
+  - PyTorch、Python、C++
+  - Transformer模型、GPU/昇腾NPU开发
+## 联系方式
+- 邮箱: yangsenius@gmail.com
+- 博客: senyang-ml.github.io
+- 谷歌学术主页
+                    </pre>
+                </div>
+                <!-- 添加简单提示 -->
+                <div style="text-align: center; padding: 10px; color: #666; font-size: 14px;">
+                    提示：可自由拖动查看思维导图内容
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 新增 Mermaid 甘特图区域 -->
+    <section id="experience-gantt" class="mermaid-chart-section">
+        <div class="container">
+            <!-- <h2 class="section-title">个人经历时间轴</h2> -->
+            <div class="mermaid">
+gantt
+    dateFormat  YYYY.MM
+    title 杨森个人经历时间轴
+
+    section 教育背景
+    学士学位           :edu1, 2013.09, 2017.07
+    硕士学位           :edu2, 2017.09, 2019.01
+    博士学位           :edu3, 2019.05, 2023.03
+
+    section 工作经历
+    旷视科技实习       :work1, 2021.01, 2021.10
+    腾讯TPG实习        :work2, 2021.12, 2022.08
+    百度算法工程师 :work3, 2023.07, 2025.06
+            </div>
+        </div>
+    </section>
+    
     <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
+            <h2 class="section-title">关于我</h2>
             <div class="about-content">
-                <p>I am a Research Engineer at Baidu, where I work on computer vision, autonomous driving and multimodal LLM. I received my Ph.D. from Southeast University in 2023. My research focuses on computer vision and deep learning, with particular interests in 2D/3D human pose estimation, autonomous driving perception, and vision-based multimodal foundation models. I am passionate about developing innovative solutions that bridge cutting-edge research with practical applications.</p>
-                <p>My research interests include:</p>
+                <p>我是百度的一名研究工程师，主要从事计算机视觉、多模态大语言模型和自动驾驶方面的工作。我于2023年获得东南大学博士学位。我的研究重点是计算机视觉和深度学习，特别关注2D/3D人体姿态估计、自动驾驶感知和视觉多模态基础模型。我热衷于开发创新解决方案，将前沿研究与实际应用相结合。</p>
+                <p>我的研究兴趣包括：</p>
                 <ul class="interests-list">
-                    <li>Computer Vision</li>
-                    <li>Deep Learning</li>
-                    <li>Human Pose Estimation</li>
-                    <li>Autonomous Driving Perception</li>
-                    <li>Multimodal Foundation Models</li>
+                    <li>计算机视觉</li>
+                    <li>深度学习</li>
+                    <li>人体姿态估计</li>
+                    <li>自动驾驶感知</li>
+                    <li>多模态基础模型</li>
                 </ul>
             </div>
         </div>
@@ -71,28 +219,34 @@
 
     <section id="experience" class="experience">
         <div class="container">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2023.7 - Present</div>
-                    <div class="timeline-content">
-                        <h3>Senior Research Engineer</h3>
-                        <p>百度 VIS</p>
+            <h2 class="section-title">工作实习经历</h2>
+            <div class="experience-grid">
+                <div class="experience-card job-fulltime">
+                    <div class="card-header">
+                        <span class="icon"><i class="fas fa-briefcase"></i></span>
+                        <h3>百度 VIS</h3>
                     </div>
+                    <p class="position">高级研发工程师</p>
+                    <p class="date">2023.7 - 至今</p>
+                    <p class="description">负责多模态大模型、自动驾驶视觉感知与规划的算法研究与创新应用，旨在推动技术边界，解决复杂挑战。工作涵盖从前沿算法设计到产品落地的全流程，注重将理论突破转化为实际业务价值，并在多个核心领域取得显著进展。</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2021.12 - 2022.8</div>
-                    <div class="timeline-content">
-                        <h3>Intern</h3>
-                        <p>腾讯 TPG</p>
+                <div class="experience-card job-internship">
+                    <div class="card-header">
+                        <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                        <h3>腾讯 TPG</h3>
                     </div>
+                    <p class="position">实习生</p>
+                    <p class="date">2021.12 - 2022.8</p>
+                    <p class="description">负责三维人体重建与动作生成项目，基于参数化SMPL模型提出独立token表征方法，实现了高精度的三维人体重建和关节运动捕捉，3DPW指标提升8%，论文发表在ICLR-2023 (spotlight, top25%)。</p>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2021.1 - 2021.10</div>
-                    <div class="timeline-content">
-                        <h3>Intern</h3>
-                        <p>旷视科技</p>
+                <div class="experience-card job-internship">
+                    <div class="card-header">
+                        <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                        <h3>旷视科技</h3>
                     </div>
+                    <p class="position">实习生</p>
+                    <p class="date">2021.1 - 2021.10</p>
+                    <p class="description">参与人体姿态估计项目，设计基于token表示的Transformer模型（ICCV-2021）。研究Transformer中注意力模式（Pattern Recognition）。首创坐标分类新范式SimCC，突破传统回归和heatmap方法精度瓶颈（ECCV 2022 Oral，被主流姿态估计框架采用）。</p>
                 </div>
             </div>
         </div>
@@ -100,27 +254,33 @@
 
     <section id="education" class="education">
         <div class="container">
-            <h2 class="section-title">Education</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2019.5 - 2023.3</div>
+            <h2 class="section-title">教育背景</h2>
+            <div class="education-timeline">
+                <div class="timeline-event">
+                    <div class="timeline-dot highlight"><i class="fas fa-graduation-cap"></i></div>
                     <div class="timeline-content">
-                        <h3>Ph.D.</h3>
-                        <p>Pattern Recognition and Intelligent Systems, School of Automation, Southeast University</p>
+                        <div class="degree">学士</div>
+                        <div class="school">吉林大学 通信工程学院</div>
+                        <div class="major">自动化</div>
+                        <div class="date">2013.09 - 2017.07</div>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2017.9 - 2019.1</div>
+                <div class="timeline-event">
+                    <div class="timeline-dot"><i class="fas fa-graduation-cap"></i></div>
                     <div class="timeline-content">
-                        <h3>Master</h3>
-                        <p>Pattern Recognition and Intelligent Systems, School of Automation, Southeast University</p>
+                        <div class="degree">硕士</div>
+                        <div class="school">东南大学 自动化学院</div>
+                        <div class="major">模式识别与智能系统</div>
+                        <div class="date">2017.09 - 2019.01</div>
                     </div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">2013.9 - 2017.7</div>
+                <div class="timeline-event">
+                    <div class="timeline-dot highlight"><i class="fas fa-graduation-cap"></i></div>
                     <div class="timeline-content">
-                        <h3>Bachelor</h3>
-                        <p>Automation, College of Communication Engineering, Jilin University</p>
+                        <div class="degree">博士</div>
+                        <div class="school">东南大学 自动化学院</div>
+                        <div class="major">模式识别与智能系统</div>
+                        <div class="date">2019.03 - 2023.05</div>
                     </div>
                 </div>
             </div>
@@ -129,21 +289,20 @@
 
     <section id="publications" class="publications">
         <div class="container">
-            <h2 class="section-title">Publications</h2>
+            <h2 class="section-title">研究成果</h2>
             <div class="publications-filter">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="pose">Pose Estimation</button>
-                <button class="filter-btn" data-filter="autonomous">Autonomous Driving</button>
-                <!-- <button class="filter-btn" data-filter="multimodal">Multimodal</button> -->
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="pose">姿态估计</button>
+                <button class="filter-btn" data-filter="autonomous">自动驾驶</button>
             </div>
             <div class="publications-grid">
                 <!-- 论文1 -->
                 <div class="publication-card" data-category="autonomous">
                     <h3>TopoSD: Topology-Enhanced Lane Segment Perception with SDMap Prior</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Minyue Jiang, Ziwei Fan, Xiaolu Xie, Xiao Tan, Yingying Li, Errui Ding, Liang Wang, Jingdong Wang.</p>
-                    <p class="venue">2024 preprint</p>
+                    <p class="venue">2024 预印本 (引用1次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Paper</a>
+                        <a href="https://arxiv.org/abs/2411.14751" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
                     </div>
                 </div>
                 
@@ -151,80 +310,116 @@
                 <div class="publication-card" data-category="autonomous">
                     <h3>MGMapNet: Multi-Granularity Representation Learning for End-to-End Vectorized HD Map Construction</h3>
                     <p class="authors">Jing Yang*, Minyue Jiang*, <strong>Sen Yang*</strong>, Xiao Tan, Yingying Li, Errui Ding, Hanli Wang, Jingdong Wang.</p>
-                    <p class="venue">ICLR 2025</p>
+                    <p class="venue">ICLR 2025 (引用0次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">PDF</a>
+                        <a href="https://arxiv.org/pdf/2410.07733.pdf" class="btn" target="_blank" rel="noopener noreferrer">PDF</a>
                     </div>
                 </div>
                 
-                <!-- 更多论文... -->
+                <!-- 论文3 - 新增 Adnet -->
+                <div class="publication-card" data-category="autonomous">
+                    <h3>Adnet: Lane shape prediction via anchor decomposition</h3>
+                    <p class="authors">L Xiao, X Li, <strong>S Yang</strong>, W Yang.</p>
+                    <p class="venue">ICCV 2023 (引用24次)</p>
+                    <div class="publication-links">
+                        <a href="https://arxiv.org/abs/2307.03961" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
+                    </div>
+                </div>
+
+                <!-- 论文4 -->
                 <div class="publication-card" data-category="pose">
                     <h3>Detecting and grouping keypoints for multi-person pose estimation using instance-aware attention</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Ze Feng, Zhicheng Wang, Yanjie Li, Shoukui Zhang, Zhibin Quan, Shu-tao Xia, Wankou Yang.</p>
-                    <p class="venue">Pattern Recognition</p>
+                    <p class="venue">Pattern Recognition (引用22次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Journal Paper</a>
+                        <a href="https://www.sciencedirect.com/science/article/abs/pii/S0031320322007117" class="btn" target="_blank" rel="noopener noreferrer">期刊论文</a>
                     </div>
                 </div>
                 
                 <div class="publication-card" data-category="pose">
                     <h3>Capturing the motion of every joint: 3D human pose and mesh recovery with independent tokens</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Wen Heng, Gang Liu, Guozhong Luo, Wankou Yang, Gang Yu.</p>
-                    <p class="venue">ICLR 2023 (spotlight, top 25%)</p>
+                    <p class="venue">ICLR 2023 (spotlight, top 25%) (引用14次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Paper</a>
-                        <a href="#" class="btn">Code</a>
-                        <a href="#" class="btn">Project</a>
+                        <a href="https://arxiv.org/abs/2303.00298" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
+                        <a href="https://github.com/yangsenius/INT_HMR_Model" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
+                        <a href="https://yangsenius.github.io/INT_HMR_Model/" class="btn" target="_blank" rel="noopener noreferrer">项目</a>
                     </div>
                 </div>
                 
                 <div class="publication-card" data-category="pose">
                     <h3>Searching part-specific neural fabrics for human pose estimation</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Wankou Yang, Zhen Cui.</p>
-                    <p class="venue">Pattern Recognition</p>
+                    <p class="venue">Pattern Recognition (引用12次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Journal Paper</a>
-                        <a href="#" class="btn">Code</a>
+                        <a href="https://www.sciencedirect.com/science/article/abs/pii/S0031320322001339" class="btn" target="_blank" rel="noopener noreferrer">期刊论文</a>
+                        <a href="https://github.com/yangsenius/ssa_pose" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
                     </div>
                 </div>
                 
                 <div class="publication-card" data-category="pose">
                     <h3>SimCC: A Simple Coordinate Classification perspective for human pose estimation</h3>
                     <p class="authors">Yanjie Li, <strong>Sen Yang</strong>, Peidong Liu, Shoukui Zhang, Yunxiao Wang, Zhicheng Wang, Wankou Yang, Shu-Tao Xia.</p>
-                    <p class="venue">ECCV 2022 (oral, top 5%)</p>
+                    <p class="venue">ECCV 2022 (oral, top 5%) (引用184次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Paper</a>
-                        <a href="#" class="btn">Code</a>
-                        <a href="#" class="btn">知乎</a>
+                        <a href="https://arxiv.org/abs/2107.03332" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
+                        <a href="https://github.com/leeyegy/SimDR" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
+                        <a href="https://zhuanlan.zhihu.com/p/664996998" class="btn" target="_blank" rel="noopener noreferrer">知乎</a>
                     </div>
                 </div>
                 
                 <div class="publication-card" data-category="pose">
                     <h3>TokenPose: Learning Keypoint Tokens for Human Pose Estimation</h3>
                     <p class="authors">Yanjie Li, Shoukui Zhang, Zhicheng Wang, <strong>Sen Yang</strong>, Wankou Yang, Shu-Tao Xia, Erjin Zhou.</p>
-                    <p class="venue">ICCV 2021</p>
+                    <p class="venue">ICCV 2021 (引用355次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Paper</a>
-                        <a href="#" class="btn">Code</a>
+                        <a href="https://arxiv.org/abs/2104.03516" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
+                        <a href="https://github.com/leeyegy/TokenPose" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
                     </div>
                 </div>
                 
                 <div class="publication-card" data-category="pose">
                     <h3>TransPose: Keypoint Localization via Transformer</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Zhibin Quan, Mu Nie, Wankou Yang.</p>
-                    <p class="venue">ICCV 2021</p>
+                    <p class="venue">ICCV 2021 (引用443次)</p>
                     <div class="publication-links">
-                        <a href="#" class="btn">Paper</a>
-                        <a href="#" class="btn">Code</a>
+                        <a href="https://arxiv.org/abs/2012.14214" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
+                        <a href="https://github.com/yangsenius/TransPose" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
+                    </div>
+                </div>
+
+                <!-- 新增论文 Learning Multiple Probabilistic Decisions -->
+                <div class="publication-card" data-category="autonomous">
+                    <h3>Learning Multiple Probabilistic Decisions from Latent World Model in Autonomous Driving</h3>
+                    <p class="authors">L Xiao, JJ Liu, <strong>Sen Yang</strong>, X Li, X Ye, W Yang, J Wang.</p>
+                    <p class="venue">arXiv preprint arXiv:2409.15730, 2024 (引用1次)</p>
+                    <div class="publication-links">
+                        <a href="https://arxiv.org/abs/2409.15730" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- 专业技能部分 -->
+    <!-- <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">专业技能</h2>
+            <div class="skills-content">
+                <ul>
+                    <li>扎实的计算机视觉理论和实践经验，有多个子领域的研究和开发经历；博士期间专注于深度学习、Transformer模型、人体姿态估计；在工作若干项目中积累了自动驾驶感知与建图、规划的落地量产经验；有多模态大模型的模型设计、优化、数据处理、标注以及自动化流的实践经验。</li>
+                    <li>擅长深度学习模型的设计与优化，融合跨领域创新思维，将理论优势转化为工程实战，有较强的代码实现能力。</li>
+                    <li>拥有大型企业项目开发经验，有跨部门合作经历，注重高效沟通与协作。</li>
+                    <li>熟练掌握PyTorch等主流开发框架，熟悉Python、C++等编程语言，熟练掌握Linux开发等技能。</li>
+                    <li>拥有较强的自驱学习能力（Transfer & Meta Learning），对前沿技术热爱并不懈追求，善于学习与利用工具，注重效率。</li>
+                </ul>
+            </div>
+        </div>
+    </section> -->
+
     <section id="contact" class="contact">
         <div class="container">
-            <h2 class="section-title">Contact</h2>
+            <h2 class="section-title">联系方式</h2>
             <div class="contact-info">
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
@@ -232,7 +427,7 @@
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-blog"></i>
-                    <p><a href="https://senyang-ml.github.io">https://senyang-ml.github.io</a></p>
+                    <p><a href="https://senyang-ml.github.io" target="_blank" rel="noopener noreferrer">https://senyang-ml.github.io</a></p>
                 </div>
             </div>
         </div>
@@ -240,10 +435,96 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 杨森. All Rights Reserved.</p>
+            <p>&copy; 2024 杨森. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="js/main.js"></script>
+    <!-- Include markmap-autoloader -->
+    <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader"></script>
+    <!-- Include Mermaid JS library -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        // Optional: Configure Mermaid theme, etc.
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+
+    <!-- Your publication filter script, unchanged -->
+    <script>
+        const filterButtons = document.querySelectorAll('.publications-filter .filter-btn');
+        const publicationCards = document.querySelectorAll('.publications-grid .publication-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to the clicked button
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                publicationCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Markmap 拖动范围限制和回到中心按钮逻辑已通过 Markmap 库的 fit() 方法和 CSS 样式优化，无需额外JS控制。
+        // 确保 Markmap 容器和按钮的样式在 CSS 中定义。
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.17.0/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.0/dist/index.min.js"></script>
+    <script type="text/javascript">
+        // Initialize markmap on window load
+        function initMarkmap() {
+            const { Markmap, deriveOptions } = window.markmap;
+            const markmapDiv = document.querySelector('.markmap');
+            if (!markmapDiv) {
+                console.error("Markmap container (.markmap) not found.");
+                return;
+            }
+            console.log("Markmap container found.", markmapDiv);
+            console.log("Markmap container dimensions (initial):", markmapDiv.offsetWidth, markmapDiv.offsetHeight);
+
+            // 获取 markdown 内容
+            const pre = markmapDiv.querySelector('pre');
+            const content = pre ? pre.textContent : markmapDiv.textContent;
+            const mm = Markmap.create(markmapDiv, deriveOptions(content), content);
+
+            // 让 mm 实例全局可用
+            window.mm = mm;
+            console.log("Markmap instance (window.mm):", window.mm);
+            console.log("Type of window.mm.fit:", typeof window.mm.fit);
+
+            // 初始居中和重新计算尺寸
+            // 直接调用 fit，并增加一个短暂的延迟作为备用
+            mm.rescale(true); // 强制重新计算尺寸
+            mm.fit(); // 调用 fit 方法将视图重置到中心
+
+            setTimeout(() => {
+                mm.rescale(true); // 强制重新计算尺寸
+                mm.fit(); // 调用 fit 方法将视图重置到中心
+            }, 100); // 短暂延迟，确保渲染完成
+
+            window.addEventListener('resize', () => {
+                // 窗口调整大小后也增加小延迟，确保布局稳定再 fit
+                setTimeout(() => {
+                    if (window.mm && typeof window.mm.fit === 'function') {
+                        window.mm.fit();
+                        console.log("窗口调整大小后调用 mm.fit().");
+                    }
+                }, 50); // 50ms 延迟
+            });
+        }
+
+        window.onload = function() {
+            initMarkmap();
+        };
+    </script>
 </body>
-</html> 
+</html>
