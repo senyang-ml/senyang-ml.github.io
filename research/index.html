@@ -67,6 +67,42 @@
         .mermaid {
             text-align: center; /* 让图表居中 */
         }
+
+        /* 更醒目的悬浮刷新按钮样式 */
+        .floating-refresh-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(0, 123, 255, 0.7); /* 半透明蓝色 */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .floating-refresh-btn:hover {
+            background-color: rgba(0, 123, 255, 0.9); /* 悬停时更不透明 */
+            transform: scale(1.05);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        /* 添加旋转动画 */
+        .floating-refresh-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .floating-refresh-btn:hover i {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body>
@@ -303,6 +339,16 @@ gantt
                     <p class="venue">2024 预印本 (引用1次)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2411.14751" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
+                    </div>
+                </div>
+                
+                <!-- 添加HisTrackMap论文 -->
+                <div class="publication-card" data-category="autonomous">
+                    <h3>HisTrackMap: Global Vectorized High-Definition Map Construction via History Map Tracking</h3>
+                    <p class="authors">Jing Yang*, <strong>Sen Yang*</strong>, Xiao Tan, Hanli Wang.</p>
+                    <p class="venue">arXiv preprint arXiv:2503.07168, 2025</p>
+                    <div class="publication-links">
+                        <a href="https://arxiv.org/abs/2503.07168" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
                     </div>
                 </div>
                 
