@@ -76,23 +76,23 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background-color: rgba(0, 123, 255, 0.7); /* 半透明蓝色 */
+            background-color: rgba(220, 53, 69, 0.85); /* 更改为明显的红色 */
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             transition: all 0.2s ease;
             font-size: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
         .floating-refresh-btn:hover {
-            background-color: rgba(0, 123, 255, 0.9); /* 悬停时更不透明 */
+            background-color: rgba(220, 53, 69, 1); /* 悬停时完全不透明 */
             transform: scale(1.05);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
         }
 
         /* 添加旋转动画 */
@@ -157,7 +157,10 @@
             <h2 class="section-title">太长不看（预览图）</h2>
             <!-- 添加容器包裹思维导图和回到中心按钮 -->
             <div class="markmap-container">
-                <!-- 删除回到中心按钮 -->
+                <!-- 添加浮动刷新按钮 -->
+                <div class="floating-refresh-btn" id="reset-mindmap">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
                 <div class="markmap">
                     <pre>
 # **杨森个人主页**
@@ -448,7 +451,7 @@ gantt
     </section>
 
     <!-- 专业技能部分 -->
-    <section id="skills" class="skills">
+    <!-- <section id="skills" class="skills">
         <div class="container">
             <h2 class="section-title">专业技能</h2>
             <div class="skills-content">
@@ -461,7 +464,7 @@ gantt
                 </ul>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <section id="contact" class="contact">
         <div class="container">
@@ -566,6 +569,31 @@ gantt
                     }
                 }, 50); // 50ms 延迟
             });
+            
+            // 添加重置按钮的点击事件处理
+            const resetButton = document.getElementById('reset-mindmap');
+            if (resetButton) {
+                resetButton.addEventListener('click', function() {
+                    // 添加旋转动画效果
+                    const icon = this.querySelector('i');
+                    icon.style.transition = 'transform 0.5s ease';
+                    icon.style.transform = 'rotate(360deg)';
+                    
+                    // 重置思维导图视图
+                    if (window.mm && typeof window.mm.fit === 'function') {
+                        window.mm.rescale(true);
+                        window.mm.fit();
+                        console.log("重置思维导图视图");
+                    }
+                    
+                    // 动画结束后恢复初始状态
+                    setTimeout(() => {
+                        icon.style.transform = '';
+                    }, 500);
+                });
+            } else {
+                console.error("Reset button (#reset-mindmap) not found.");
+            }
         }
 
         window.onload = function() {
