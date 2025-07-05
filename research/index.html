@@ -76,23 +76,23 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background-color: rgba(220, 53, 69, 0.85); /* 更改为明显的红色 */
+            background-color: rgba(0, 123, 255, 0.8); /* 蓝色，与网页色系搭配 */
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
             z-index: 1000;
             transition: all 0.2s ease;
             font-size: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.8);
         }
 
         .floating-refresh-btn:hover {
-            background-color: rgba(220, 53, 69, 1); /* 悬停时完全不透明 */
+            background-color: rgba(0, 123, 255, 1); /* 悬停时完全不透明 */
             transform: scale(1.05);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         /* 添加旋转动画 */
@@ -409,7 +409,7 @@ gantt
                 <div class="publication-card" data-category="pose">
                     <h3>SimCC: A Simple Coordinate Classification perspective for human pose estimation</h3>
                     <p class="authors">Yanjie Li, <strong>Sen Yang</strong>, Peidong Liu, Shoukui Zhang, Yunxiao Wang, Zhicheng Wang, Wankou Yang, Shu-Tao Xia.</p>
-                    <p class="venue">ECCV 2022 (oral, top 5%) (引用184次)</p>
+                    <p class="venue">ECCV 2022 (oral, top 5%) (引用200+次)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2107.03332" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
                         <a href="https://github.com/leeyegy/SimDR" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
@@ -420,7 +420,7 @@ gantt
                 <div class="publication-card" data-category="pose">
                     <h3>TokenPose: Learning Keypoint Tokens for Human Pose Estimation</h3>
                     <p class="authors">Yanjie Li, Shoukui Zhang, Zhicheng Wang, <strong>Sen Yang</strong>, Wankou Yang, Shu-Tao Xia, Erjin Zhou.</p>
-                    <p class="venue">ICCV 2021 (引用355次)</p>
+                    <p class="venue">ICCV 2021 (引用400+次)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2104.03516" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
                         <a href="https://github.com/leeyegy/TokenPose" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
@@ -430,7 +430,7 @@ gantt
                 <div class="publication-card" data-category="pose">
                     <h3>TransPose: Keypoint Localization via Transformer</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Zhibin Quan, Mu Nie, Wankou Yang.</p>
-                    <p class="venue">ICCV 2021 (引用443次)</p>
+                    <p class="venue">ICCV 2021 (引用500+次)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2012.14214" class="btn" target="_blank" rel="noopener noreferrer">论文</a>
                         <a href="https://github.com/yangsenius/TransPose" class="btn" target="_blank" rel="noopener noreferrer">代码</a>
@@ -551,7 +551,6 @@ gantt
             console.log("Type of window.mm.fit:", typeof window.mm.fit);
 
             // 初始居中和重新计算尺寸
-            // 直接调用 fit，并增加一个短暂的延迟作为备用
             mm.rescale(true); // 强制重新计算尺寸
             mm.fit(); // 调用 fit 方法将视图重置到中心
 
@@ -560,16 +559,6 @@ gantt
                 mm.fit(); // 调用 fit 方法将视图重置到中心
             }, 100); // 短暂延迟，确保渲染完成
 
-            window.addEventListener('resize', () => {
-                // 窗口调整大小后也增加小延迟，确保布局稳定再 fit
-                setTimeout(() => {
-                    if (window.mm && typeof window.mm.fit === 'function') {
-                        window.mm.fit();
-                        console.log("窗口调整大小后调用 mm.fit().");
-                    }
-                }, 50); // 50ms 延迟
-            });
-            
             // 添加重置按钮的点击事件处理
             const resetButton = document.getElementById('reset-mindmap');
             if (resetButton) {
@@ -579,12 +568,8 @@ gantt
                     icon.style.transition = 'transform 0.5s ease';
                     icon.style.transform = 'rotate(360deg)';
                     
-                    // 重置思维导图视图
-                    if (window.mm && typeof window.mm.fit === 'function') {
-                        window.mm.rescale(true);
-                        window.mm.fit();
-                        console.log("重置思维导图视图");
-                    }
+                    // 刷新页面
+                    window.location.reload();
                     
                     // 动画结束后恢复初始状态
                     setTimeout(() => {

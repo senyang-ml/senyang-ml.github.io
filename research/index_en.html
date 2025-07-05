@@ -130,8 +130,8 @@
             <h2 class="section-title">TL;DR (Overview)</h2>
             <div class="markmap-container">
                 <div class="markmap-controls">
-                    <button id="reset-view-btn" class="control-button" title="Reset View">
-                        <i class="fas fa-redo-alt"></i> Reset
+                    <button id="reset-view-btn" class="control-button" title="Refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
                 <div class="markmap">
@@ -372,7 +372,7 @@ gantt
                 <div class="publication-card" data-category="pose">
                     <h3>SimCC: A Simple Coordinate Classification perspective for human pose estimation</h3>
                     <p class="authors">Yanjie Li, <strong>Sen Yang</strong>, Peidong Liu, Shoukui Zhang, Yunxiao Wang, Zhicheng Wang, Wankou Yang, Shu-Tao Xia.</p>
-                    <p class="venue">ECCV 2022 (oral, top 5%)</p>
+                    <p class="venue">ECCV 2022 (oral, top 5%) (cited 200+ times)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2107.03332" class="btn" target="_blank" rel="noopener noreferrer">Paper</a>
                         <a href="https://github.com/leeyegy/SimDR" class="btn" target="_blank" rel="noopener noreferrer">Code</a>
@@ -383,7 +383,7 @@ gantt
                 <div class="publication-card" data-category="pose">
                     <h3>TokenPose: Learning Keypoint Tokens for Human Pose Estimation</h3>
                     <p class="authors">Yanjie Li, Shoukui Zhang, Zhicheng Wang, <strong>Sen Yang</strong>, Wankou Yang, Shu-Tao Xia, Erjin Zhou.</p>
-                    <p class="venue">ICCV 2021</p>
+                    <p class="venue">ICCV 2021 (cited 400+ times)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2104.03516" class="btn" target="_blank" rel="noopener noreferrer">Paper</a>
                         <a href="https://github.com/leeyegy/TokenPose" class="btn" target="_blank" rel="noopener noreferrer">Code</a>
@@ -393,7 +393,7 @@ gantt
                 <div class="publication-card" data-category="pose">
                     <h3>TransPose: Keypoint Localization via Transformer</h3>
                     <p class="authors"><strong>Sen Yang</strong>, Zhibin Quan, Mu Nie, Wankou Yang.</p>
-                    <p class="venue">ICCV 2021</p>
+                    <p class="venue">ICCV 2021 (cited 500+ times)</p>
                     <div class="publication-links">
                         <a href="https://arxiv.org/abs/2012.14214" class="btn" target="_blank" rel="noopener noreferrer">Paper</a>
                         <a href="https://github.com/yangsenius/TransPose" class="btn" target="_blank" rel="noopener noreferrer">Code</a>
@@ -494,17 +494,17 @@ gantt
             const resetBtn = document.getElementById('reset-view-btn');
             if (resetBtn) {
                 resetBtn.addEventListener('click', function() {
-                    // 使用location.reload()刷新整个页面
+                    // 添加旋转动画效果
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transition = 'transform 0.5s ease';
+                        icon.style.transform = 'rotate(360deg)';
+                    }
+                    
+                    // 刷新整个页面
                     window.location.reload();
                 });
             }
-            
-            // 窗口大小变化时重新居中
-            window.addEventListener('resize', () => {
-                if (window.mm) {
-                    window.mm.fit();
-                }
-            });
         };
     </script>
 </body>
