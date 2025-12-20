@@ -1,75 +1,176 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // 导航栏滚动效果
-    const header = document.querySelector('header');
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-            header.style.background = 'rgba(44, 62, 80, 0.95)';
-            header.style.padding = '10px 0';
-        } else {
-            header.style.background = 'var(--dark-color)';
-            header.style.padding = '20px 0';
-        }
-    });
+// 应用程序主入口
+class App {
+    constructor() {
+        this.currentLang = this.getInitialLanguage();
+        this.init();
+    }
 
-    // 平滑滚动到锚点
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
+    // 获取初始语言
+    getInitialLanguage() {
+        // 优先使用localStorage保存的语言
+        const saved = localStorage.getItem('preferredLanguage');
+        if (saved) return saved;
+        
+        // 根据URL路径判断
+        const path = window.location.pathname;
+        if (path.includes('_en.html')) return 'en';
+        return 'zh';
+    }
+
+    // 初始化应用
+    async init() {
+        try {
+            // 显示加载状态
+            this.showLoading();
             
-            if (targetElement) {
-                const headerHeight = document.querySelector('header').offsetHeight;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+            // 加载数据
+            await dataLoader.loadAll();
+            dataLoader.setLanguage(this.currentLang);
+            
+            // 渲染页面
+            pageRenderer.renderAll();
+            
+            // 设置语言切换
+            this.setupLanguageSwitch();
+            
+            // 设置其他功能
+            this.setupScrollEffects();
+            this.setupSmoothScroll();
+            this.setupAnimations();
+            
+            // 隐藏加载状态
+            this.hideLoading();
+        } catch (error) {
+            console.error('Failed to initialize app:', error);
+            this.showError();
+        }
+    }
+
+    // 显示加载状态
+    showLoading() {
+        // 可以添加加载动画
+        document.body.style.opacity = '0';
+    }
+
+    // 隐藏加载状态
+    hideLoading() {
+        document.body.style.opacity = '1';
+        document.body.style.transition = 'opacity 0.3s';
+    }
+
+    // 显示错误
+    showError() {
+        alert('Failed to load page data. Please refresh the page.');
+    }
+
+    // 设置语言切换
+    setupLanguageSwitch() {
+        const langSwitch = document.querySelector('.language-switch');
+        if (!langSwitch) return;
+        
+        langSwitch.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' || e.target.tagName === 'SPAN') {
+                e.preventDefault();
                 
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                // 切换语言
+                const newLang = this.currentLang === 'zh' ? 'en' : 'zh';
+                this.switchLanguage(newLang);
             }
         });
-    });
+        
+        // 更新语言切换显示
+        this.updateLanguageSwitch();
+    }
 
-    // 研究成果过滤功能
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const publicationCards = document.querySelectorAll('.publication-card');
+    // 切换语言
+    switchLanguage(lang) {
+        this.currentLang = lang;
+        dataLoader.setLanguage(lang);
+        pageRenderer.renderAll();
+        this.updateLanguageSwitch();
+        
+        // 重新初始化某些功能
+        this.setupAnimations();
+    }
 
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // 更新活动按钮
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            // 过滤论文
-            const filter = this.getAttribute('data-filter');
-            
-            publicationCards.forEach(card => {
-                if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
+    // 更新语言切换按钮
+    updateLanguageSwitch() {
+        const langSwitch = document.querySelector('.language-switch');
+        if (!langSwitch) return;
+        
+        if (this.currentLang === 'zh') {
+            langSwitch.innerHTML = '<a href="#" data-lang="en">EN</a> | <span class="active">中文</span>';
+        } else {
+            langSwitch.innerHTML = '<span class="active">EN</span> | <a href="#" data-lang="zh">中文</a>';
+        }
+    }
+
+    // 设置滚动效果
+    setupScrollEffects() {
+        const header = document.querySelector('header');
+        if (!header) return;
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(44, 62, 80, 0.95)';
+                header.style.padding = '10px 0';
+            } else {
+                header.style.background = 'var(--dark-color)';
+                header.style.padding = '20px 0';
+            }
+        });
+    }
+
+    // 设置平滑滚动
+    setupSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                // 如果是语言切换链接，不阻止默认行为
+                if (this.closest('.language-switch')) return;
+                
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
-    });
+    }
 
-    // 添加滚动动画
-    const animateOnScroll = function() {
-        const elements = document.querySelectorAll('.section-title, .about-content, .timeline-item, .publication-card');
-        
-        elements.forEach(element => {
-            const elementPosition = element.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
+    // 设置滚动动画
+    setupAnimations() {
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.section-title, .about-content, .timeline-event, .publication-card');
             
-            if (elementPosition < windowHeight - 100) {
-                element.classList.add('animate');
-            }
-        });
-    };
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    element.classList.add('animate');
+                }
+            });
+        };
 
-    // 初始动画
-    setTimeout(animateOnScroll, 300);
-    
-    // 滚动时动画
-    window.addEventListener('scroll', animateOnScroll);
+        // 初始动画
+        setTimeout(animateOnScroll, 300);
+        
+        // 滚动时动画
+        window.addEventListener('scroll', animateOnScroll);
+    }
+}
+
+// 页面加载完成后启动应用
+document.addEventListener('DOMContentLoaded', function() {
+    const app = new App();
 }); 
