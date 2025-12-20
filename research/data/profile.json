@@ -1,0 +1,52 @@
+{
+  "basic": {
+    "name": {
+      "zh": "杨森",
+      "en": "Sen Yang"
+    },
+    "title": {
+      "zh": "计算机视觉 | 多模态大语言模型 | 自动驾驶",
+      "en": "Computer Vision | Multimodal Large Language Models | Autonomous Driving"
+    },
+    "position": {
+      "zh": "百度高级研发工程师",
+      "en": "Senior R&D Engineer at Baidu"
+    },
+    "description": {
+      "zh": "现任百度高级研发工程师，专注于计算机视觉、多模态大语言模型和自动驾驶研究",
+      "en": "Senior R&D Engineer at Baidu, focusing on Computer Vision, Multimodal Large Language Models, and Autonomous Driving research."
+    },
+    "photo": "https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5",
+    "email": "yangsenius@gmail.com",
+    "scholar": "https://scholar.google.com/citations?user=z5O3DLcAAAAJ",
+    "blog": "https://senyang-ml.github.io",
+    "github": "https://github.com/senyang-ml"
+  },
+  
+  "about": {
+    "content": {
+      "zh": "我是百度的一名研究工程师，主要从事计算机视觉、多模态大模型和自动驾驶方面的工作。我于2023年获得东南大学博士学位，博士期间主要研究方向2D/3D人体姿态估计、Transformer模型。我热衷于开发创新解决方案，将前沿研究与实际应用相结合。",
+      "en": "I am a research engineer at Baidu, primarily working on computer vision, multimodal large language models, and autonomous driving. I obtained my Ph.D. from Southeast University in 2023, where my research focused on 2D/3D human pose estimation and Transformer models. I am passionate about developing innovative solutions that bridge cutting-edge research with practical applications."
+    },
+    "interests": {
+      "zh": ["计算机视觉", "深度学习", "人体姿态估计", "自动驾驶感知", "多模态基础模型"],
+      "en": ["Computer Vision", "Deep Learning", "Human Pose Estimation", "Autonomous Driving Perception", "Multimodal Foundation Models"]
+    }
+  },
+  
+  "navigation": {
+    "zh": ["关于我", "工作经历", "教育背景", "研究成果", "联系方式"],
+    "en": ["About Me", "Experience", "Education", "Publications", "Contact"]
+  },
+  
+  "mindmap": {
+    "title": {
+      "zh": "太长不看（预览图）",
+      "en": "TL;DR (Overview)"
+    },
+    "tip": {
+      "zh": "提示：可自由拖动查看思维导图内容",
+      "en": "Tip: You can drag and click to explore the mindmap, \"Reset\" refreshes the view"
+    }
+  }
+}

@@ -425,735 +425,108 @@ footer {
 }
 
 /* 为 markmap 容器添加明确的尺寸，确保其正确显示 */
-.markmap {
-    width: 100%;
-    max-width: 1000px;
-    height: 350px;
-    margin: 0 auto;
-    /* border: 1px solid #ddd; */ /* 移除边框 */
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.mindmap .container {
-    padding-top: 10px; /* 减小上间距 */
-    padding-bottom: 10px; /* 减小下间距 */
-}
-
-/* 为 Mermaid 图表添加一些基础样式，确保其可见性 */
-.mermaid-chart-section {
-    margin-top: 20px; /* 减小与上方内容的间距 */
-    padding-bottom: 20px;
-}
-.mermaid {
-    text-align: center; /* 让图表居中 */
-}
-
-/* 思维导图部分 */
-.mindmap {
-    background-color: #ffffff; /* 改为白色背景 */
-    border-radius: 10px;
-    padding: 30px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    /* border: 1px solid #cceeff; */ /* 移除蓝色边框 */
-    box-shadow: none !important;
-    transition: none !important;
-}
-
-.mindmap:hover {
-    box-shadow: none !important;
-    transition: none !important;
-}
-
-.markmap:hover {
-    box-shadow: none !important;
-    transition: none !important;
-}
-
-/* 工作实习经历样式 (卡片式布局) */
-.experience-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 30px;
-}
-
-.experience-card {
-    background-color: #fff;
-    border-radius: var(--border-radius);
-    padding: 25px;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.experience-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.experience-card .card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.experience-card .icon {
-    font-size: 1.8rem;
-    margin-right: 15px;
-    color: var(--primary-color);
-}
-
-.experience-card h3 {
-    font-size: 1.5rem;
-    margin: 0;
-    color: var(--secondary-color);
-}
-
-.experience-card .position {
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.experience-card .date {
-    font-size: 0.95rem;
-    color: #777;
-    margin-bottom: 15px;
-}
-
-.experience-card .description {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #444;
-}
-
-/* 正式工作和实习的颜色区分 */
-.experience-card.job-fulltime {
-    border: 2px solid var(--primary-color);
-    background-color: #e0f2ff; /* 更浅的蓝色背景，突出正式工作 */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* 更明显的阴影 */
-    padding: 30px; /* 增大内边距 */
-}
-
-.experience-card.job-internship {
-    border: 1px solid #eee; /* 更浅的边框 */
-    background-color: #fcfcfc; /* 接近白色背景 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* 弱化阴影 */
-    padding: 20px; /* 减小内边距 */
-}
-
-/* 教育背景横向时间轴样式 */
-.education-timeline {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    position: relative;
-    margin: 40px 0 30px 0;
-    gap: 0;
-}
-.education-timeline::before {
-    content: '';
-    position: absolute;
-    top: 40px;
-    left: 6%;
-    right: 6%;
-    height: 4px;
-    background: linear-gradient(90deg, #e0e7ef 0%, var(--primary-color) 100%);
-    z-index: 0;
-    border-radius: 2px;
-}
-.timeline-event {
-    flex: 1 1 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-}
-.timeline-dot {
-    width: 32px;
-    height: 32px;
-    background: #fff;
-    border: 4px solid var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    color: var(--primary-color);
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: border 0.3s;
-}
-.timeline-dot.highlight {
-    border-color: var(--secondary-color);
-    color: var(--secondary-color);
-}
-.timeline-content {
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    padding: 18px 22px 12px 22px;
-    min-width: 180px;
-    text-align: center;
-    margin-top: 0;
-}
-.timeline-content .degree {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-bottom: 4px;
-}
-.timeline-content .school {
-    color: var(--primary-color);
-    font-size: 1rem;
-    margin-bottom: 2px;
-}
-.timeline-content .major {
-    color: #666;
-    font-size: 0.98rem;
-    margin-bottom: 2px;
-}
-.timeline-content .date {
-    color: #999;
-    font-size: 0.95rem;
-    margin-top: 4px;
-}
-@media (max-width: 900px) {
-    .education-timeline {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .education-timeline::before {
-        top: 0;
-        left: 24px;
-        right: auto;
-        width: 4px;
-        height: 100%;
-        background: linear-gradient(180deg, #e0e7ef 0%, var(--primary-color) 100%);
-    }
-    .timeline-event {
-        flex-direction: row;
-        align-items: flex-start;
-        margin-bottom: 40px;
-    }
-    .timeline-dot {
-        margin: 0 18px 0 0;
-    }
-    .timeline-content {
-        text-align: left;
-        min-width: 0;
-        padding: 16px 18px;
-    }
-}
-
-.markmap-center-btn {
-    position: absolute;
-    top: 12px;
-    right: 18px;
-    z-index: 10;
-    background: rgba(255,255,255,0.92);
-    border: 1.5px solid var(--primary-color);
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-color);
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: background 0.2s, box-shadow 0.2s;
-}
-.markmap-center-btn:hover {
-    background: var(--primary-color);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-}
-
-:root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
-    --accent-color: #e74c3c;
-    --light-color: #ecf0f1;
-    --dark-color: #2c3e50;
-    --text-color: #333;
-    --light-text: #fff;
-    --border-radius: 5px;
-    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    line-height: 1.6;
-    color: var(--text-color);
-    background-color: #f9f9f9;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* 导航栏样式 */
-header {
-    background-color: var(--dark-color);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--light-text);
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-}
-
-.nav-links li {
-    margin-left: 30px;
-}
-
-.nav-links a {
-    color: var(--light-text);
-    text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.nav-links a:hover {
-    color: var(--primary-color);
-}
-
-.language-switch {
-    color: var(--light-text);
-}
-
-.language-switch a {
-    color: var(--light-text);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.language-switch a:hover {
-    color: var(--primary-color);
-}
-
-.language-switch .active {
-    color: var(--primary-color);
-    font-weight: bold;
-}
-
-/* 英雄区域样式 */
-.hero {
-    padding: 150px 0 100px;
-    background: linear-gradient(135deg, var(--dark-color) 0%, var(--secondary-color) 100%);
-    color: var(--light-text);
-}
-
-.hero-content {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-}
-
-.hero-image {
-    flex: 1;
-    text-align: center;
-}
-
-.hero-image img {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 5px solid var(--light-text);
-    box-shadow: var(--box-shadow);
-}
-
-.hero-text {
-    flex: 2;
-}
-
-.hero-text h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-}
-
-.hero-text h2 {
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 20px;
-    color: var(--primary-color);
-}
-
-.hero-text p {
-    font-size: 1.1rem;
-    margin-bottom: 30px;
-    max-width: 600px;
-}
-
-.social-links {
-    display: flex;
-    gap: 20px;
-}
-
-.social-links a {
-    color: var(--light-text);
-    font-size: 1.5rem;
-    transition: var(--transition);
-}
-
-.social-links a:hover {
-    color: var(--primary-color);
-    transform: translateY(-3px);
-}
-
-/* 通用部分样式 */
-section {
-    padding: 80px 0;
-}
-
-.section-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 50px;
-    color: var(--secondary-color);
-    position: relative;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background-color: var(--primary-color);
-}
-
-/* 关于我部分 */
-.about {
-    background-color: #fff;
-}
-
-.about-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.about-content p {
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-}
-
-.interests-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 30px;
-    list-style: none;
-}
-
-.interests-list li {
-    background-color: var(--light-color);
-    padding: 10px 20px;
-    border-radius: 30px;
-    font-weight: 500;
-    color: var(--secondary-color);
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-}
-
-.interests-list li:hover {
-    background-color: var(--primary-color);
-    color: var(--light-text);
-    transform: translateY(-3px);
-}
-
-/* 时间线样式 (用于工作经历和教育背景) */
-.timeline {
-    display: none; /* 隐藏旧的时间线 */
-}
-
-/* 研究成果部分 */
-.publications {
-    background-color: #f9f9f9;
-}
-
-.publications-filter {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 40px;
-}
-
-.filter-btn {
-    background-color: #fff;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 8px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.filter-btn:hover, .filter-btn.active {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
-.publications-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
-}
-
-.publication-card {
-    background-color: #fff;
-    border-radius: var(--border-radius);
-    padding: 25px;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-}
-
-.publication-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.publication-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: var(--secondary-color);
-}
-
-.publication-card .authors {
-    font-size: 0.95rem;
-    margin-bottom: 10px;
-}
-
-.publication-card .venue {
-    font-style: italic;
-    color: #666;
-    margin-bottom: 15px;
-}
-
-.publication-links {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.btn {
-    display: inline-block;
-    padding: 6px 15px;
-    background-color: var(--light-color);
-    color: var(--secondary-color);
-    text-decoration: none;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    transition: var(--transition);
-}
-
-.btn:hover {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
-/* 联系方式部分 */
-.contact {
-    background-color: #fff;
-}
-
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.contact-item i {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-}
-
-.contact-item a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.contact-item a:hover {
-    text-decoration: underline;
-}
-
-/* 修改联系方式简介样式，使其在一行显示 */
-.contact-brief {
-    margin-bottom: 25px;
-    font-size: 1rem;
-    line-height: 1.8;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.contact-brief p {
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 10px;
-}
-
-.contact-brief i {
-    color: var(--primary-color);
-    width: 20px;
-    text-align: center;
-}
-
-.contact-brief a {
-    color: var(--light-text);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--light-text);
-    transition: var(--transition);
-}
-
-.contact-brief a:hover {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-
-/* 页脚样式 */
-footer {
-    background-color: var(--dark-color);
-    color: var(--light-text);
-    padding: 30px 0;
-    text-align: center;
-}
-
-/* 响应式设计 */
-@media (max-width: 992px) {
-    .hero-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .hero-text {
-        flex: 1;
-    }
-    
-    .social-links, .contact-brief {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
-    
-    .publications-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-brief {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-}
-
 /* 为 markmap 容器添加明确的尺寸，确保其正确显示 */
 .markmap {
     width: 100%;
-    max-width: 1000px;
-    height: 350px;
+    max-width: 900px;
+    min-height: 350px;
+    height: 800px;
     margin: 0 auto;
-    /* border: 1px solid #ddd; */ /* 移除边框 */
     border-radius: 8px;
     overflow: hidden;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    padding: 20px;
 }
 
 .mindmap .container {
-    padding-top: 10px; /* 减小上间距 */
-    padding-bottom: 10px; /* 减小下间距 */
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 /* 为 Mermaid 图表添加一些基础样式，确保其可见性 */
 .mermaid-chart-section {
-    margin-top: 20px; /* 减小与上方内容的间距 */
-    padding-bottom: 20px;
+    margin-top: 40px;
+    padding-bottom: 40px;
 }
 .mermaid {
-    text-align: center; /* 让图表居中 */
+    text-align: center;
+}
+
+/* markmap-container 样式 */
+.markmap-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: linear-gradient(to bottom right, #f5f5f5, #ffffff);
+}
+
+.markmap-controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.markmap-controls .control-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.markmap-controls .control-button:hover {
+    background-color: #0056b3;
+}
+
+/* 浮动刷新按钮样式 */
+.floating-refresh-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(0, 123, 255, 0.8);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.floating-refresh-btn:hover {
+    background-color: rgba(0, 123, 255, 1);
+    transform: scale(1.05);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.floating-refresh-btn i {
+    transition: transform 0.3s ease;
+}
+
+.floating-refresh-btn:hover i {
+    transform: rotate(180deg);
 }
 
 /* 思维导图部分 */
 .mindmap {
-    background-color: #ffffff; /* 改为白色背景 */
+    background-color: #ffffff;
     border-radius: 10px;
-    padding: 30px;
+    padding: 40px;
     margin-top: 20px;
     margin-bottom: 20px;
-    /* border: 1px solid #cceeff; */ /* 移除蓝色边框 */
-    box-shadow: none !important;
-    transition: none !important;
-}
-
-.mindmap:hover {
-    box-shadow: none !important;
-    transition: none !important;
-}
-
-.markmap:hover {
-    box-shadow: none !important;
-    transition: none !important;
 }
 
 /* 工作实习经历样式 (卡片式布局) */
