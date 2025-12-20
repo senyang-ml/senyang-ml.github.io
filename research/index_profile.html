@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sen Yang | 杨森 - Personal Website</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
     <style>
         /* Markmap容器样式 - 优化为更大更易读的设计 */
         .markmap {
@@ -252,14 +252,14 @@ gantt
     <script src="js/renderer.js"></script>
     <script src="js/main.js"></script>
     
-    <!-- Markmap库 -->
-    <script src="https://cdn.jsdelivr.net/npm/markmap-autoloader"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.17.0/dist/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17.0/dist/index.min.js"></script>
+    <!-- Markmap库 - 使用全局变量版本 -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4/dist/browser/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4/dist/browser/index.js"></script>
     
-    <!-- Mermaid库 -->
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    <!-- Mermaid库 - 使用UMD版本 -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
         mermaid.initialize({ startOnLoad: true, theme: 'default' });
     </script>
 
@@ -267,7 +267,19 @@ gantt
     <script type="text/javascript">
         // Initialize markmap on window load
         function initMarkmap() {
-            const { Markmap, deriveOptions } = window.markmap;
+            // 检查库是否加载
+            if (!window.markmap) {
+                console.error("Markmap library not loaded");
+                setTimeout(initMarkmap, 100); // 重试
+                return;
+            }
+            
+            const { Transformer, Markmap } = window.markmap;
+            if (!Transformer || !Markmap) {
+                console.error("Markmap components not available");
+                return;
+            }
+            
             const markmapDiv = document.querySelector('.markmap');
             if (!markmapDiv) {
                 console.error("Markmap container (.markmap) not found.");
@@ -278,35 +290,57 @@ gantt
 
             // 获取 markdown 内容
             const pre = markmapDiv.querySelector('pre');
-            const content = pre ? pre.textContent : markmapDiv.textContent;
+            const content = pre ? pre.textContent.trim() : markmapDiv.textContent.trim();
+            console.log("Markdown content:", content.substring(0, 100) + "...");
             
-            // 使用 deriveOptions 并自定义字体大小
-            const options = deriveOptions(content);
-            // 增大字体，设置为 20px
-            if (options.style) {
-                options.style = options.style.map(style => {
-                    if (style.name === 'root') {
-                        return { ...style, fontSize: '24px' };
-                    }
-                    return { ...style, fontSize: '22px' };
+            // 清空容器并创建SVG
+            markmapDiv.innerHTML = '';
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            markmapDiv.appendChild(svg);
+            
+            // 使用 Transformer 转换 markdown
+            const transformer = new Transformer();
+            const { root, features } = transformer.transform(content);
+            console.log("Transformed root:", root);
+            
+            // 自定义样式
+            const { styles, scripts } = transformer.getUsedAssets(features);
+            if (styles) {
+                styles.forEach(style => {
+                    const styleEl = document.createElement('style');
+                    styleEl.textContent = style.data;
+                    document.head.appendChild(styleEl);
                 });
             }
             
-            const mm = Markmap.create(markmapDiv, options, content);
+            const options = {
+                color: (node) => {
+                    const colors = ['#5e7ce0', '#f66f6a', '#faad14', '#52c41a', '#13c2c2', '#722ed1'];
+                    return colors[node.depth % colors.length];
+                },
+                duration: 500,
+                maxWidth: 0,
+                initialExpandLevel: -1,
+                paddingX: 8,
+                spacingHorizontal: 80,
+                spacingVertical: 5,
+                nodeFont: '22px sans-serif'
+            };
+            
+            // 创建 markmap 实例
+            const mm = Markmap.create(svg, options, root);
 
             // 让 mm 实例全局可用
             window.mm = mm;
-            console.log("Markmap instance (window.mm):", window.mm);
-            console.log("Type of window.mm.fit:", typeof window.mm.fit);
+            console.log("Markmap instance created:", window.mm);
 
             // 初始居中和重新计算尺寸
-            mm.rescale(true); // 强制重新计算尺寸
-            mm.fit(); // 调用 fit 方法将视图重置到中心
-
             setTimeout(() => {
-                mm.rescale(true); // 强制重新计算尺寸
-                mm.fit(); // 调用 fit 方法将视图重置到中心
-            }, 100); // 短暂延迟，确保渲染完成
+                mm.fit();
+                console.log("Markmap fitted");
+            }, 200);
 
             // 添加重置按钮的点击事件处理
             const resetButton = document.getElementById('reset-view-btn');
@@ -339,9 +373,13 @@ gantt
             });
         }
 
-        window.onload = function() {
-            initMarkmap();
-        };
+        // 等待所有资源加载完成
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMarkmap);
+        } else {
+            // DOMContentLoaded 已触发
+            setTimeout(initMarkmap, 100);
+        }
     </script>
 </body>
 </html>
