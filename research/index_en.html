@@ -22,6 +22,15 @@
             padding: 20px; /* Add some internal padding */
         }
 
+        /* 禁用思维导图拖动 */
+        .markmap svg {
+            pointer-events: auto;
+        }
+
+        .markmap svg .markmap-node {
+            cursor: pointer;
+        }
+
         /* 添加视觉指示，帮助用户理解思维导图的边界 */
         .markmap-container {
             position: relative;
@@ -183,7 +192,7 @@
                     </pre>
                 </div>
                 <div style="text-align: center; padding: 10px; color: #666; font-size: 14px;">
-                    Tip: You can drag and click to explore the mindmap, "Reset" refreshes the view
+                    Tip: Click nodes to expand or collapse
                 </div>
             </div>
         </div>
@@ -471,8 +480,9 @@ gantt
                 const content = pre ? pre.textContent : markmapDiv.textContent;
                 
                 const mm = Markmap.create(markmapDiv, {
-                    zoom: { min: 0.5, max: 2.0 },
-                    pan: { constraintToViewport: true }
+                    zoom: false,
+                    pan: false,
+                    autoFit: true
                 }, content);
                 
                 // 居中显示

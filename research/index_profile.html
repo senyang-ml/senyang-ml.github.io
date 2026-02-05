@@ -22,6 +22,15 @@
             padding: 10px;
         }
 
+        /* 禁用思维导图拖动 */
+        .markmap svg {
+            pointer-events: auto;
+        }
+
+        .markmap svg .markmap-node {
+            cursor: pointer;
+        }
+
         .markmap-container {
             position: relative;
             max-width: 100%;
@@ -326,7 +335,10 @@ gantt
                 paddingX: 8,
                 spacingHorizontal: 80,
                 spacingVertical: 5,
-                nodeFont: '22px sans-serif'
+                nodeFont: '22px sans-serif',
+                zoom: false,
+                pan: false,
+                autoFit: true
             };
             
             // 创建 markmap 实例
