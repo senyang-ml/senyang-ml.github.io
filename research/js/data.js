@@ -17,8 +17,8 @@ window.DATA_PROFILE = {
       "en": "Senior R&D Engineer at Baidu"
     },
     "description": {
-      "zh": "现任百度高级研发工程师，专注于计算机视觉、多模态大语言模型和自动驾驶研究",
-      "en": "Senior R&D Engineer at Baidu, focusing on Computer Vision, Multimodal Large Language Models, and Autonomous Driving research."
+      "zh": "现任百度高级研发工程师，专注于多模态大模型和自动驾驶研究",
+      "en": "Senior R&D Engineer at Baidu, focusing on Multimodal Large Language Models and Autonomous Driving research."
     },
     "photo": "https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5",
     "email": "yangsenius@gmail.com",
