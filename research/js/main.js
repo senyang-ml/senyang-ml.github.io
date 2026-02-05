@@ -84,13 +84,18 @@ class App {
 
     // 切换语言
     switchLanguage(lang) {
-        this.currentLang = lang;
-        dataLoader.setLanguage(lang);
-        pageRenderer.renderAll();
-        this.updateLanguageSwitch();
+        // 保存语言偏好
+        localStorage.setItem('preferredLanguage', lang);
         
-        // 重新初始化某些功能
-        this.setupAnimations();
+        // 跳转到对应语言的页面
+        const currentPath = window.location.pathname;
+        if (lang === 'en') {
+            // 跳转到英文版
+            window.location.href = 'index_en.html';
+        } else {
+            // 跳转到中文版
+            window.location.href = 'index.html';
+        }
     }
 
     // 更新语言切换按钮
