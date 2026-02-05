@@ -70,8 +70,8 @@ window.DATA_PROFILE = {
       "en": "TL;DR (Overview)"
     },
     "tip": {
-      "zh": "提示：可自由拖动查看思维导图内容",
-      "en": "Tip: You can drag and click to explore the mindmap, \"Reset\" refreshes the view"
+      "zh": "点击展开或折叠",
+      "en": "Click nodes to expand or collapse"
     }
   }
 };
