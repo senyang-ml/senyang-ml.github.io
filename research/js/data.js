@@ -72,10 +72,6 @@ window.DATA_PROFILE = {
     "tip": {
       "zh": "点击展开或折叠",
       "en": "Click nodes to expand or collapse"
-    },
-    "content": {
-      "zh": "# **杨森个人主页**\n## 关于我\n- **视觉与多模态AI研究者**\n- 研究方向：\n  - 多模态大模型研究与应用\n  - 自动驾驶\n  - 人体姿态估计\n  - 模型架构优化\n## 教育背景\n- **博士**：东南大学 (2019.5-2023.3)\n- 硕士：东南大学 (2017.9-2019.1)\n- 学士：吉林大学 (2013.9-2017.7)\n## 工作经历\n- **百度 VIS 高级研发工程师** (2023.7-至今)\n- 腾讯 PCG 实习生 (2021.12-2022.8)\n- 旷视科技 实习生 (2021.1-2021.10)\n## 技术栈与研究\n- 自动驾驶感知与决策\n  - **VLM、融合&跟踪建图、拓扑预测、概率规划**\n  - 相关工作：TopoSD, MGMapNet, HisTrackMap\n- 多模态大模型\n  - **视觉定位、多模蒸馏、视频理解、COT、RL**\n  - 相关工作：EM-KD, Vision Remember, MomentSeg\n- 人体姿态估计\n  - **2D/3D姿态、Transformer模型、SMPL模型**\n  - 相关工作：TransPose, TokenPose, SimCC\n## 联系方式\n- Email: yangsenius@gmail.com\n- Blog: senyang-ml.github.io",
-      "en": "# **Sen Yang's Personal Website**\n## About Me\n- **CV & Multimodal AI Researcher**\n- Focus on:\n  - Multimodal LLM research and applications\n  - Autonomous Driving\n  - Human Pose Estimation\n  - Model architecture optimization\n## Education\n- **Ph.D.**: Southeast University (2019.5-2023.3)\n- Master: Southeast University (2017.9-2019.1)\n- Bachelor: Jilin University (2013.9-2017.7)\n## Work Experience\n- **Baidu VIS Senior R&D Engineer** (2023.7-Present)\n- Tencent PCG Intern (2021.12-2022.8)\n- Megvii Intern (2021.1-2021.10)\n## Technology Stack & Research\n- AD Perception & Planning\n  - **VLM, Fusion & Tracking Mapping, Topology Prediction, Probabilistic Planning**\n  - Work: TopoSD, MGMapNet, HisTrackMap\n- Multimodal Foundation Models\n  - **Visual Grounding, Multimodal Distillation, Video Understanding, COT, RL**\n  - Work: EM-KD, Vision Remember, MomentSeg\n- Human Pose Estimation\n  - **2D/3D Pose, Transformer Models, SMPL Model**\n  - Work: TransPose, TokenPose, SimCC\n## Contact\n- Email: yangsenius@gmail.com\n- Blog: senyang-ml.github.io"
     }
   }
 };

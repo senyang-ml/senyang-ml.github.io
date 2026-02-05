@@ -225,7 +225,7 @@ class PageRenderer {
         `;
     }
 
-    // 渲染思维导图
+    // 渲染思维导图标题
     renderMindmap() {
         const profile = this.loader.getProfile();
         const lang = this.loader.getLanguage();
@@ -242,27 +242,6 @@ class PageRenderer {
         const tipEl = section.querySelector('.markmap-tip');
         if (tipEl) {
             tipEl.textContent = this.loader.getText(profile.mindmap.tip);
-        }
-
-        // 渲染思维导图内容
-        const mindmapContent = section.querySelector('.markmap-content');
-        if (mindmapContent && profile.mindmap.content) {
-            const content = this.loader.getText(profile.mindmap.content);
-            mindmapContent.textContent = content;
-
-            // 重新初始化 markmap
-            this.reinitializeMarkmap(mindmapContent);
-        }
-    }
-
-    // 重新初始化 markmap
-    reinitializeMarkmap(element) {
-        // 如果存在全局 initMarkmap 函数，调用它重新初始化
-        if (typeof window.initMarkmap === 'function') {
-            // 延迟执行，确保 DOM 更新完成
-            setTimeout(() => {
-                window.initMarkmap();
-            }, 50);
         }
     }
 

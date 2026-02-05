@@ -4,7 +4,7 @@ Guidelines for AI agents working on this personal academic portfolio website.
 This project is located at <USERNAME>.github.io/research. I want to maintian this project for my personal website.
 
 ## git push rule
-每次修改完新的feature，以合理的commits提交
+每次修改完新的feature，查看git status后，以合理的commits提交
 
 ## Project Overview
 
