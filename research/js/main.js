@@ -30,9 +30,6 @@ class App {
             // 渲染页面
             pageRenderer.renderAll();
             
-            // 初始化思维导图语言
-            this.switchMindmapLanguage(this.currentLang);
-            
             // 设置语言切换
             this.setupLanguageSwitch();
             
@@ -92,34 +89,8 @@ class App {
         pageRenderer.renderAll();
         this.updateLanguageSwitch();
         
-        // 切换思维导图语言
-        this.switchMindmapLanguage(lang);
-        
         // 重新初始化某些功能
         this.setupAnimations();
-    }
-    
-    // 切换思维导图语言
-    switchMindmapLanguage(lang) {
-        const zhContent = document.querySelector('.markmap-content[data-lang="zh"]');
-        const enContent = document.querySelector('.markmap-content[data-lang="en"]');
-        
-        if (zhContent && enContent) {
-            if (lang === 'zh') {
-                zhContent.style.display = 'block';
-                enContent.style.display = 'none';
-            } else {
-                zhContent.style.display = 'none';
-                enContent.style.display = 'block';
-            }
-            
-            // 重新初始化 markmap
-            if (typeof window.initMarkmap === 'function') {
-                setTimeout(() => {
-                    window.initMarkmap();
-                }, 50);
-            }
-        }
     }
 
     // 更新语言切换按钮
