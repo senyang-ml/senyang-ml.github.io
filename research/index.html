@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sen Yang | 杨森 - Personal Website</title>
+    <!-- 默认跳转到英文版 -->
+    <script>
+        // 检查是否已经手动选择过语言
+        if (!localStorage.getItem('preferredLanguage')) {
+            window.location.href = 'index_en.html';
+        }
+    </script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
     <style>
