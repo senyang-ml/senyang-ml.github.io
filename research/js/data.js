@@ -28,7 +28,7 @@ window.DATA_PROFILE = {
   },
   "about": {
     "content": {
-      "zh": "我是百度的一名研究工程师，主要从事计算机视觉、多模态大模型和自动驾驶方面的工作。我于2023年获得东南大学博士学位，博士期间主要研究方向2D/3D人体姿态估计、Transformer模型。我热衷于开发创新解决方案，将前沿研究与实际应用相结合。",
+      "zh": "我是百度的一名研究工程师，主要从事多模态大模型和自动驾驶方面的工作。我于2023年获得东南大学博士学位，博士期间主要研究方向2D/3D人体姿态估计、Transformer模型。我热衷于开发创新解决方案，将前沿研究与实际应用相结合。",
       "en": "I am a research engineer at Baidu, primarily working on computer vision, multimodal large language models, and autonomous driving. I obtained my Ph.D. from Southeast University in 2023, where my research focused on 2D/3D human pose estimation and Transformer models. I am passionate about developing innovative solutions that bridge cutting-edge research with practical applications."
     },
     "interests": {
