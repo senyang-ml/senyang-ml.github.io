@@ -142,41 +142,9 @@
                     </button>
                 </div>
                 <div class="markmap">
-                    <pre>
-# **Sen Yang's Personal Website / 杨森个人主页**
-## About Me / 关于我
-- **CV & Multimodal AI Researcher / 视觉与多模态AI研究者**
-- Focus on:
-  - Multimodal LLM research and applications
-  - Autonomous Driving 
-  - Human Pose Estimation
-  - Model architecture optimization
-## Education / 教育背景
-- **Ph.D. / 博士**：Southeast University / 东南大学 (2019.5-2023.3)
-- Master / 硕士：Southeast University / 东南大学 (2017.9-2019.1)
-- Bachelor / 学士：Jilin University / 吉林大学 (2013.9-2017.7)
-## Work Experience / 工作经历
-- **Baidu VIS Senior R&D Engineer / 百度 VIS 高级研发工程师** (2023.7-Present / 至今)
-- Tencent PCG Intern / 腾讯 PCG 实习生 (2021.12-2022.8)
-- Megvii Intern / 旷视科技 实习生 (2021.1-2021.10)
-## Technology Stack & Research / 技术栈与研究
-- 自动驾驶感知与决策 / AD Perception & Planning
-  - **VLM、融合&跟踪建图、拓扑预测、概率规划**
-  - 相关工作：TopoSD, MGMapNet, HisTrackMap
-- 多模态大模型 / Multimodal Foundation Models
-  - **视觉定位、多模蒸馏、视频理解、COT、RL**
-  - 相关工作：EM-KD, Vision Remember, MomentSeg
-- 人体姿态估计 / Human Pose Estimation
-  - **2D/3D姿态、Transformer模型、SMPL模型**
-  - 相关工作：TransPose, TokenPose, SimCC
-## Contact / 联系方式
-- Email: yangsenius@gmail.com
-- Blog: senyang-ml.github.io
-                    </pre>
+                    <pre class="markmap-content"></pre>
                 </div>
-                <div style="text-align: center; padding: 8px; color: #888; font-size: 12px;">
-                    <!-- 动态生成 -->
-                </div>
+                <div class="markmap-tip" style="text-align: center; padding: 8px; color: #888; font-size: 12px;"></div>
             </div>
         </div>
     </section>
@@ -276,20 +244,20 @@ gantt
     <!-- Markmap初始化 -->
     <script type="text/javascript">
         // Initialize markmap on window load
-        function initMarkmap() {
+        window.initMarkmap = function() {
             // 检查库是否加载
             if (!window.markmap) {
                 console.error("Markmap library not loaded");
-                setTimeout(initMarkmap, 100); // 重试
+                setTimeout(window.initMarkmap, 100); // 重试
                 return;
             }
-            
+
             const { Transformer, Markmap } = window.markmap;
             if (!Transformer || !Markmap) {
                 console.error("Markmap components not available");
                 return;
             }
-            
+
             const markmapDiv = document.querySelector('.markmap');
             if (!markmapDiv) {
                 console.error("Markmap container (.markmap) not found.");
@@ -301,20 +269,38 @@ gantt
             // 获取 markdown 内容
             const pre = markmapDiv.querySelector('pre');
             const content = pre ? pre.textContent.trim() : markmapDiv.textContent.trim();
+
+            // 如果内容为空，等待内容填充
+            if (!content) {
+                console.log("Markmap content is empty, waiting for data...");
+                setTimeout(window.initMarkmap, 100);
+                return;
+            }
+
             console.log("Markdown content:", content.substring(0, 100) + "...");
-            
+
+            // 如果已经初始化过，先销毁旧实例
+            if (window.mm) {
+                markmapDiv.innerHTML = '';
+                // 保留 pre 元素以便重新初始化
+                const newPre = document.createElement('pre');
+                newPre.className = 'markmap-content';
+                newPre.textContent = content;
+                markmapDiv.appendChild(newPre);
+            }
+
             // 清空容器并创建SVG
             markmapDiv.innerHTML = '';
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('width', '100%');
             svg.setAttribute('height', '100%');
             markmapDiv.appendChild(svg);
-            
+
             // 使用 Transformer 转换 markdown
             const transformer = new Transformer();
             const { root, features } = transformer.transform(content);
             console.log("Transformed root:", root);
-            
+
             // 自定义样式
             const { styles, scripts } = transformer.getUsedAssets(features);
             if (styles) {
@@ -324,7 +310,7 @@ gantt
                     document.head.appendChild(styleEl);
                 });
             }
-            
+
             const options = {
                 color: (node) => {
                     const colors = ['#5e7ce0', '#f66f6a', '#faad14', '#52c41a', '#13c2c2', '#722ed1'];
@@ -341,7 +327,7 @@ gantt
                 pan: false,
                 autoFit: true
             };
-            
+
             // 创建 markmap 实例
             const mm = Markmap.create(svg, options, root);
 
@@ -358,17 +344,21 @@ gantt
             // 添加重置按钮的点击事件处理
             const resetButton = document.getElementById('reset-view-btn');
             if (resetButton) {
-                resetButton.addEventListener('click', function() {
+                // 移除旧的事件监听器（如果有）
+                const newResetButton = resetButton.cloneNode(true);
+                resetButton.parentNode.replaceChild(newResetButton, resetButton);
+
+                newResetButton.addEventListener('click', function() {
                     // 添加旋转动画效果
                     const icon = this.querySelector('i');
                     if (icon) {
                         icon.style.transition = 'transform 0.5s ease';
                         icon.style.transform = 'rotate(360deg)';
                     }
-                    
+
                     // 刷新页面
                     window.location.reload();
-                    
+
                     // 动画结束后恢复初始状态
                     setTimeout(() => {
                         if (icon) icon.style.transform = '';
@@ -377,21 +367,21 @@ gantt
             } else {
                 console.warn("Reset button (#reset-view-btn) not found.");
             }
-            
+
             // 窗口大小改变时重新适配
             window.addEventListener('resize', () => {
                 if (window.mm) {
                     window.mm.fit();
                 }
             });
-        }
+        };
 
         // 等待所有资源加载完成
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initMarkmap);
+            document.addEventListener('DOMContentLoaded', window.initMarkmap);
         } else {
             // DOMContentLoaded 已触发
-            setTimeout(initMarkmap, 100);
+            setTimeout(window.initMarkmap, 100);
         }
     </script>
 </body>
