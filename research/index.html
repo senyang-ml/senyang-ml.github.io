@@ -11,12 +11,11 @@
         .markmap {
             width: 100%;
             max-width: 100%;
-            min-height: 400px;
-            height: auto;
-            max-height: 550px;
+            min-height: 500px;
+            height: 650px;
             margin: 0;
             border-radius: 6px;
-            overflow: hidden;
+            overflow: visible;
             position: relative;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
             background-color: #fafafa;
@@ -146,11 +145,11 @@
                     <pre class="markmap-content"># **Sen Yang's Personal Website**
 
 ## About Me
-- **Computer Vision Researcher**
+- **Computer Vision & MLLM Researcher**
 - Research Interests
-  - Multimodal Large Language Models
-  - Autonomous Driving
-  - Human Pose Estimation
+  - Multimodal Large Language Models for Understanding
+  - Autonomous Driving with Map consturcton and VLMs
+  - 2D & 3D Human Pose Estimation
 
 ## Education
 - **Ph.D.**: Southeast University (2019.5-2023.3)
@@ -171,25 +170,27 @@
   - Vision Remember
   - MomentSeg
   - EM-KD
-- **Pose Estimation**
+- **Human Pose Estimation**
   - TransPose
   - SimCC
   - TokenPose
   - Capturing the motion of every joint
   - Detecting and grouping keypoints
 
-## Technical stack
+## Technical Stack
 - **Multimodal Large Models**
-  - Tasks: multilingual understanding, video understanding, referseg, visual reasoning and action
-  - Training Techniques: SFT, Autoregressive Models, RL
-  - Token Compression, Large-scale Distributed Training
+  - Visual Grounding & Referring Segmentation
+  - Video Understanding & Temporal Reasoning
+  - Post-Training: CoT, cold-start SFT, RL
+  - Efficient Token Compression
 - **Autonomous Driving Perception**
-  - BEV Visual Mapping, Temporal Modeling
-  - Multimodal Fusion: Vision + Map Structured Data
-  - Navigation Map Integration, Probabilistic Planning, Topology prediciton
-- **Deep Learning Frameworks**
-  - PyTorch, Python, C++
-  - Transformer Models, GPU/Ascend NPU Development
+  - BEV Mapping & Temporal Fusion
+  - Vision-Map Multimodal Fusion
+  - Topology Prediction & Probabilistic Planning
+- **Engineering & Systems**
+  - Large-scale Distributed Training
+  - GPU / Ascend NPU Heterogeneous Computing
+  - Model Optimization & Deployment
 
 ## Contact Information
 - Email: yangsenius@gmail.com
@@ -365,16 +366,17 @@ gantt
 
             const options = {
                 color: (node) => {
-                    const colors = ['#5e7ce0', '#f66f6a', '#faad14', '#52c41a', '#13c2c2', '#722ed1'];
+                    // 与网站主色调统一：蓝、深蓝灰、红、蓝灰、深灰、浅蓝
+                    const colors = ['#3498db', '#2c3e50', '#e74c3c', '#5d7d9a', '#34495e', '#2980b9'];
                     return colors[node.depth % colors.length];
                 },
                 duration: 500,
                 maxWidth: 0,
-                initialExpandLevel: -1,
-                paddingX: 8,
+                initialExpandLevel: 2,
+                paddingX: 10,
                 spacingHorizontal: 80,
                 spacingVertical: 5,
-                nodeFont: '22px sans-serif',
+                nodeFont: '16px "Noto Sans SC", "PingFang SC", sans-serif',
                 zoom: false,
                 pan: false,
                 autoFit: true

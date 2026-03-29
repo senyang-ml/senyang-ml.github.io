@@ -429,11 +429,11 @@ footer {
 .markmap {
     width: 100%;
     max-width: 900px;
-    min-height: 350px;
-    height: 800px;
+    min-height: 500px;
+    height: 650px;
     margin: 30px auto;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
