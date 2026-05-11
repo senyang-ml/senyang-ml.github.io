@@ -261,7 +261,7 @@ class PageRenderer {
             </div>
             <div class="contact-item">
                 <i class="fas fa-comment-dots"></i>
-                <p><a href="http://see-knowledge.site/agent_plaza/agent/personal-talk" target="_blank" rel="noopener noreferrer">${agentText}</a></p>
+                <p><a href="http://see-knowledge.site/agent_plaza/agent/give-to-y-msgs" target="_blank" rel="noopener noreferrer">${agentText}</a></p>
             </div>
         `;
   }
