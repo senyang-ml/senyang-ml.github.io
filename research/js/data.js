@@ -9,16 +9,16 @@ window.DATA_PROFILE = {
       "en": "Sen Yang"
     },
     "title": {
-      "zh": "计算机视觉 | 多模态大语言模型 | 自动驾驶",
-      "en": "Computer Vision | Multimodal Large Language Models | Autonomous Driving"
+      "zh": "多模态大语言模型 | 自动驾驶 | 计算机视觉",
+      "en": "Multimodal Large Language Models | Autonomous Driving | Computer Vision"
     },
     "position": {
-      "zh": "百度高级研发工程师",
-      "en": "Senior R&D Engineer at Baidu"
+      "zh": "百度研发工程师",
+      "en": "R&D Engineer at Baidu"
     },
     "description": {
-      "zh": "现任百度高级研发工程师，专注于多模态大模型和自动驾驶研究",
-      "en": "Senior R&D Engineer at Baidu, focusing on Multimodal Large Language Models and Autonomous Driving research."
+      "zh": "现任百度研发工程师，专注于多模态大模型和自动驾驶研究",
+      "en": "R&D Engineer at Baidu, focusing on Multimodal Large Language Models and Autonomous Driving research."
     },
     "photo": "https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5",
     "email": "yangsenius@gmail.com",

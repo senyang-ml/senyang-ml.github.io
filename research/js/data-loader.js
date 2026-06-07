@@ -6,7 +6,7 @@ class DataLoader {
             experience: null,
             publications: null
         };
-        this.currentLang = 'zh'; // 默认中文
+        this.currentLang = 'en'; // 默认英文
     }
 
     // 加载所有数据

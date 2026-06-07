@@ -14,7 +14,7 @@ class App {
         // 根据URL路径判断
         const path = window.location.pathname;
         if (path.includes('_en.html')) return 'en';
-        return 'zh';
+        return 'en';
     }
 
     // 初始化应用
