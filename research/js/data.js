@@ -23,7 +23,7 @@ window.DATA_PROFILE = {
     "photo": "https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5",
     "email": "yangsenius@gmail.com",
     "scholar": "https://scholar.google.com/citations?user=z5O3DLcAAAAJ",
-    "blog": "https://senyang-ml.github.io",
+    "blog": "https://senyang-ml.github.io/blog/",
     "github": "https://github.com/senyang-ml"
   },
   "about": {
