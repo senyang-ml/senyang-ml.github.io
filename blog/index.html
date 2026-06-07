@@ -90,12 +90,12 @@
 
 
 
+<meta name="description" content="Talk is not cheap">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
-<meta property="og:url" content="http://senyang-ml.github.io/blog/index.html">
+<meta property="og:title" content="Sen Yang">
+<meta property="og:url" content="http://senyang-ml.github.io/index.html">
 <meta property="og:site_name" content="Sen Yang">
-<meta property="article:published_time" content="2020-05-21T10:48:26.000Z">
-<meta property="article:modified_time" content="2020-05-21T10:48:26.497Z">
+<meta property="og:description" content="Talk is not cheap">
 <meta property="article:author" content="杨森 &amp; yangsenius">
 <meta property="article:tag" content="machine learning">
 <meta property="article:tag" content=" computer vision">
@@ -136,7 +136,7 @@
 
 
 
-  <title>Blog | Sen Yang</title>
+  <title>Sen Yang</title>
   
 
 
@@ -155,7 +155,8 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -192,7 +193,7 @@
       
         
         <li class="menu-item menu-item-blogs">
-          <a href="/" rel="section">
+          <a href="/blog/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -248,38 +249,553 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
 
-  <div id="posts" class="posts-expand">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/09/22/coordconv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨森 & yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
     
-    
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">Blog</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/09/22/coordconv/" itemprop="url">My Findings - CoordConv坐标嵌入技术及其泛化性</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-22T19:53:41+08:00">
+                2020-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
 
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
         
-      </div>
-      
-      
+          <p>Uber团队在2018NeurIPS上提出了CoordConv，它分析了卷积神经网络在进行坐标预测时存在的缺陷，并引入坐标嵌入方式来解决这个问题。但本人也注意到网上有人质疑这个方法，比如<a href="https://www.zhihu.com/search?type=content&amp;q=coordconv" target="_blank" rel="noopener">量子位小编</a>报道了一个<a href="https://blog.piekniewski.info/2018/07/14/autopsy-dl-paper/" target="_blank" rel="noopener">国外博主</a>的质疑。本人看了他的质疑，他主要是在强调：</p>
+<blockquote>
+<p>用完全数学的方式就可以构造出一个由one-hot heatmap映射到坐标的神经网络，并且根本不需要训练</p>
+</blockquote>
+<p>实际上，他讲的这个和soft-argmax对heatmap求积分得到坐标的方法很像。首先，我想说，数学的归纳是一种非常高阶的手段和智能，很多问题本身就可以直接去用数学问题去解决，但是，这是直接注入了人类专家的知识，并不是神经网络本身从头学习到的（from scratch）。</p>
+<p>CoordConv探讨的是，神经网络在拟合能力上以及<em>泛化</em>能力上存在的缺陷。CoorConv的亮点之一在于构造数据集划分的巧妙，一个是普通的train和test坐标数值分布一致的数据集，另外一个是test中的坐标取汁是train中完全没有的取值分布的数据集（正方形的1/4一角区域拿出来做测试），后者在考验模型在未见到的坐标分布上的泛化能力。</p>
+<p>该论文的实验以及本人的实验验证发现，大多数普通的MLP或者Conv是很难调出一个好的泛化效果。而CoordConv神奇之处在于，它通过训练的方式来获取一种数学上的严格计算能力，结果确实做到了，因为train loss 和 test loss同时收敛到0，模型可以100%地精确预测坐标，这对于普通神经网络真的挺难的。</p>
+<p>本文主要进行了如下的代码实验和分析：</p>
+<ul>
+<li>数据集：构造由坐标生成的one-hot heatmap与数值坐标之间的数据集：遵循<a href="https://arxiv.org/abs/1807.03247" target="_blank" rel="noopener">An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution</a>的<em>quarter split</em>方式。</li>
+<li>模型：利用神经网络加坐标嵌入（MLP+Coord and Conv+Coord）的方式进行拟合与泛化测试。</li>
+<li>效果分析与发现：用Pytorch复现验证了An Intriguing Failing of Convolutional Neural Networks and the CoordConv Solution中Superivised Coordinates Regression任务的CoordConv的泛化性能！</li>
+<li>可视化神经网络的某些层和输出，来发掘神经网络学习坐标信息的过程</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/09/22/coordconv/#thêm" rel="contents">
+              READ MORE &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/06/04/detr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨森 & yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/04/detr/" itemprop="url">Detr</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-04T18:19:09+08:00">
+                2020-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Detr （DEtection TRansformer） 是最近很受关注的一个工作。论文叫做「End-to-end object detection with Transformers」， Facebook Research目前把它投稿到了2020年的ECCV。</p>
+<p>鉴于网上有太多关于DETR的解读和评价，本文就不做太多的探讨，而致力于分析这两个概念：</p>
+<ul>
+<li>Set prediction and Hungarian Loss</li>
+<li>Permutation Invariance</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/06/04/detr/#thêm" rel="contents">
+              READ MORE &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨森 & yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/" itemprop="url">Bipartite Matching and Hungarian Algorithm</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T18:53:41+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="引言">引言</h2>
+<p>二分图匹配和匈牙利算法（Bipartite Matching and Hungarian Algorithm）在CV领域的后处理算法中是经常可以看到的，比如以下的一些论文：</p>
+<ul>
+<li>2017年的CVPR工作，OpenPose 利用bipartite matching 来进行，同关节类型的多个人体关键点分配到不同的隶属人体</li>
+<li>2020年的End-to-end Object Detection with Transformer直接构造了一个Hungarian Loss，来解决预测目标与真实目标的分配问题</li>
+<li>2020年CVPR Compressed Volumetric Heatmaps for Multi-Person 3D Pose Estimation中多人人体3D距离匹配算法</li>
+<li>多目标跟踪领域内的，前后相邻帧匹配问题</li>
+<li>在Instance Segmentation领域，这也是很常见的</li>
+</ul>
+<p>顾名思义，二分图匹配是一个<code>分配</code>问题 (Assignment Problem)。</p>
+<p>Hungarian Algorithm (匈牙利算法) 是在1955年提出的<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> .</p>
+<p>如果想要彻底理解它，需要先掌握它所涉及到的一些概念，作为先验知识。如下所示：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/06/01/Bipartite-Matching-and-Hungarian-Algorithm/#thêm" rel="contents">
+              READ MORE &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://senyang-ml.github.io/2020/05/24/enhance-hexo-next/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="杨森 & yangsenius">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sen Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/24/enhance-hexo-next/" itemprop="url">Enhance Hexo Next</a></h1>
+        
+
+        <div class="post-meta">
+                  
+
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">posted on</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-24T15:08:20+08:00">
+                2020-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>目标：希望让hexo的next主题，能达到vscode markdown enhanced插件的markdown和MathJax的渲染效果, 并同时提高写博客效率</p>
+<p>方法：</p>
+<ul>
+<li>修改Next相关配置文件</li>
+<li>利用Mac的截图和Typora的快速插图动作</li>
+<li>利用edge浏览器的集锦功能</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/05/24/enhance-hexo-next/#thêm" rel="contents">
+              READ MORE &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+ <nav class="pagination">
+   <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="accessibility.next_page"></i></a>
+ </nav>
 
 
           </div>
@@ -287,10 +803,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -525,10 +1037,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
@@ -575,17 +1083,6 @@
 
 
     
-      <script src="https://utteranc.es/client.js"
-        repo="senyang-ml/Comments"
-        issue-term="title"
-        label="utt-comment"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-</script>
-
-      
-    
 
 
 
@@ -623,6 +1120,29 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+      
   
 
 
