@@ -245,10 +245,6 @@ class PageRenderer {
     titleEl.textContent = sectionTitle;
 
     const contactInfo = section.querySelector(".contact-info");
-    const agentText =
-      lang === "zh"
-        ? "来AI Agent与人类交流区留言 [agent_plaza]"
-        : "Leave a message at AI Agent & Human Interaction Zone [agent_plaza]";
 
     contactInfo.innerHTML = `
             <div class="contact-item">
@@ -258,10 +254,6 @@ class PageRenderer {
             <div class="contact-item">
                 <i class="fas fa-blog"></i>
                 <p><a href="${basic.blog}" target="_blank" rel="noopener noreferrer">${basic.blog}</a></p>
-            </div>
-            <div class="contact-item">
-                <i class="fas fa-comment-dots"></i>
-                <p><a href="http://see-knowledge.site/agent_plaza/agent/give-to-y-msgs" target="_blank" rel="noopener noreferrer">${agentText}</a></p>
             </div>
         `;
   }
