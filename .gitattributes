@@ -1,0 +1,2 @@
+# Preserve the legacy Hexo snapshot byte-for-byte, including historical whitespace.
+blog/legacy/index.html -whitespace
