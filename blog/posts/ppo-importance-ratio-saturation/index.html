@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从负 Advantage 与极端 Importance Ratio 出发，推导一种保持梯度方向、同时平滑限制更新强度的 surrogate objective。">
+  <meta name="generator" content="native-markdown-blog">
+  <meta name="theme-color" content="#f3f0e8">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="PPO 的 Clip 真的限制了梯度吗？从负 Advantage 下的大 Importance Ratio 说起 · Sen Yang">
+  <meta property="og:description" content="从负 Advantage 与极端 Importance Ratio 出发，推导一种保持梯度方向、同时平滑限制更新强度的 surrogate objective。">
+  <meta property="og:url" content="https://senyang-ml.github.io/blog/posts/ppo-importance-ratio-saturation/">
+  <link rel="canonical" href="https://senyang-ml.github.io/blog/posts/ppo-importance-ratio-saturation/">
+  <link rel="icon" type="image/png" href="/images/favicon-32x32-next.png">
+  <link rel="stylesheet" href="/blog/assets/native.css">
+  <title>PPO 的 Clip 真的限制了梯度吗？从负 Advantage 下的大 Importance Ratio 说起 · Sen Yang</title>
+</head>
+<body class="article-page">
+  <div class="reading-progress" aria-hidden="true"></div>
+  <header class="site-header">
+  <a class="wordmark" href="/blog/" aria-label="Sen Yang Notes 首页">SY<span>/</span>NOTES</a>
+  <nav aria-label="主导航">
+    <a href="/blog/">文章</a>
+    <a href="/blog/legacy/">归档</a>
+    <a href="/research/">Research</a>
+  </nav>
+</header>
+<main class="article-main">
+  <article>
+    <header class="article-header reveal">
+      <a class="back-link" href="/blog/">← 返回新文章</a>
+      <p class="eyebrow">2026.09.12</p>
+      <h1>PPO 的 Clip 真的限制了梯度吗？从负 Advantage 下的大 Importance Ratio 说起</h1>
+      <p class="article-description">从负 Advantage 与极端 Importance Ratio 出发，推导一种保持梯度方向、同时平滑限制更新强度的 surrogate objective。</p><div class="tags"><span>Reinforcement Learning</span> <span>PPO</span> <span>Policy Gradient</span></div>
+    </header>
+    <div class="article-body reveal"><p>最近在看 PPO / GRPO 的 policy gradient 实现时，我注意到一个挺有意思的问题：</p>
+<blockquote>
+<p>当 advantage 为负，而 importance ratio 非常大时，PPO 的 clipping 并不会阻止一个非常大的负向梯度。</p>
+</blockquote>
+<p>这件事乍看有点反直觉。很多人对 PPO clipping 的第一印象是：</p>
+<blockquote>
+<p>ratio 太大或者太小，就把它截断，避免 policy 更新过猛。</p>
+</blockquote>
+<p>但严格来说，这并不完全正确。</p>
+<p>这篇文章从这个问题出发，尝试构造一种<strong>不依赖 hard clipping，而是平滑限制 policy gradient 强度</strong>的 surrogate objective。</p>
+<hr />
+<h2 id="从最基本的-policy-gradient-开始">1. 从最基本的 Policy Gradient 开始</h2>
+<p>对于一个 token/action，最简单的 importance-weighted policy objective 可以写成：</p>
+<p><span class="math display">\[
+J_t(\theta)=r_tA_t
+\]</span></p>
+<p>其中：</p>
+<p><span class="math display">\[
+r_t=
+\frac{\pi_\theta(a_t|s_t)}
+{\pi_{\mathrm{old}}(a_t|s_t)}
+\]</span></p>
+<p>(A_t) 是 advantage。</p>
+<p>因为：</p>
+<p><span class="math display">\[
+\nabla_\theta r_t
+=
+r_t\nabla_\theta\log\pi_\theta(a_t|s_t)
+\]</span></p>
+<p>所以：</p>
+<p><span class="math display">\[
+\nabla_\theta J_t
+=
+A_t r_t
+\nabla_\theta\log\pi_\theta(a_t|s_t)
+\]</span></p>
+<p>这个公式其实已经说明了两个东西：</p>
+<p><span class="math display">\[
+\boxed{
+A_t\text{ 决定强化还是抑制，}
+\quad
+r_t\text{ 决定梯度被放大多少}
+}
+\]</span></p>
+<p>当 (A_t&gt;0)，我们希望提高当前 token 的概率。</p>
+<p>当 (A_t&lt;0)，我们希望降低当前 token 的概率。</p>
+<p>问题在于，如果：</p>
+<p><span class="math display">\[
+A_t=-1,\qquad r_t=10000
+\]</span></p>
+<p>那么：</p>
+<p><span class="math display">\[
+\nabla_\theta J_t
+=
+-10000
+\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>负向更新可能非常大。</p>
+<hr />
+<h2 id="ppo-clipping-能解决这个问题吗">2. PPO clipping 能解决这个问题吗？</h2>
+<p>PPO 的 clipped objective 是：</p>
+<p><span class="math display">\[
+J_t^{\mathrm{PPO}}
+=
+\min
+\left(
+r_tA_t,\;
+\operatorname{clip}(r_t,1-\epsilon,1+\epsilon)A_t
+\right)
+\]</span></p>
+<p>假设：</p>
+<p><span class="math display">\[
+A_t=-1,\qquad
+r_t=10000,\qquad
+\epsilon=0.2
+\]</span></p>
+<p>第一项：</p>
+<p><span class="math display">\[
+r_tA_t=-10000
+\]</span></p>
+<p>第二项：</p>
+<p><span class="math display">\[
+1.2\times(-1)=-1.2
+\]</span></p>
+<p>于是：</p>
+<p><span class="math display">\[
+\min(-10000,-1.2)=-10000
+\]</span></p>
+<p>也就是说，<strong>这里并没有被 clip。</strong></p>
+<p>梯度依然是：</p>
+<p><span class="math display">\[
+\nabla_\theta J_t
+=
+-10000\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>为什么？</p>
+<p>因为 PPO clipping 本身就是<strong>非对称的</strong>。</p>
+<p>对于 (A&gt;0)，PPO 防止一个好 action 的概率被提高得太多：</p>
+<p><span class="math display">\[
+r&gt;1+\epsilon
+\quad\Rightarrow\quad
+\nabla J=0
+\]</span></p>
+<p>对于 (A&lt;0)，PPO 防止一个坏 action 的概率被降低得太多：</p>
+<p><span class="math display">\[
+r&lt;1-\epsilon
+\quad\Rightarrow\quad
+\nabla J=0
+\]</span></p>
+<p>但是：</p>
+<p><span class="math display">\[
+\boxed{
+A&lt;0,\quad r\gg1
+}
+\]</span></p>
+<p>意味着一个“坏 action”的概率反而比 old policy 高了很多。</p>
+<p>PPO 认为这是一个应该被强烈纠正的方向，所以不会把它 clip 掉。</p>
+<p>逻辑上没有错。</p>
+<p>但问题是：<strong>真的有必要让这种纠正强度随着 (r) 无限增长吗？</strong></p>
+<hr />
+<h2 id="我真正想限制的不是-ratio而是梯度强度">3. 我真正想限制的不是 ratio，而是梯度强度</h2>
+<p>这里可以换一个思路。</p>
+<p>我们不一定需要说：</p>
+<blockquote>
+<p>(r) 超过某个值以后，直接把梯度变成 0。</p>
+</blockquote>
+<p>我们真正想要的可能是：</p>
+<blockquote>
+<p>(r) 越大，负向抑制越强；但是这种抑制应该逐渐饱和，而不是无限增长。</p>
+</blockquote>
+<p>也就是希望找到一个函数 (h(r))，满足：</p>
+<p><span class="math display">\[
+h(1)=1
+\]</span></p>
+<p>这样 policy 没有明显 drift 时，不改变原始 PG。</p>
+<p>同时：</p>
+<p><span class="math display">\[
+h(r)\approx r
+\]</span></p>
+<p>在正常区域尽量保持 importance sampling 的行为。</p>
+<p>但当：</p>
+<p><span class="math display">\[
+r\rightarrow\infty
+\]</span></p>
+<p>希望：</p>
+<p><span class="math display">\[
+h(r)\rightarrow B
+\]</span></p>
+<p>其中 (B) 是我们允许的最大梯度放大倍数。</p>
+<p>一个很简单的候选是：</p>
+<p><span class="math display">\[
+\boxed{
+h_B(r)=\frac{Br}{B-1+r}
+}
+\]</span></p>
+<p>其中 (B&gt;1)。</p>
+<hr />
+<h2 id="一个-smooth-saturation-importance-weight">4. 一个 Smooth Saturation Importance Weight</h2>
+<p>这个函数有几个不错的性质。</p>
+<p>首先：</p>
+<p><span class="math display">\[
+h_B(1)=1
+\]</span></p>
+<p>所以在 (r=1) 处，它和原始 importance weight 完全一致。</p>
+<p>其次：</p>
+<p><span class="math display">\[
+\lim_{r\rightarrow\infty}h_B(r)=B
+\]</span></p>
+<p>所以无论 ratio 多大：</p>
+<p><span class="math display">\[
+\boxed{
+h_B(r)\le B
+}
+\]</span></p>
+<p>例如取 (B=2)：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">(r)</th>
+<th style="text-align: right;">原始 (r)</th>
+<th style="text-align: right;">(h_2(r))</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.667</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.333</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1.818</td>
+</tr>
+<tr>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">1.980</td>
+</tr>
+<tr>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">1.9998</td>
+</tr>
+</tbody>
+</table>
+<p>于是刚才：</p>
+<p><span class="math display">\[
+A=-1,\qquad r=10000
+\]</span></p>
+<p>原本对应：</p>
+<p><span class="math display">\[
+-10000\nabla\log\pi
+\]</span></p>
+<p>现在变成大约：</p>
+<p><span class="math display">\[
+-2\nabla\log\pi
+\]</span></p>
+<p><strong>方向没有改变，但更新强度有界。</strong></p>
+<p>这和 hard clipping 有明显区别。</p>
+<p>PPO 更像：</p>
+<p><span class="math display">\[
+\text{正常梯度}
+\rightarrow
+\text{突然变成 0}
+\]</span></p>
+<p>而 smooth saturation 是：</p>
+<p><span class="math display">\[
+\text{正常增长}
+\rightarrow
+\text{增长逐渐变慢}
+\rightarrow
+\text{趋近有限上限}
+\]</span></p>
+<hr />
+<h2 id="不能只改梯度能否找到对应的-objective">5. 不能只改梯度：能否找到对应的 Objective？</h2>
+<p>如果只是手工把梯度中的 (r) 换成 (h(r))，当然可以实现。</p>
+<p>但更自然的问题是：</p>
+<blockquote>
+<p>是否存在一个真正的 surrogate objective，它求导之后恰好得到这个梯度？</p>
+</blockquote>
+<p>假设：</p>
+<p><span class="math display">\[
+J_{\mathrm{smooth}}=A f(r)
+\]</span></p>
+<p>我们希望：</p>
+<p><span class="math display">\[
+\nabla_\theta J_{\mathrm{smooth}}
+=
+A h_B(r)
+\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>又因为：</p>
+<p><span class="math display">\[
+\nabla_\theta r
+=
+r\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>所以：</p>
+<p><span class="math display">\[
+\nabla_\theta f(r)
+=
+f&#39;(r)r\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>因此只需要满足：</p>
+<p><span class="math display">\[
+rf&#39;(r)=h_B(r)
+\]</span></p>
+<p>代入：</p>
+<p><span class="math display">\[
+h_B(r)=\frac{Br}{B-1+r}
+\]</span></p>
+<p>得到：</p>
+<p><span class="math display">\[
+f&#39;(r)=\frac{B}{B-1+r}
+\]</span></p>
+<p>积分：</p>
+<p><span class="math display">\[
+f(r)=B\log(B-1+r)+C
+\]</span></p>
+<p>如果希望 (f(1)=1)，可以写成：</p>
+<p><span class="math display">\[
+\boxed{
+f_B(r)
+=
+1+
+B\log
+\left(
+\frac{B-1+r}{B}
+\right)
+}
+\]</span></p>
+<p>于是得到一个完整的 smooth surrogate：</p>
+<p><span class="math display">\[
+\boxed{
+J_{\mathrm{smooth}}
+=
+A
+\left[
+1+
+B\log
+\left(
+\frac{B-1+r}{B}
+\right)
+\right]
+}
+\]</span></p>
+<p>它的梯度正好是：</p>
+<p><span class="math display">\[
+\boxed{
+\nabla_\theta J_{\mathrm{smooth}}
+=
+A
+\frac{Br}{B-1+r}
+\nabla_\theta\log\pi_\theta
+}
+\]</span></p>
+<p>这就比较有意思了。</p>
+<p>它不是简单做 gradient clipping，而是从 objective 本身构造出了一个<strong>有界的 effective importance weight</strong>。</p>
+<hr />
+<h2 id="如果只担心-negative-advantage-呢">6. 如果只担心 Negative Advantage 呢？</h2>
+<p>实际上，我最初关注的问题并不是所有 (r)，而是：</p>
+<p><span class="math display">\[
+A&lt;0,\qquad r\gg1
+\]</span></p>
+<p>因此可以进一步做成 asymmetric objective。</p>
+<p>定义：</p>
+<p><span class="math display">\[
+A^+=\max(A,0)
+\]</span></p>
+<p><span class="math display">\[
+A^-=\min(A,0)
+\]</span></p>
+<p>然后：</p>
+<p><span class="math display">\[
+\boxed{
+J
+=
+A^+r
++
+A^-f_B(r)
+}
+\]</span></p>
+<p>对应梯度：</p>
+<p><span class="math display">\[
+\boxed{
+\nabla J
+=
+\left[
+A^+r
++
+A^-
+\frac{Br}{B-1+r}
+\right]
+\nabla\log\pi
+}
+\]</span></p>
+<p>这样：</p>
+<p>对于 positive advantage：</p>
+<p><span class="math display">\[
+A&gt;0
+\]</span></p>
+<p>仍然保持原始 importance-weighted PG。</p>
+<p>而对于 negative advantage：</p>
+<p><span class="math display">\[
+A&lt;0
+\]</span></p>
+<p>使用：</p>
+<p><span class="math display">\[
+A\frac{Br}{B-1+r}
+\]</span></p>
+<p>因此：</p>
+<p><span class="math display">\[
+\left|
+A\frac{Br}{B-1+r}
+\right|
+\le B|A|
+\]</span></p>
+<p>也就是说：</p>
+<blockquote>
+<p><strong>坏 action 仍然会受到惩罚，但单个 token 的 importance weight 不会无限放大这种惩罚。</strong></p>
+</blockquote>
+<p>这正是我想要的性质。</p>
+<hr />
+<h2 id="另一种思路在-log-ratio-空间做-saturation">7. 另一种思路：在 Log-Ratio 空间做 Saturation</h2>
+<p>还有一种思路也很自然。</p>
+<p>定义：</p>
+<p><span class="math display">\[
+z=\log r
+\]</span></p>
+<p>然后直接构造：</p>
+<p><span class="math display">\[
+J=A B\tanh(z/B)
+\]</span></p>
+<p>由于：</p>
+<p><span class="math display">\[
+\nabla_\theta z
+=
+\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>所以：</p>
+<p><span class="math display">\[
+\nabla_\theta J
+=
+A\operatorname{sech}^2(z/B)
+\nabla_\theta\log\pi_\theta
+\]</span></p>
+<p>这里会出现一个完全不同的行为：</p>
+<p><span class="math display">\[
+r\rightarrow\infty
+\quad\Rightarrow\quad
+\nabla J\rightarrow0
+\]</span></p>
+<p>它表达的思想是：</p>
+<blockquote>
+<p>一个样本如果已经严重 off-policy，那么这个样本本身可能已经不值得信任，因此逐渐忽略它。</p>
+</blockquote>
+<p>而前面的 rational saturation：</p>
+<p><span class="math display">\[
+h_B(r)=\frac{Br}{B-1+r}
+\]</span></p>
+<p>表达的是：</p>
+<blockquote>
+<p>即使严重 off-policy，我仍然认为这个负反馈是有效的，只是不允许它无限主导更新。</p>
+</blockquote>
+<p>这其实是两种不同的 inductive bias。</p>
+<hr />
+<h2 id="三种方法背后的不同哲学">8. 三种方法背后的不同哲学</h2>
+<p>把它们放在一起看，会非常清楚。</p>
+<h3 id="ppo-clipping">PPO clipping</h3>
+<p><span class="math display">\[
+\text{越界}
+\Rightarrow
+\text{部分区域直接停止更新}
+\]</span></p>
+<h3 id="log-ratio-saturation">Log-ratio saturation</h3>
+<p><span class="math display">\[
+\text{越离谱}
+\Rightarrow
+\text{越不相信这个样本}
+\Rightarrow
+\nabla J\rightarrow0
+\]</span></p>
+<h3 id="bounded-importance-gradient">Bounded importance gradient</h3>
+<p><span class="math display">\[
+\text{越离谱}
+\Rightarrow
+\text{仍然纠正}
+\Rightarrow
+\text{但纠正强度存在上限}
+\]</span></p>
+<p>我目前更感兴趣的是第三种。</p>
+<p>因为对于：</p>
+<p><span class="math display">\[
+A&lt;0,\qquad r\gg1
+\]</span></p>
+<p>这个样本传递的信息其实是明确的：</p>
+<blockquote>
+<p>当前 policy 相比 rollout policy，大幅提高了一个 negative-advantage action 的概率。</p>
+</blockquote>
+<p>完全不给梯度似乎有点浪费。</p>
+<p>但让：</p>
+<p><span class="math display">\[
+r=10^4
+\]</span></p>
+<p>产生 (10^4) 量级的 importance weighting，又可能让极少数异常 token 对优化产生过大的影响。</p>
+<p>所以一个折中的目标是：</p>
+<p><span class="math display">\[
+\boxed{
+\text{Keep the direction, bound the strength.}
+}
+\]</span></p>
+<hr />
+<h2 id="一个值得继续验证的问题">9. 一个值得继续验证的问题</h2>
+<p>当然，上面的构造目前更多是一个 objective-design idea，而不是说它一定比 PPO 更好。</p>
+<p>真正需要实验回答的问题很多。</p>
+<p>例如：</p>
+<ul>
+<li>(B) 应该取多少？</li>
+<li>positive / negative advantage 是否应该使用不同的 (B)？</li>
+<li>是否应该只处理 (A&lt;0,r&gt;1) 这个象限？</li>
+<li>对 GRPO 的 group-relative advantage 有什么影响？</li>
+<li>token-level ratio 的长尾到底有多严重？</li>
+<li>是否会降低 exploration？</li>
+<li>是否影响 PPO 原本的 pessimistic surrogate 性质？</li>
+<li>和直接 gradient norm clipping 相比有什么区别？</li>
+<li>在 stale rollout / fully-async RL 场景下是否更有价值？</li>
+</ul>
+<p>尤其是最后一点。</p>
+<p>在 asynchronous RL 中，policy version lag 会天然增加：</p>
+<p><span class="math display">\[
+\left|
+\log\pi_\theta-\log\pi_{\mathrm{old}}
+\right|
+\]</span></p>
+<p>importance ratio 的长尾问题可能因此更加明显。</p>
+<p>这种情况下，与其单纯丢掉 stale trajectory，或让极端 ratio 产生非常大的梯度，也许存在第三种选择：</p>
+<p><span class="math display">\[
+\boxed{
+\text{保留 trajectory，但平滑限制它能施加的最大更新强度。}
+}
+\]</span></p>
+<p>我觉得这是这个思路最值得继续实验的地方。</p>
+<hr />
+<h2 id="总结">总结</h2>
+<p>最初的问题其实非常简单：</p>
+<blockquote>
+<p><strong>当 (A&lt;0) 且 (r) 时，我们真的希望 policy gradient 随着 (r) 无限增长吗？</strong></p>
+</blockquote>
+<p>PPO 的答案基本是：在这个方向上允许，因为 policy 正在严重增加一个 negative-advantage action 的概率。</p>
+<p>但另一种可能是：</p>
+<p><span class="math display">\[
+\boxed{
+\text{惩罚应该继续，但惩罚强度不需要无限增长。}
+}
+\]</span></p>
+<p>于是可以构造：</p>
+<p><span class="math display">\[
+h_B(r)=\frac{Br}{B-1+r}
+\]</span></p>
+<p>以及对应的 smooth surrogate：</p>
+<p><span class="math display">\[
+\boxed{
+J_{\mathrm{smooth}}
+=
+A
+\left[
+1+
+B\log
+\left(
+\frac{B-1+r}{B}
+\right)
+\right]
+}
+\]</span></p>
+<p>它保留了 advantage 的强化/抑制方向，同时把 effective importance weight 平滑限制在有限范围内。</p>
+<p>这未必是最终最优的形式，但我觉得它提供了一个挺直接的视角：</p>
+<blockquote>
+<p><strong>PPO 不一定只能在“保留梯度”和“clip 成 0”之间二选一。我们也可以让梯度保留方向，同时让强度平滑饱和。</strong></p>
+</blockquote>
+<p>这可能尤其适合 importance ratio 长尾明显、policy lag 较大的异步 RL 场景。</p></div>
+  </article>
+  <aside class="article-end reveal"><p>End of note</p><a href="/blog/">继续阅读其他文章 →</a></aside>
+</main>
+<footer class="site-footer"><p>© 2026 Sen Yang</p>
+  <div><a href="/blog/legacy/">旧博客</a><a href="/research/">Research</a></div></footer>
+  <script src="/blog/assets/native.js" defer></script>
+  <script>window.MathJax = {tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]}};</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+</body>
+</html>

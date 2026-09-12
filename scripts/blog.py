@@ -225,7 +225,7 @@ def render_index(posts: Iterable[Post]) -> str:
     <div class="hero-copy">
       <p class="eyebrow">Sen Yang</p>
       <h1>Notes on vision,<br>learning, and systems.</h1>
-      <p class="lede">关于机器智能、计算机视觉与工程实践的思考。</p>
+      <p class="lede">一些随意的个人记录与思考</p>
     </div>
     <p class="edition">01 / Notes</p>
   </section>
