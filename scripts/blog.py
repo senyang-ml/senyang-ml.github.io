@@ -191,8 +191,8 @@ def nav() -> str:
     return """<header class="site-header">
   <a class="wordmark" href="/blog/" aria-label="Sen Yang Notes 首页">SY<span>/</span>NOTES</a>
   <nav aria-label="主导航">
-    <a href="/blog/">新文章</a>
-    <a href="/blog/legacy/">旧博客</a>
+    <a href="/blog/">文章</a>
+    <a href="/blog/legacy/">归档</a>
     <a href="/research/">Research</a>
   </nav>
 </header>"""
@@ -210,31 +210,29 @@ def render_index(posts: Iterable[Post]) -> str:
 </article>""" for post in posts
         )
     else:
-        rows = """<div class="empty-state reveal">
-  <p>新的 Markdown 文章会出现在这里。</p>
-  <code>python3 scripts/blog.py new "文章标题" --slug article-slug</code>
-</div>"""
+        rows = ""
+
+    post_section = ""
+    if posts:
+        post_section = f"""<section class="post-list" id="notes">
+    <div class="section-heading reveal"><p>Notes</p><h2>文章</h2><span>{len(posts):02d}</span></div>
+    {rows}
+  </section>"""
 
     body = f"""{nav()}
 <main>
   <section class="hero">
-    <img src="/images/avatar.gif" alt="Sen Yang beside a lakeside grove">
-    <div class="hero-shade"></div>
     <div class="hero-copy">
-      <p class="eyebrow">Research · Engineering · Field Notes</p>
-      <h1>Ideas, built<br>from first principles.</h1>
-      <p class="lede">杨森的技术手记。新文章由 Markdown 直接生成，旧博客完整保留。</p>
-      <a class="hero-link" href="#latest">阅读最新文章 <span>↓</span></a>
+      <p class="eyebrow">Sen Yang</p>
+      <h1>Notes on vision,<br>learning, and systems.</h1>
+      <p class="lede">关于机器智能、计算机视觉与工程实践的思考。</p>
     </div>
+    <p class="edition">01 / Notes</p>
   </section>
-  <section class="post-list" id="latest">
-    <div class="section-heading reveal"><p>Latest notes</p><h2>最新文章</h2><span>{len(posts):02d}</span></div>
-    {rows}
-  </section>
+{post_section}
   <section class="legacy-band reveal">
-    <div><p class="eyebrow">2018—2021</p><h2>旧博客保持原貌。</h2></div>
-    <p>原 Hexo 页面、21 篇文章、分页和资源均作为只读档案保留。</p>
-    <a href="/blog/legacy/">进入旧版界面 <span>↗</span></a>
+    <div><p class="eyebrow">2018—2021</p><h2>Archive</h2></div>
+    <a href="/blog/legacy/">浏览旧文章 <span>↗</span></a>
   </section>
 </main>
 <footer class="site-footer"><p>© {datetime.now().year} Sen Yang</p>
