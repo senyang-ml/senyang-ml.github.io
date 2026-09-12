@@ -141,7 +141,7 @@ def render_markdown(post: Post) -> str:
         raise RuntimeError("未找到 pandoc。macOS 可运行 `brew install pandoc` 后重试。")
     command = [
         executable,
-        "--from=markdown+fenced_code_attributes+pipe_tables+task_lists+strikeout",
+        "--from=markdown+fenced_code_attributes+pipe_tables+task_lists+strikeout+tex_math_single_backslash",
         "--to=html5",
         "--wrap=none",
         "--mathjax",
@@ -257,7 +257,7 @@ def render_post(post: Post) -> str:
       <h1>{esc(post.title)}</h1>
       <p class="article-description">{esc(post.description)}</p><div class="tags">{tag_markup}</div>
     </header>
-    <div class="article-body reveal">{post.body_html}</div>
+    <div class="article-body">{post.body_html}</div>
   </article>
   <aside class="article-end reveal"><p>End of note</p><a href="/blog/">继续阅读其他文章 →</a></aside>
 </main>

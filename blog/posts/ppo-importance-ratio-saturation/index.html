@@ -33,7 +33,7 @@
       <h1>PPO 的 Clip 真的限制了梯度吗？从负 Advantage 下的大 Importance Ratio 说起</h1>
       <p class="article-description">从负 Advantage 与极端 Importance Ratio 出发，推导一种保持梯度方向、同时平滑限制更新强度的 surrogate objective。</p><div class="tags"><span>Reinforcement Learning</span> <span>PPO</span> <span>Policy Gradient</span></div>
     </header>
-    <div class="article-body reveal"><p>最近在看 PPO / GRPO 的 policy gradient 实现时，我注意到一个挺有意思的问题：</p>
+    <div class="article-body"><p>最近在看 PPO / GRPO 的 policy gradient 实现时，我注意到一个挺有意思的问题：</p>
 <blockquote>
 <p>当 advantage 为负，而 importance ratio 非常大时，PPO 的 clipping 并不会阻止一个非常大的负向梯度。</p>
 </blockquote>
@@ -55,7 +55,7 @@ r_t=
 \frac{\pi_\theta(a_t|s_t)}
 {\pi_{\mathrm{old}}(a_t|s_t)}
 \]</span></p>
-<p>(A_t) 是 advantage。</p>
+<p><span class="math inline">\(A_t\)</span> 是 advantage。</p>
 <p>因为：</p>
 <p><span class="math display">\[
 \nabla_\theta r_t
@@ -77,8 +77,8 @@ A_t\text{ 决定强化还是抑制，}
 r_t\text{ 决定梯度被放大多少}
 }
 \]</span></p>
-<p>当 (A_t&gt;0)，我们希望提高当前 token 的概率。</p>
-<p>当 (A_t&lt;0)，我们希望降低当前 token 的概率。</p>
+<p>当 <span class="math inline">\(A_t&gt;0\)</span>，我们希望提高当前 token 的概率。</p>
+<p>当 <span class="math inline">\(A_t&lt;0\)</span>，我们希望降低当前 token 的概率。</p>
 <p>问题在于，如果：</p>
 <p><span class="math display">\[
 A_t=-1,\qquad r_t=10000
@@ -130,13 +130,13 @@ r_tA_t=-10000
 \]</span></p>
 <p>为什么？</p>
 <p>因为 PPO clipping 本身就是<strong>非对称的</strong>。</p>
-<p>对于 (A&gt;0)，PPO 防止一个好 action 的概率被提高得太多：</p>
+<p>对于 <span class="math inline">\(A&gt;0\)</span>，PPO 防止一个好 action 的概率被提高得太多：</p>
 <p><span class="math display">\[
 r&gt;1+\epsilon
 \quad\Rightarrow\quad
 \nabla J=0
 \]</span></p>
-<p>对于 (A&lt;0)，PPO 防止一个坏 action 的概率被降低得太多：</p>
+<p>对于 <span class="math inline">\(A&lt;0\)</span>，PPO 防止一个坏 action 的概率被降低得太多：</p>
 <p><span class="math display">\[
 r&lt;1-\epsilon
 \quad\Rightarrow\quad
@@ -151,19 +151,19 @@ A&lt;0,\quad r\gg1
 <p>意味着一个“坏 action”的概率反而比 old policy 高了很多。</p>
 <p>PPO 认为这是一个应该被强烈纠正的方向，所以不会把它 clip 掉。</p>
 <p>逻辑上没有错。</p>
-<p>但问题是：<strong>真的有必要让这种纠正强度随着 (r) 无限增长吗？</strong></p>
+<p>但问题是：<strong>真的有必要让这种纠正强度随着 <span class="math inline">\(r\)</span> 无限增长吗？</strong></p>
 <hr />
 <h2 id="我真正想限制的不是-ratio而是梯度强度">3. 我真正想限制的不是 ratio，而是梯度强度</h2>
 <p>这里可以换一个思路。</p>
 <p>我们不一定需要说：</p>
 <blockquote>
-<p>(r) 超过某个值以后，直接把梯度变成 0。</p>
+<p><span class="math inline">\(r\)</span> 超过某个值以后，直接把梯度变成 0。</p>
 </blockquote>
 <p>我们真正想要的可能是：</p>
 <blockquote>
-<p>(r) 越大，负向抑制越强；但是这种抑制应该逐渐饱和，而不是无限增长。</p>
+<p><span class="math inline">\(r\)</span> 越大，负向抑制越强；但是这种抑制应该逐渐饱和，而不是无限增长。</p>
 </blockquote>
-<p>也就是希望找到一个函数 (h(r))，满足：</p>
+<p>也就是希望找到一个函数 <span class="math inline">\(h(r)\)</span>，满足：</p>
 <p><span class="math display">\[
 h(1)=1
 \]</span></p>
@@ -181,14 +181,14 @@ r\rightarrow\infty
 <p><span class="math display">\[
 h(r)\rightarrow B
 \]</span></p>
-<p>其中 (B) 是我们允许的最大梯度放大倍数。</p>
+<p>其中 <span class="math inline">\(B\)</span> 是我们允许的最大梯度放大倍数。</p>
 <p>一个很简单的候选是：</p>
 <p><span class="math display">\[
 \boxed{
 h_B(r)=\frac{Br}{B-1+r}
 }
 \]</span></p>
-<p>其中 (B&gt;1)。</p>
+<p>其中 <span class="math inline">\(B&gt;1\)</span>。</p>
 <hr />
 <h2 id="一个-smooth-saturation-importance-weight">4. 一个 Smooth Saturation Importance Weight</h2>
 <p>这个函数有几个不错的性质。</p>
@@ -196,7 +196,7 @@ h_B(r)=\frac{Br}{B-1+r}
 <p><span class="math display">\[
 h_B(1)=1
 \]</span></p>
-<p>所以在 (r=1) 处，它和原始 importance weight 完全一致。</p>
+<p>所以在 <span class="math inline">\(r=1\)</span> 处，它和原始 importance weight 完全一致。</p>
 <p>其次：</p>
 <p><span class="math display">\[
 \lim_{r\rightarrow\infty}h_B(r)=B
@@ -207,13 +207,13 @@ h_B(1)=1
 h_B(r)\le B
 }
 \]</span></p>
-<p>例如取 (B=2)：</p>
+<p>例如取 <span class="math inline">\(B=2\)</span>：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: right;">(r)</th>
-<th style="text-align: right;">原始 (r)</th>
-<th style="text-align: right;">(h_2(r))</th>
+<th style="text-align: right;"><span class="math inline">\(r\)</span></th>
+<th style="text-align: right;">原始 <span class="math inline">\(r\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(h_2(r)\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -279,7 +279,7 @@ A=-1,\qquad r=10000
 \]</span></p>
 <hr />
 <h2 id="不能只改梯度能否找到对应的-objective">5. 不能只改梯度：能否找到对应的 Objective？</h2>
-<p>如果只是手工把梯度中的 (r) 换成 (h(r))，当然可以实现。</p>
+<p>如果只是手工把梯度中的 <span class="math inline">\(r\)</span> 换成 <span class="math inline">\(h(r)\)</span>，当然可以实现。</p>
 <p>但更自然的问题是：</p>
 <blockquote>
 <p>是否存在一个真正的 surrogate objective，它求导之后恰好得到这个梯度？</p>
@@ -323,7 +323,7 @@ f&#39;(r)=\frac{B}{B-1+r}
 <p><span class="math display">\[
 f(r)=B\log(B-1+r)+C
 \]</span></p>
-<p>如果希望 (f(1)=1)，可以写成：</p>
+<p>如果希望 <span class="math inline">\(f(1)=1\)</span>，可以写成：</p>
 <p><span class="math display">\[
 \boxed{
 f_B(r)
@@ -364,7 +364,7 @@ A
 <p>它不是简单做 gradient clipping，而是从 objective 本身构造出了一个<strong>有界的 effective importance weight</strong>。</p>
 <hr />
 <h2 id="如果只担心-negative-advantage-呢">6. 如果只担心 Negative Advantage 呢？</h2>
-<p>实际上，我最初关注的问题并不是所有 (r)，而是：</p>
+<p>实际上，我最初关注的问题并不是所有 <span class="math inline">\(r\)</span>，而是：</p>
 <p><span class="math display">\[
 A&lt;0,\qquad r\gg1
 \]</span></p>
@@ -508,7 +508,7 @@ A&lt;0,\qquad r\gg1
 <p><span class="math display">\[
 r=10^4
 \]</span></p>
-<p>产生 (10^4) 量级的 importance weighting，又可能让极少数异常 token 对优化产生过大的影响。</p>
+<p>产生 <span class="math inline">\(10^4\)</span> 量级的 importance weighting，又可能让极少数异常 token 对优化产生过大的影响。</p>
 <p>所以一个折中的目标是：</p>
 <p><span class="math display">\[
 \boxed{
@@ -521,9 +521,9 @@ r=10^4
 <p>真正需要实验回答的问题很多。</p>
 <p>例如：</p>
 <ul>
-<li>(B) 应该取多少？</li>
-<li>positive / negative advantage 是否应该使用不同的 (B)？</li>
-<li>是否应该只处理 (A&lt;0,r&gt;1) 这个象限？</li>
+<li><span class="math inline">\(B\)</span> 应该取多少？</li>
+<li>positive / negative advantage 是否应该使用不同的 <span class="math inline">\(B\)</span>？</li>
+<li>是否应该只处理 <span class="math inline">\(A&lt;0,r&gt;1\)</span> 这个象限？</li>
 <li>对 GRPO 的 group-relative advantage 有什么影响？</li>
 <li>token-level ratio 的长尾到底有多严重？</li>
 <li>是否会降低 exploration？</li>
@@ -550,7 +550,7 @@ r=10^4
 <h2 id="总结">总结</h2>
 <p>最初的问题其实非常简单：</p>
 <blockquote>
-<p><strong>当 (A&lt;0) 且 (r) 时，我们真的希望 policy gradient 随着 (r) 无限增长吗？</strong></p>
+<p><strong>当 <span class="math inline">\(A&lt;0\)</span> 且 <span class="math inline">\(r\gg1\)</span> 时，我们真的希望 policy gradient 随着 <span class="math inline">\(r\)</span> 无限增长吗？</strong></p>
 </blockquote>
 <p>PPO 的答案基本是：在这个方向上允许，因为 policy 正在严重增加一个 negative-advantage action 的概率。</p>
 <p>但另一种可能是：</p>
