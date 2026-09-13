@@ -21,19 +21,35 @@
   <a class="wordmark" href="/blog/" aria-label="Sen Yang Notes 首页">SY<span>/</span>NOTES</a>
   <nav aria-label="主导航">
     <a href="/blog/">文章</a>
-    <a href="/blog/legacy/">归档</a>
     <a href="/research/">Research</a>
   </nav>
 </header>
-<main class="article-main">
-  <article>
-    <header class="article-header reveal">
-      <a class="back-link" href="/blog/">← 返回新文章</a>
-      <p class="eyebrow">2026.09.12</p>
-      <h1>PPO 的 Clip 真的限制了梯度吗？从负 Advantage 下的大 Importance Ratio 说起</h1>
-      <p class="article-description">从负 Advantage 与极端 Importance Ratio 出发，推导一种保持梯度方向、同时平滑限制更新强度的 surrogate objective。</p><div class="tags"><span>Reinforcement Learning</span> <span>PPO</span> <span>Policy Gradient</span></div>
-    </header>
-    <div class="article-body"><p>最近在看 PPO / GRPO 的 policy gradient 实现时，我注意到一个挺有意思的问题：</p>
+<main class="article-main has-outline">
+  <details class="article-outline" open>
+    <summary>目录</summary>
+    <nav aria-label="文章大纲"><ol><li class="outline-level-2"><a href="#从最基本的-policy-gradient-开始">1. 从最基本的 Policy Gradient 开始</a></li>
+<li class="outline-level-2"><a href="#ppo-clipping-能解决这个问题吗">2. PPO clipping 能解决这个问题吗？</a></li>
+<li class="outline-level-2"><a href="#我真正想限制的不是-ratio而是梯度强度">3. 我真正想限制的不是 ratio，而是梯度强度</a></li>
+<li class="outline-level-2"><a href="#一个-smooth-saturation-importance-weight">4. 一个 Smooth Saturation Importance Weight</a></li>
+<li class="outline-level-2"><a href="#不能只改梯度能否找到对应的-objective">5. 不能只改梯度：能否找到对应的 Objective？</a></li>
+<li class="outline-level-2"><a href="#如果只担心-negative-advantage-呢">6. 如果只担心 Negative Advantage 呢？</a></li>
+<li class="outline-level-2"><a href="#另一种思路在-log-ratio-空间做-saturation">7. 另一种思路：在 Log-Ratio 空间做 Saturation</a></li>
+<li class="outline-level-2"><a href="#三种方法背后的不同哲学">8. 三种方法背后的不同哲学</a></li>
+<li class="outline-level-3"><a href="#ppo-clipping">PPO clipping</a></li>
+<li class="outline-level-3"><a href="#log-ratio-saturation">Log-ratio saturation</a></li>
+<li class="outline-level-3"><a href="#bounded-importance-gradient">Bounded importance gradient</a></li>
+<li class="outline-level-2"><a href="#一个值得继续验证的问题">9. 一个值得继续验证的问题</a></li>
+<li class="outline-level-2"><a href="#总结">总结</a></li></ol></nav>
+  </details>
+  <div class="article-column">
+    <article>
+      <header class="article-header reveal">
+        <a class="back-link" href="/blog/">← 返回新文章</a>
+        <p class="eyebrow">2026.09.12</p>
+        <h1>PPO 的 Clip 真的限制了梯度吗？从负 Advantage 下的大 Importance Ratio 说起</h1>
+        <p class="article-description">从负 Advantage 与极端 Importance Ratio 出发，推导一种保持梯度方向、同时平滑限制更新强度的 surrogate objective。</p><div class="tags"><span>Reinforcement Learning</span> <span>PPO</span> <span>Policy Gradient</span></div>
+      </header>
+      <div class="article-body"><p>最近在看 PPO / GRPO 的 policy gradient 实现时，我注意到一个挺有意思的问题：</p>
 <blockquote>
 <p>当 advantage 为负，而 importance ratio 非常大时，PPO 的 clipping 并不会阻止一个非常大的负向梯度。</p>
 </blockquote>
@@ -584,8 +600,9 @@ B\log
 <p><strong>PPO 不一定只能在“保留梯度”和“clip 成 0”之间二选一。我们也可以让梯度保留方向，同时让强度平滑饱和。</strong></p>
 </blockquote>
 <p>这可能尤其适合 importance ratio 长尾明显、policy lag 较大的异步 RL 场景。</p></div>
-  </article>
-  <aside class="article-end reveal"><p>End of note</p><a href="/blog/">继续阅读其他文章 →</a></aside>
+    </article>
+    <aside class="article-end reveal"><p>End of note</p><a href="/blog/">继续阅读其他文章 →</a></aside>
+  </div>
 </main>
 <footer class="site-footer"><p>© 2026 Sen Yang</p>
   <div><a href="/blog/legacy/">旧博客</a><a href="/research/">Research</a></div></footer>

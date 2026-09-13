@@ -12,6 +12,7 @@ import subprocess
 import sys
 from dataclasses import dataclass, replace
 from datetime import date, datetime
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
@@ -156,6 +157,56 @@ def esc(value: object) -> str:
     return html.escape(str(value), quote=True)
 
 
+class HeadingCollector(HTMLParser):
+    """Collect second- and third-level headings from Pandoc HTML."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.headings: List[Tuple[int, str, str]] = []
+        self._level: Optional[int] = None
+        self._anchor = ""
+        self._parts: List[str] = []
+
+    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
+        if tag not in {"h2", "h3"}:
+            return
+        anchor = dict(attrs).get("id")
+        if not anchor:
+            return
+        self._level = int(tag[1])
+        self._anchor = anchor
+        self._parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self._level is not None:
+            self._parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._level is None or tag != f"h{self._level}":
+            return
+        label = re.sub(r"\s+", " ", "".join(self._parts)).strip()
+        if label:
+            self.headings.append((self._level, self._anchor, label))
+        self._level = None
+        self._anchor = ""
+        self._parts = []
+
+
+def render_outline(body_html: str) -> str:
+    collector = HeadingCollector()
+    collector.feed(body_html)
+    if not collector.headings:
+        return ""
+    items = "\n".join(
+        f'<li class="outline-level-{level}"><a href="#{esc(anchor)}">{esc(label)}</a></li>'
+        for level, anchor, label in collector.headings
+    )
+    return f"""<details class="article-outline" open>
+    <summary>目录</summary>
+    <nav aria-label="文章大纲"><ol>{items}</ol></nav>
+  </details>"""
+
+
 def page_shell(*, title: str, description: str, canonical: str, body: str, article: bool) -> str:
     page_class = "article-page" if article else "index-page"
     page_type = "article" if article else "website"
@@ -192,7 +243,6 @@ def nav() -> str:
   <a class="wordmark" href="/blog/" aria-label="Sen Yang Notes 首页">SY<span>/</span>NOTES</a>
   <nav aria-label="主导航">
     <a href="/blog/">文章</a>
-    <a href="/blog/legacy/">归档</a>
     <a href="/research/">Research</a>
   </nav>
 </header>"""
@@ -248,18 +298,23 @@ def render_index(posts: Iterable[Post]) -> str:
 
 def render_post(post: Post) -> str:
     tag_markup = " ".join(f"<span>{esc(tag)}</span>" for tag in post.tags)
+    outline = render_outline(post.body_html)
+    main_class = "article-main has-outline" if outline else "article-main"
     body = f"""{nav()}
-<main class="article-main">
-  <article>
-    <header class="article-header reveal">
-      <a class="back-link" href="/blog/">← 返回新文章</a>
-      <p class="eyebrow">{post.published.strftime('%Y.%m.%d')}</p>
-      <h1>{esc(post.title)}</h1>
-      <p class="article-description">{esc(post.description)}</p><div class="tags">{tag_markup}</div>
-    </header>
-    <div class="article-body">{post.body_html}</div>
-  </article>
-  <aside class="article-end reveal"><p>End of note</p><a href="/blog/">继续阅读其他文章 →</a></aside>
+<main class="{main_class}">
+  {outline}
+  <div class="article-column">
+    <article>
+      <header class="article-header reveal">
+        <a class="back-link" href="/blog/">← 返回新文章</a>
+        <p class="eyebrow">{post.published.strftime('%Y.%m.%d')}</p>
+        <h1>{esc(post.title)}</h1>
+        <p class="article-description">{esc(post.description)}</p><div class="tags">{tag_markup}</div>
+      </header>
+      <div class="article-body">{post.body_html}</div>
+    </article>
+    <aside class="article-end reveal"><p>End of note</p><a href="/blog/">继续阅读其他文章 →</a></aside>
+  </div>
 </main>
 <footer class="site-footer"><p>© {datetime.now().year} Sen Yang</p>
   <div><a href="/blog/legacy/">旧博客</a><a href="/research/">Research</a></div></footer>"""
