@@ -9,16 +9,16 @@ window.DATA_PROFILE = {
       "en": "Sen Yang"
     },
     "title": {
-      "zh": "多模态大语言模型 | 自动驾驶 | 计算机视觉",
-      "en": "Multimodal Large Language Models | Autonomous Driving | Computer Vision"
+      "zh": "Agentic RL | 多模态大语言模型 | 自动驾驶 | 计算机视觉",
+      "en": "Agentic RL | Multimodal Large Language Models | Autonomous Driving | Computer Vision"
     },
     "position": {
       "zh": "百度研发工程师",
       "en": "R&D Engineer at Baidu"
     },
     "description": {
-      "zh": "现任百度研发工程师，专注于多模态大模型和自动驾驶研究",
-      "en": "R&D Engineer at Baidu, focusing on Multimodal Large Language Models and Autonomous Driving research."
+      "zh": "现任百度研发工程师，专注于 Agentic RL、多模态大模型和自动驾驶研究",
+      "en": "R&D Engineer at Baidu, focusing on Agentic RL, Multimodal Large Language Models and Autonomous Driving research."
     },
     "photo": "https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=z5O3DLcAAAAJ&citpid=5",
     "email": "yangsenius@gmail.com",
@@ -225,7 +225,7 @@ window.DATA_PUBLICATIONS = {
   },
   "papers": [
     {
-      "title": "Online Video Agent Harness for Long Video Understanding",
+      "title": "VideoXAgent: Online Video Agent Harness for Long Video Understanding",
       "authors": "Sen Yang, Boqiang Duan, Jing Yang, Weihao Bo, Jie Liu, Boyuan Tong, Ze Feng, Wenkang Zhang, Jingdong Wang, Hua Wu",
       "venue": "arXiv preprint arXiv:2609.12818, 2026",
       "citations": 0,

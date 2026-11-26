@@ -12,28 +12,26 @@ class DataLoader {
     // 加载所有数据
     async loadAll() {
         try {
-            // 尝试从外部JSON文件加载（用于开发环境）
-            if (window.location.protocol !== 'file:') {
-                const [profile, experience, publications] = await Promise.all([
-                    fetch('data/profile.json').then(r => r.json()),
-                    fetch('data/experience.json').then(r => r.json()),
-                    fetch('data/publications.json').then(r => r.json())
-                ]);
-                
-                this.data.profile = profile;
-                this.data.experience = experience;
-                this.data.publications = publications;
-            } else {
-                // 使用内联数据（用于file://协议）
+            // 发布页内联 data.js；JSON 源仅在存在时用于本地开发
+            if (window.DATA_PROFILE && window.DATA_EXPERIENCE && window.DATA_PUBLICATIONS) {
                 this.data.profile = window.DATA_PROFILE;
                 this.data.experience = window.DATA_EXPERIENCE;
                 this.data.publications = window.DATA_PUBLICATIONS;
+                return this.data;
             }
-            
+
+            const [profile, experience, publications] = await Promise.all([
+                fetch('data/profile.json').then(r => r.json()),
+                fetch('data/experience.json').then(r => r.json()),
+                fetch('data/publications.json').then(r => r.json())
+            ]);
+
+            this.data.profile = profile;
+            this.data.experience = experience;
+            this.data.publications = publications;
             return this.data;
         } catch (error) {
             console.error('Failed to load data:', error);
-            // 如果fetch失败，回退到内联数据
             this.data.profile = window.DATA_PROFILE;
             this.data.experience = window.DATA_EXPERIENCE;
             this.data.publications = window.DATA_PUBLICATIONS;
