@@ -226,7 +226,7 @@ window.DATA_PUBLICATIONS = {
   "papers": [
     {
       "title": "VideoXAgent: Online Video Agent Harness for Long Video Understanding",
-      "authors": "Sen Yang, Boqiang Duan, Jing Yang, Weihao Bo, Jie Liu, Boyuan Tong, Ze Feng, Wenkang Zhang, Jingdong Wang, Hua Wu",
+      "authors": "Sen Yang*, Boqiang Duan*, Jing Yang, Weihao Bo, Jie Liu, Boyuan Tong, Ze Feng, Wenkang Zhang, Jingdong Wang, Hua Wu",
       "venue": "arXiv preprint arXiv:2609.12818, 2026",
       "citations": 0,
       "category": "agent",
