@@ -155,7 +155,7 @@ class PageRenderer {
     const filterDiv = section.querySelector(".publications-filter");
     filterDiv.innerHTML = publications.categories[lang]
       .map((cat, idx) => {
-        const filters = ["all", "pose", "autonomous", "mllm"];
+        const filters = ["all", "agent", "pose", "autonomous", "mllm"];
         return `<button class="filter-btn ${idx === 0 ? "active" : ""}" data-filter="${filters[idx]}">${cat}</button>`;
       })
       .join("");

@@ -33,6 +33,7 @@ window.DATA_PROFILE = {
     },
     "interests": {
       "zh": [
+        "Agentic RL",
         "计算机视觉",
         "深度学习",
         "人体姿态估计",
@@ -40,6 +41,7 @@ window.DATA_PROFILE = {
         "多模态基础模型"
       ],
       "en": [
+        "Agentic RL",
         "Computer Vision",
         "Deep Learning",
         "Human Pose Estimation",
@@ -142,8 +144,8 @@ window.DATA_EXPERIENCE = {
         "en": "2023.7 - Present"
       },
       "description": {
-        "zh": "负责多模态大模型、自动驾驶视觉感知与规划的算法研究与创新应用，旨在推动技术边界，解决复杂挑战。工作涵盖从前沿算法设计到产品落地的全流程，注重将理论突破转化为实际业务价值，并在多个核心领域取得显著进展。",
-        "en": "Responsible for in-depth research and innovative applications in multimodal large models, computer vision perception, and decision-making algorithms, aiming to push the boundaries of technology and solve complex challenges. My work encompasses the entire process from cutting-edge algorithm design to product deployment, focusing on translating theoretical breakthroughs into practical business value and achieving significant progress in multiple core areas."
+        "zh": "负责 Agentic RL、多模态大模型、自动驾驶视觉感知与规划的算法研究与创新应用，旨在推动技术边界，解决复杂挑战。工作涵盖从前沿算法设计到产品落地的全流程，注重将理论突破转化为实际业务价值，并在多个核心领域取得显著进展。",
+        "en": "Responsible for in-depth research and innovative applications in Agentic RL, multimodal large models, computer vision perception, and decision-making algorithms, aiming to push the boundaries of technology and solve complex challenges. My work encompasses the entire process from cutting-edge algorithm design to product deployment, focusing on translating theoretical breakthroughs into practical business value and achieving significant progress in multiple core areas."
       },
       "type": "fulltime"
     },
@@ -208,18 +210,32 @@ window.DATA_PUBLICATIONS = {
   "categories": {
     "zh": [
       "全部",
+      "Agent",
       "姿态估计",
       "自动驾驶",
       "多模态大模型"
     ],
     "en": [
       "All",
+      "Agent",
       "Pose Estimation",
       "Autonomous Driving",
       "Multimodal LLM"
     ]
   },
   "papers": [
+    {
+      "title": "Online Video Agent Harness for Long Video Understanding",
+      "authors": "Sen Yang, Boqiang Duan, Jing Yang, Weihao Bo, Jie Liu, Boyuan Tong, Ze Feng, Wenkang Zhang, Jingdong Wang, Hua Wu",
+      "venue": "arXiv preprint arXiv:2609.12818, 2026",
+      "citations": 0,
+      "category": "agent",
+      "links": {
+        "paper": "https://arxiv.org/abs/2609.12818",
+        "code": "https://github.com/go-agent-x/VideoXAgent",
+        "project": "https://go-agent-x.github.io/video_agent_harness/"
+      }
+    },
     {
       "title": "TransPose: Keypoint Localization via Transformer",
       "authors": "Sen Yang, Zhibin Quan, Mu Nie, Wankou Yang",
