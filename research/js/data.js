@@ -228,6 +228,7 @@ window.DATA_PUBLICATIONS = {
       "title": "VideoXAgent: Online Video Agent Harness for Long Video Understanding",
       "authors": "Sen Yang*, Boqiang Duan*, Jing Yang, Weihao Bo, Jie Liu, Boyuan Tong, Ze Feng, Wenkang Zhang, Jingdong Wang, Hua Wu",
       "venue": "arXiv preprint arXiv:2609.12818, 2026",
+      "date": "2026-09",
       "citations": 0,
       "category": "agent",
       "links": {
@@ -240,6 +241,7 @@ window.DATA_PUBLICATIONS = {
       "title": "TransPose: Keypoint Localization via Transformer",
       "authors": "Sen Yang, Zhibin Quan, Mu Nie, Wankou Yang",
       "venue": "ICCV 2021",
+      "date": "2021-10",
       "citations": 565,
       "category": "pose",
       "links": {
@@ -251,6 +253,7 @@ window.DATA_PUBLICATIONS = {
       "title": "TokenPose: Learning Keypoint Tokens for Human Pose Estimation",
       "authors": "Yanjie Li, Shoukui Zhang, Zhicheng Wang, Sen Yang, Wankou Yang, Shu-Tao Xia, Erjin Zhou",
       "venue": "ICCV 2021",
+      "date": "2021-10",
       "citations": 490,
       "category": "pose",
       "links": {
@@ -262,6 +265,7 @@ window.DATA_PUBLICATIONS = {
       "title": "SimCC: A Simple Coordinate Classification perspective for human pose estimation",
       "authors": "Yanjie Li, Sen Yang, Peidong Liu, Shoukui Zhang, Yunxiao Wang, Zhicheng Wang, Wankou Yang, Shu-Tao Xia",
       "venue": "ECCV 2022 (oral, top 5%)",
+      "date": "2022-10",
       "citations": 312,
       "category": "pose",
       "links": {
@@ -274,6 +278,7 @@ window.DATA_PUBLICATIONS = {
       "title": "Adnet: Lane shape prediction via anchor decomposition",
       "authors": "Lei Xiao, Lingyu Xiao, Sen Yang, Wankou Yang",
       "venue": "Proceedings of the IEEE/CVF International Conference on Computer Vision",
+      "date": "2023-10",
       "citations": 57,
       "category": "autonomous",
       "links": {
@@ -284,6 +289,7 @@ window.DATA_PUBLICATIONS = {
       "title": "Detecting and grouping keypoints for multi-person pose estimation using instance-aware attention",
       "authors": "Sen Yang, Ze Feng, Zhicheng Wang, Yanjie Li, Shoukui Zhang, Zhibin Quan, Shu-tao Xia, Wankou Yang",
       "venue": "Pattern Recognition",
+      "date": "2023-04",
       "citations": 28,
       "category": "pose",
       "links": {
@@ -294,6 +300,7 @@ window.DATA_PUBLICATIONS = {
       "title": "Capturing the motion of every joint: 3D human pose and mesh recovery with independent tokens",
       "authors": "Sen Yang, Wen Heng, Gang Liu, Guozhong Luo, Wankou Yang, Gang Yu",
       "venue": "ICLR 2023 (spotlight, top 25%)",
+      "date": "2023-05",
       "citations": 20,
       "category": "pose",
       "links": {
@@ -306,6 +313,7 @@ window.DATA_PUBLICATIONS = {
       "title": "Searching part-specific neural fabrics for human pose estimation",
       "authors": "Sen Yang, Wankou Yang, Zhen Cui",
       "venue": "Pattern Recognition",
+      "date": "2022-03",
       "citations": 15,
       "category": "pose",
       "links": {
@@ -317,6 +325,7 @@ window.DATA_PUBLICATIONS = {
       "title": "Learning Multiple Probabilistic Decisions from Latent World Model in Autonomous Driving",
       "authors": "Lingyu Xiao, Jiang-Jiang Liu, Sen Yang, Xiaofan Li, Xiaoqing Ye, Wankou Yang, Jingdong Wang",
       "venue": "2025 IEEE International Conference on Robotics and Automation (ICRA), 2025",
+      "date": "2025-05",
       "citations": 6,
       "category": "autonomous",
       "links": {
@@ -327,6 +336,7 @@ window.DATA_PUBLICATIONS = {
       "title": "TopoSD: Topology-Enhanced Lane Segment Perception with SDMap Prior",
       "authors": "Sen Yang, Minyue Jiang, Ziwei Fan, Xiaolu Xie, Xiao Tan, Yingying Li, Errui Ding, Liang Wang, Jingdong Wang",
       "venue": "arXiv preprint arXiv:2411.14751, 2024",
+      "date": "2024-11",
       "citations": 6,
       "category": "autonomous",
       "links": {
@@ -337,6 +347,7 @@ window.DATA_PUBLICATIONS = {
       "title": "MGMapNet: Multi-Granularity Representation Learning for End-to-End Vectorized HD Map Construction",
       "authors": "Jing Yang*, Minyue Jiang*, Sen Yang*, Xiao Tan, Yingying Li, Errui Ding, Hanli Wang, Jingdong Wang",
       "venue": "ICLR 2025",
+      "date": "2025-04",
       "citations": 6,
       "category": "autonomous",
       "links": {
@@ -347,6 +358,7 @@ window.DATA_PUBLICATIONS = {
       "title": "HisTrackMap: Global Vectorized High-Definition Map Construction via History Map Tracking",
       "authors": "Jing Yang*, Sen Yang*, Xiao Tan, Hanli Wang",
       "venue": "arXiv preprint arXiv:2503.07168, 2025",
+      "date": "2025-03",
       "citations": 5,
       "category": "autonomous",
       "links": {
@@ -358,6 +370,7 @@ window.DATA_PUBLICATIONS = {
       "title": "EM-KD: Distilling Efficient Multimodal Large Language Model with Unbalanced Vision Tokens",
       "authors": "Ze Feng, Sen Yang, Boqiang Duan, Wankou Yang, Jingdong Wang",
       "venue": "AAAI 2026",
+      "date": "2026-02",
       "citations": 0,
       "category": "mllm",
       "links": {
@@ -368,6 +381,7 @@ window.DATA_PUBLICATIONS = {
       "title": "Vision Remember: Alleviating Visual Forgetting in Efficient MLLM with Vision Feature Resample",
       "authors": "Ze Feng, Jiang-Jiang Liu, Sen Yang, Lingyu Xiao, Xiaofan Li, Wankou Yang, Jingdong Wang",
       "venue": "arXiv preprint arXiv:2506.03928, 2025",
+      "date": "2025-06",
       "citations": 1,
       "category": "mllm",
       "links": {
@@ -378,6 +392,7 @@ window.DATA_PUBLICATIONS = {
       "title": "MomentSeg: Moment-Centric Sampling for Enhanced Video Pixel Understanding",
       "authors": "Ming Dai*, Sen Yang*, Boqiang Duan, Wankou Yang, Jingdong Wang",
       "venue": "arXiv preprint arXiv:2510.09274, 2025",
+      "date": "2025-10",
       "citations": 0,
       "category": "mllm",
       "links": {

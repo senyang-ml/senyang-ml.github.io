@@ -160,9 +160,14 @@ class PageRenderer {
       })
       .join("");
 
+    // 全部列表按发表时间倒序
+    const papers = [...publications.papers].sort((a, b) =>
+      String(b.date || "").localeCompare(String(a.date || "")),
+    );
+
     // 渲染论文卡片
     const grid = section.querySelector(".publications-grid");
-    grid.innerHTML = publications.papers
+    grid.innerHTML = papers
       .map((paper) => {
         const linksHtml = Object.entries(paper.links)
           .map(([key, url]) => {
